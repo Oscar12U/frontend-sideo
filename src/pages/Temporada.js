@@ -1,13 +1,14 @@
-import React from "react";
 import { Button } from "react-bootstrap";
+import React from "react";
 const Temporada = () => {
   return (
     <>
       <label>Buscar:</label>
-      <Button variant="secondary">Buscar Temporada</Button>{' '}
+      <Button variant="primary">Primary</Button>
       <br></br>
 
-      <div></div>
+      <div>
+      </div>
     </>
   );
 };
