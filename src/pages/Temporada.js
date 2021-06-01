@@ -3,23 +3,45 @@ import React from "react";
 const Temporada = () => {
   return (
     <>
+      <br></br>
       <Container fluid="md">
+        <input md="auto" type="text" id="fname" name="fname"></input>
+        <Button variant="primary ml-2" md="auto">Guardar</Button>
         <br></br>
-        <Row>
-        <Col className="justify-content-md-center"></Col>
-          <Col className="justify-content-md-center">
-            <label> Buscar: </label>
-            <Button variant="primary">Buscar</Button>
-          </Col>
-          <Col className="justify-content-md-center"></Col>
-        </Row>
       </Container>
+      <br></br>
       <br></br>
       <Container fluid="md">
         <Row>
-        <Col className="justify-content-md-center"></Col>
-          <Col className="justify-content-md-center">Aquí va la Tabla</Col>
-          <Col className="justify-content-md-center"></Col>
+        <Col></Col>
+          <Col md="center">
+          <Button variant="primary ml-2" md="auto">Crear Partido</Button>
+          </Col>
+          <Col></Col>
+        </Row>
+        <br></br>
+        <Row>
+        <Col></Col>
+          <Col md="center">
+          <Button variant="primary ml-2" md="auto">Estadisticas de Temporada</Button>
+          </Col>
+          <Col></Col>
+        </Row>
+        <br></br>
+        <Row>
+        <Col></Col>
+          <Col md="center">
+          <Button variant="primary ml-2" md="auto">Crear Entrenamiento</Button>
+          </Col>
+          <Col></Col>
+        </Row>
+        <br></br>
+        <Row>
+        <Col></Col>
+          <Col md="center">
+          <Button variant="primary ml-2" md="auto">Gestionar Partido</Button>
+          </Col>
+          <Col></Col>
         </Row>
       </Container>
     </>
