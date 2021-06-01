@@ -13,7 +13,7 @@ function App() {
           <Temporada></Temporada>
         </Route>
 
-        <Route path="/topAnime">
+        <Route path="/Partido">
           {/* <Partido></Partido> */}
         </Route>
 
