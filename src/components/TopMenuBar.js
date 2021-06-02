@@ -45,7 +45,7 @@ export default function TopMenuBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="static" style={{backgroundColor:"#BD0F15"}}>
         <Toolbar>
           <div>
             <Drawer></Drawer>
