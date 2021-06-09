@@ -11,6 +11,10 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import axios from "axios";
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -53,6 +57,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const useStyles2 = makeStyles({
+  root: {
+    minWidth: 275,
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+});
+
 const MenuJugador = () => {
   const [jugadores, setJugadores] = React.useState(0);
   const classes = useStyles();
@@ -69,8 +90,9 @@ const MenuJugador = () => {
       console.log("hola: " + jugadores);
       setJugadores(jugadores);
     })
-    .catch((err) => {});
-
+    .catch((err) => { });
+  const bull = <span className={classes.bullet}>•</span>;
+  const classes2 = useStyles2();
   return (
     <Box sx={{ pb: 7 }}>
       <AppBar style={{ position: "relative", bottom: 0 }} color="default">
@@ -113,7 +135,33 @@ const MenuJugador = () => {
         </Container> */}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item 2 {jugadores}
+        <Container fluid="md" style={{ margin: "60px auto" }}>
+          <Row style={{ background: "lightblue" }}>
+            <Card style={{ margin: "60px auto" }} className={classes2.root}>
+              <CardContent style={{ backgroundColor: "gray" }}>
+                <Typography className={classes2.title} color="textSecondary" gutterBottom>
+                  Word of the Day
+        </Typography>
+                <Typography variant="h5" component="h2">
+                  be{bull}nev{bull}o{bull}lent
+        </Typography>
+                <Typography className={classes2.pos} color="textSecondary">
+                  adjective
+        </Typography>
+                <Typography variant="body2" component="p">
+                  well meaning and kindly.
+          <br />
+                  {'"a benevolent smile"'}
+                </Typography>
+              </CardContent >
+              <CardActions style={{ backgroundColor: "gray" }}>
+                <Button variant="contained" color="default">Ver</Button>
+                <Button variant="contained" color="default">Eliminar</Button>
+              </CardActions>
+            </Card>
+
+          </Row>
+        </Container>
       </TabPanel>
       <TabPanel value={value} index={2}>
         Item Three
