@@ -12,6 +12,9 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 
 const useStyles = makeStyles({
   list: {
@@ -49,21 +52,10 @@ export default function TemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+        {["Temporada", "Administrar Jugadores", "Adminsitrar Asistentes"].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              {index % 2 === 0 ? index % 3 === 0 ? <ArrowForwardIcon /> : <AccountCircleIcon /> : <AssignmentIndIcon />}
             </ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>

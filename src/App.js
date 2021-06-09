@@ -4,19 +4,22 @@ import React from "react";
 import Partido from "./pages/Partido";
 import Temporada from "./pages/Temporada";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import TemporadaInit from "./pages/TemporadaInit";
+import Inicio from "./pages/Inicio";
 
 function App() {
   return (
     <>
       <Router>
         <Route exact path="/">
-          <Temporada></Temporada>
+          <Inicio></Inicio>
         </Route>
-
         <Route path="/Partido">
-           <Partido></Partido> 
+          <Partido></Partido>
         </Route>
-
+        <Route path="/TemporadaInit">
+          <TemporadaInit></TemporadaInit>
+        </Route>
       </Router>
     </>
   );
