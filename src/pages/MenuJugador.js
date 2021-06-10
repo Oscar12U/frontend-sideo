@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from "react-bootstrap";
 import PartidoIcon from "@material-ui/icons/SportsSoccer";
 import TeamIcon from "@material-ui/icons/People";
@@ -74,26 +74,43 @@ const useStyles2 = makeStyles({
   },
 });
 
+
+
+
 const MenuJugador = () => {
-  const [jugadores, setJugadores] = React.useState(0);
+
+  useEffect(() => {
+    axiosConsulta();
+  }, [null]);
+
+  function axiosConsulta() {
+    axios
+      .get(`http://localhost:3000/api/jugadores/`)
+      .then((resultado) => {
+        const jugadoresList = resultado.data.data;
+
+        setJugadores(jugadoresList);
+        //console.log(jugadores[0].nombre);
+        //console.log("variablex: " + listaJugadores);
+      })
+      .catch((err) => { });
+
+  }
+
+  const [jugadores, setJugadores] = React.useState([]);
   const classes = useStyles();
   const [value, setValue] = React.useState(3);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  //axiosConsulta();
   //prueba
-  axios
-    .get(`http://localhost:3000/api/entrenamientos/`)
-    .then((resultado) => {
-      const jugadores = resultado.data.data[0].nombre;
-      console.log("hola: " + jugadores);
-      setJugadores(jugadores);
-    })
-    .catch((err) => { });
+
   const bull = <span className={classes.bullet}>•</span>;
   const classes2 = useStyles2();
   return (
+
     <Box sx={{ pb: 7 }}>
       <AppBar style={{ position: "relative", bottom: 0 }} color="default">
         <Tabs
@@ -134,33 +151,27 @@ const MenuJugador = () => {
           </Row>
         </Container> */}
       </TabPanel>
-
-
       <TabPanel value={value} index={1}>
         <Container fluid="md" style={{ margin: "60px auto" }}>
           <Row style={{ background: "lightblue" }}>
-            <Card style={{ margin: "60px auto" }} className={classes2.root}>
-              <CardContent style={{ backgroundColor: "gray" }}>
-                <Typography className={classes2.title} color="textSecondary" gutterBottom>
-                  Word of the Day
-        </Typography>
-                <Typography variant="h5" component="h2">
-                  be{bull}nev{bull}o{bull}lent
-        </Typography>
-                <Typography className={classes2.pos} color="textSecondary">
-                  adjective
-        </Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
-          <br />
-                  {'"a benevolent smile"'}
-                </Typography>
-              </CardContent >
-              <CardActions style={{ backgroundColor: "gray" }}>
-                <Button variant="contained" color="default">Ver</Button>
-                <Button variant="contained" color="default">Eliminar</Button>
-              </CardActions>
-            </Card>
+
+            {jugadores.map((jugador, index) => {
+              return (
+                <Card style={{ margin: "60px auto" }} className={classes2.root}>
+                  <CardContent style={{ backgroundColor: "gray" }}>
+                    <Typography className={classes2.title} color="textSecondary" gutterBottom>
+                      Nombre: {jugador.nombre}
+                    </Typography>
+
+                  </CardContent >
+                  <CardActions style={{ backgroundColor: "gray" }}>
+                    <Button variant="contained" color="default">Ver</Button>
+                    <Button variant="contained" color="default">Eliminar</Button>
+                  </CardActions>
+                </Card>
+              );
+            })}
+
 
           </Row>
         </Container>
