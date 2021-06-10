@@ -134,6 +134,8 @@ const MenuJugador = () => {
           </Row>
         </Container> */}
       </TabPanel>
+
+
       <TabPanel value={value} index={1}>
         <Container fluid="md" style={{ margin: "60px auto" }}>
           <Row style={{ background: "lightblue" }}>
