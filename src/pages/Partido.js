@@ -98,7 +98,7 @@ export default function ScrollableTabsButtonForce() {
                 <h3>Partido Contra: YYY</h3>
                 <h3>Temporada: X</h3>
               </Col>
-              <Col sm="4" style={{ backgroundColor: "#787682" }}>
+              <Col sm="4">
                 <h1>Tiempo del partido</h1>
                 <Timer style={{ backgroundColor: "#787682" }} />
               </Col>

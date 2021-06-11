@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import cronometroImage from "../assets/images/cronometro.png";
+import cronometroImage from "../assets/images/cronometronegro.png";
 import "./style/Timer.css";
 
 class Timer extends Component {
