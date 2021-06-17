@@ -43,10 +43,15 @@ class Timer extends Component {
   render() {
     return (
       <div className="timer">
+        <br></br>
+        <br></br>
+        <br></br>
         <div className="time">
           <img src={cronometroImage} alt="" />
           <h2>{this.state.actualTime.toFixed(0)}</h2>
         </div>
+        <br></br>
+        <br></br>
         <div className="btns">
           <input
             type="button"

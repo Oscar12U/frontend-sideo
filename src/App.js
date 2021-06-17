@@ -20,6 +20,9 @@ function App() {
         <Route path="/TemporadaInit">
           <TemporadaInit></TemporadaInit>
         </Route>
+        <Route path="/Temporada">
+          <Temporada></Temporada>
+        </Route>
       </Router>
     </>
   );

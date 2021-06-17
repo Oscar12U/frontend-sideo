@@ -15,12 +15,15 @@ import TeamIcon from "@material-ui/icons/People";
 import HomeIcon from "@material-ui/icons/Home";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import Paper from "@material-ui/core/Paper";
+import {
+  Box,
+  Divider,
+  Paper,
+  Typography,
+  Tab,
+  Tabs,
+  AppBar,
+} from "@material-ui/core";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -57,6 +60,24 @@ const useStyles = makeStyles((theme) => ({
   pr: {
     top: "100px",
   },
+  p1: {
+    fontSize: "25px",
+    color: "#000000",
+    font: "Bold",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+  },
+  p2: {
+    fontSize: "20px",
+    color: "#000000",
+    font: "Bold",
+  },
+  p3: {
+    fontSize: "15px",
+    color: "#000000",
+    font: "Bold",
+  },
 }));
 
 export default function ScrollableTabsButtonForce() {
@@ -88,109 +109,152 @@ export default function ScrollableTabsButtonForce() {
       <TabPanel value={value} index={0}>
         <Container
           fluid="md"
-          style={{ margin: "60px auto", backgroundcolor: "#fefbd8" }}
+          style={{
+            margin: "60px auto",
+            backgroundColor: "#4A77BF",
+            borderRadius: "15px",
+          }}
           elevation={3}
         >
-          <Paper elevation={3}>
+          <br></br>
+          <Paper
+            elevation={3}
+            borderRadius={50}
+            style={{
+              backgroundColor: "#FFFFFF"
+            }}
+          >
             <Row style={{ margin: "auto 20px" }}>
-              <Col sm="8">
-                <h1>Detallles del Partido</h1>
-                <h3>Partido Contra: YYY</h3>
-                <h3>Temporada: X</h3>
+              <Col sm="6" style={{}}>
+                <div className={classes.p1}>Detalles del Partido</div>
+                <br></br>
+                <div className={classes.p2}>
+                  Partido Contra:<br></br> YYY
+                </div>
+                <div className={classes.p3}>
+                  Temporada:<br></br> X
+                </div>
               </Col>
-              <Col sm="4">
-                <h1>Tiempo del partido</h1>
-                <Timer style={{ backgroundColor: "#787682" }} />
+              <Col
+                sm="6"
+                style={{
+                  font: "bold",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <div className={classes.p1}>Tiempo del partido</div>
+                <br></br>
+                <Timer
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    margin: "auto",
+                  }}
+                />
+                <br></br>
               </Col>
             </Row>
           </Paper>
-          <Row
+          <Container
+            fluid="md"
             style={{
-              margin: "40px 50px",
-              columnRuleStyle: "groove",
-              columnRuleWidth: "3px",
-              columnRuleColor: "lightcoral",
+              margin: "60px auto",
+
+              backgroundColor: "#4A77BF",
             }}
+            elevation={3}
           >
-            <Col style={{ borderRight: "3px solid #A9A9A9" }}>
-              <h3>Seleccionar jugador</h3>
-              <DropdownButton
-                id="dropdown-item-button"
-                title="Seleccionar Jugador"
-              >
-                <Dropdown.ItemText>Lista Jugadores</Dropdown.ItemText>
-                <Dropdown.Item as="button">Jugador 1</Dropdown.Item>
-                <Dropdown.Item as="button">Jugador 2</Dropdown.Item>
-                <Dropdown.Item as="button">Jugador 3</Dropdown.Item>
-              </DropdownButton>
-            </Col>
-            <Col style={{ borderRight: "3px solid #A9A9A9" }}>
-              <Container fluid="md" style={{ margin: "auto" }}>
-                <Row>
-                  <Col>
-                    <Button variant="primary" size="lg">
-                      Gol
-                    </Button>{" "}
-                  </Col>
-                  <Col>
-                    <Form>
-                      {["A favor", "En contra"].map((type) => (
-                        <div key={`default-${type}`} className="mb-3">
-                          <Form.Check
-                            type={"checkbox"}
-                            id={`${type}`}
-                            label={`${type}`}
-                          />
-                        </div>
-                      ))}
-                    </Form>
-                  </Col>
-                </Row>
-                <Row style={{ margin: "20px auto" }}>
-                  <Button variant="secondary" size="lg">
-                    Falta
-                  </Button>
-                </Row>
-                <Row style={{ margin: "10px auto" }}>
-                  <Button variant="secondary" size="lg">
-                    Lesion
-                  </Button>
-                </Row>
-              </Container>
-            </Col>
-            <Col>
-              <Container>
-                <Col>
+            <Row
+              style={{
+                margin: "40px 50px",
+                columnRuleStyle: "groove",
+                columnRuleWidth: "3px",
+                columnRuleColor: "lightcoral",
+              }}
+            >
+              <Col style={{ borderRight: "3px solid #A9A9A9" }}>
+                <h3>Seleccionar jugador</h3>
+                <DropdownButton
+                  id="dropdown-item-button"
+                  title="Seleccionar Jugador"
+                >
+                  <Dropdown.ItemText>Lista Jugadores</Dropdown.ItemText>
+                  <Dropdown.Item as="button">Jugador 1</Dropdown.Item>
+                  <Dropdown.Item as="button">Jugador 2</Dropdown.Item>
+                  <Dropdown.Item as="button">Jugador 3</Dropdown.Item>
+                </DropdownButton>
+              </Col>
+              <Col style={{ borderRight: "3px solid #A9A9A9" }}>
+                <Container fluid="md" style={{ margin: "auto" }}>
                   <Row>
-                    <h3>Jugador Entra</h3>
-                    <br></br>
-                    <DropdownButton
-                      id="dropdown-item-button"
-                      title="Seleccionar Jugador"
-                    >
-                      <Dropdown.ItemText>Lista Jugadores</Dropdown.ItemText>
-                      <Dropdown.Item as="button">Jugador 1</Dropdown.Item>
-                      <Dropdown.Item as="button">Jugador 2</Dropdown.Item>
-                      <Dropdown.Item as="button">Jugador 3</Dropdown.Item>
-                    </DropdownButton>
+                    <Col>
+                      <Button variant="primary" size="lg">
+                        Gol
+                      </Button>{" "}
+                    </Col>
+                    <Col>
+                      <Form>
+                        {["A favor", "En contra"].map((type) => (
+                          <div key={`default-${type}`} className="mb-3">
+                            <Form.Check
+                              type={"checkbox"}
+                              id={`${type}`}
+                              label={`${type}`}
+                            />
+                          </div>
+                        ))}
+                      </Form>
+                    </Col>
                   </Row>
-                  <Row>
-                    <h3>Jugador Sale</h3>
-                    <br></br>
-                    <DropdownButton
-                      id="dropdown-item-button"
-                      title="Seleccionar Jugador"
-                    >
-                      <Dropdown.ItemText>Lista Jugadores</Dropdown.ItemText>
-                      <Dropdown.Item as="button">Jugador 1</Dropdown.Item>
-                      <Dropdown.Item as="button">Jugador 2</Dropdown.Item>
-                      <Dropdown.Item as="button">Jugador 3</Dropdown.Item>
-                    </DropdownButton>
+                  <Row style={{ margin: "20px auto" }}>
+                    <Button variant="secondary" size="lg">
+                      Falta
+                    </Button>
                   </Row>
-                </Col>
-              </Container>
-            </Col>
-          </Row>
+                  <Row style={{ margin: "10px auto" }}>
+                    <Button variant="secondary" size="lg">
+                      Lesion
+                    </Button>
+                  </Row>
+                </Container>
+              </Col>
+              <Col>
+                <Container>
+                  <Col>
+                    <Row>
+                      <h3>Jugador Entra</h3>
+                      <br></br>
+                      <DropdownButton
+                        id="dropdown-item-button"
+                        title="Seleccionar Jugador"
+                      >
+                        <Dropdown.ItemText>Lista Jugadores</Dropdown.ItemText>
+                        <Dropdown.Item as="button">Jugador 1</Dropdown.Item>
+                        <Dropdown.Item as="button">Jugador 2</Dropdown.Item>
+                        <Dropdown.Item as="button">Jugador 3</Dropdown.Item>
+                      </DropdownButton>
+                    </Row>
+                    <Row>
+                      <h3>Jugador Sale</h3>
+                      <br></br>
+                      <DropdownButton
+                        id="dropdown-item-button"
+                        title="Seleccionar Jugador"
+                      >
+                        <Dropdown.ItemText>Lista Jugadores</Dropdown.ItemText>
+                        <Dropdown.Item as="button">Jugador 1</Dropdown.Item>
+                        <Dropdown.Item as="button">Jugador 2</Dropdown.Item>
+                        <Dropdown.Item as="button">Jugador 3</Dropdown.Item>
+                      </DropdownButton>
+                    </Row>
+                  </Col>
+                </Container>
+              </Col>
+            </Row>
+          </Container>
+          <br></br>
         </Container>
       </TabPanel>
       <TabPanel value={value} index={1}>
