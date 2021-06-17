@@ -29,6 +29,17 @@ const TemporadaInit = () => {
     txt: {
       color: "#FBFEF9",
       font: "bold",
+      justifyContent: "center",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      textAlign: "center",
+      marginLeft: "-70px",
+    },
+    icon: {
+      color: "#FBFEF9",
+      font: "bold",
+      justifyContent: "center",
     },
   }));
 
@@ -51,8 +62,8 @@ const TemporadaInit = () => {
         }}
       >
         <List component="nav" className={classes.root} aria-label="contacts">
-          <ListItem button>
-            <ListItemIcon className={classes.txt}>
+          <ListItem button component="a" href="/Temporada">
+            <ListItemIcon className={classes.icon}>
               <ArrowForwardIcon />
             </ListItemIcon>
             <ListItemText
@@ -62,7 +73,7 @@ const TemporadaInit = () => {
             />
           </ListItem>
           <ListItem button>
-            <ListItemIcon className={classes.txt}>
+            <ListItemIcon className={classes.icon}>
               <AddIcon />
             </ListItemIcon>
             <ListItemText

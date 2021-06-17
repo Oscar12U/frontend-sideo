@@ -32,6 +32,17 @@ const Temporada = () => {
     txt: {
       color: "#FBFEF9",
       font: "bold",
+      justifyContent: "center",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      textAlign: "center",
+      marginLeft: "-70px",
+    },
+    icon: {
+      color: "#FBFEF9",
+      font: "bold",
+      justifyContent: "center",
     },
   }));
 
@@ -67,14 +78,16 @@ const Temporada = () => {
       <br></br>
       <br></br>
 
-      <Container style={{
+      <Container
+        style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-        }}>
+        }}
+      >
         <List component="nav" className={classes.root} aria-label="contacts">
-          <ListItem button>
-            <ListItemIcon className={classes.txt}>
+          <ListItem button component="a" href="/Partido">
+            <ListItemIcon className={classes.icon}>
               <CreateIcon />
             </ListItemIcon>
             <ListItemText
@@ -84,7 +97,7 @@ const Temporada = () => {
             />
           </ListItem>
           <ListItem button>
-            <ListItemIcon className={classes.txt}>
+            <ListItemIcon className={classes.icon}>
               <AssessmentIcon />
             </ListItemIcon>
             <ListItemText
@@ -94,7 +107,7 @@ const Temporada = () => {
             />
           </ListItem>
           <ListItem button>
-            <ListItemIcon className={classes.txt}>
+            <ListItemIcon className={classes.icon}>
               <DirectionsRunIcon />
             </ListItemIcon>
             <ListItemText
@@ -104,7 +117,7 @@ const Temporada = () => {
             />
           </ListItem>
           <ListItem button>
-            <ListItemIcon className={classes.txt}>
+            <ListItemIcon className={classes.icon}>
               <PanToolIcon />
             </ListItemIcon>
             <ListItemText

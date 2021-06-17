@@ -30,6 +30,17 @@ const Inicio = () => {
     txt: {
       color: "#FBFEF9",
       font: "bold",
+      justifyContent: "center",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      textAlign: "center",
+      marginLeft: "-70px",
+    },
+    icon: {
+      color: "#FBFEF9",
+      font: "bold",
+      justifyContent: "center",
     },
   }));
 
@@ -63,19 +74,23 @@ const Inicio = () => {
       >
         <List component="nav" className={classes.root} aria-label="contacts">
           <ListItem button component="a" href="/TemporadaInit">
-            <ListItemIcon className={classes.txt}>
+            <ListItemIcon className={classes.icon}>
               <ArrowForwardIcon />
             </ListItemIcon>
             <ListItemText className={classes.txt} inset primary="Temporadas" />
           </ListItem>
           <ListItem button>
-            <ListItemIcon className={classes.txt}>
+            <ListItemIcon className={classes.icon}>
               <AssignmentIndIcon />
             </ListItemIcon>
-            <ListItemText className={classes.txt} inset primary="Administrar Jugadores" />
+            <ListItemText
+              className={classes.txt}
+              inset
+              primary="Administrar Jugadores"
+            />
           </ListItem>
           <ListItem button>
-            <ListItemIcon className={classes.txt}>
+            <ListItemIcon className={classes.icon}>
               <AccountCircleIcon />
             </ListItemIcon>
             <ListItemText
