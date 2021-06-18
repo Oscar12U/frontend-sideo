@@ -110,9 +110,9 @@ export default function ScrollableTabsButtonForce() {
         <Container
           fluid="md"
           style={{
-            border: "3px solid #000000",
+            border: "3px solid #456990",
             margin: "60px auto",
-            backgroundColor: "#373F51",
+            backgroundColor: "#456990",
             borderRadius: "15px",
           }}
           elevation={3}
@@ -175,7 +175,7 @@ export default function ScrollableTabsButtonForce() {
                   alignItems: "center",
                   textAlign: "center",
                   margin: "auto",
-                  backgroundColor: "#BD0F15",
+                  backgroundColor: "#00070",
                   borderRadius: "15px",
                 }}
               >
@@ -190,6 +190,10 @@ export default function ScrollableTabsButtonForce() {
                 <DropdownButton  variant="primary"
                   id="dropdown-item-button"
                   title="Seleccionar Jugador"
+                  style={{
+                    marginBottom: "10px",
+                    marginTop: "5px",
+                  }}
                 >
                   <Dropdown.ItemText>Lista Jugadores</Dropdown.ItemText>
                   <Dropdown.Item as="button">Jugador 1</Dropdown.Item>
