@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Form } from "react-bootstrap";
 import PartidoIcon from "@material-ui/icons/SportsSoccer";
 import TeamIcon from "@material-ui/icons/People";
 import HomeIcon from "@material-ui/icons/Home";
@@ -15,6 +15,10 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
+import { Link } from "react-router-dom";
+import TextField from "@material-ui/core/TextField";
+import VerJugador from './VerJugador';
+import GestorJugador from "../containers/GestorJugador";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -100,15 +104,22 @@ const MenuJugador = () => {
   const [jugadores, setJugadores] = React.useState([]);
   const classes = useStyles();
   const [value, setValue] = React.useState(3);
+  const [jugador, setJugador] = React.useState();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const EnviarJugador = () => {
+    gestorJugador.crearJugador(jugador);
+    //console.log(jugador);
   };
   //axiosConsulta();
   //prueba
 
   const bull = <span className={classes.bullet}>•</span>;
   const classes2 = useStyles2();
+  let gestorJugador = new GestorJugador();
   return (
 
     <Box sx={{ pb: 7 }}>
@@ -127,29 +138,92 @@ const MenuJugador = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        {/* <Container fluid="md" style={{ margin: "60px auto" }}>
-          <Row style={{ background: "lightblue" }}>
-            <Col sm="8">
-              <h1>Detallles del Partido</h1>
-              <h3>Partido Contra: YYY</h3>
-              <h3>Temporada: X</h3>
-            </Col>
-            <Col sm="4">
-              <h2>Tiempo del partido</h2>
-              <h3>Ha transcurrido: 000 Minutos</h3>
+        <Container
+          fluid="md"
+          style={{
+            margin: "60px auto",
+          }}
+        >
+          <Typography
+            style={{
+              color: "black",
+              fontSize: "25px",
+              fontFamily: "Arial",
+            }}
+            align="center"
+          >
+            Ingrese el nombre del nuevo jugador a incluir al equipo
+          </Typography>
+          <Row
+            style={{
+              background: "lightblue",
+              borderRadius: "15px",
+              border: "3px solid #000000",
+            }}
+          >
+            <Col sm="12">
+              <Form align="center">
+                <Form.Label
+                  style={{
+                    color: "black",
+                    fontSize: "20px",
+                    fontFamily: "Arial",
+                  }}
+                >
+                  Nombre del Jugador:
+                </Form.Label>
+
+                {/* <Form.Control
+                    controlId="nombreJugador"
+                    placeholder="Nombre"
+                    style={{
+                      width: "55%",
+                      align: "center",
+                      display: "flex",
+                      margin: "10px auto",
+                    }}
+                    onChange={(event) => setJugador(event.target.value)}
+                  /> */}
+
+                <TextField
+                  id="filled-full-width"
+                  style={{
+                    width: "55%",
+                    display: "flex",
+                    textColor: "black",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    margin: "auto",
+                    marginBottom: "10px",
+                    backgroundColor: "white",
+                    borderRadius: "5px",
+                  }}
+                  //placeholder="Nombre"
+                  fullWidth
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  variant="filled"
+                  onChange={(event) => setJugador(event.target.value)}
+                />
+
+                <Button
+                  style={{
+                    background: "#0F98C2",
+                    color: "white",
+                    textTransform: "none",
+                    fontSize: 20,
+                  }}
+                  onClick={EnviarJugador}
+                >
+                  Agregar
+                </Button>
+              </Form>
             </Col>
           </Row>
-          <Row style={{ background: "green" }}>
-            <Col>1 of 3</Col>
-            <Col>2 of 3</Col>
-            <Col>3 of 3</Col>
-          </Row>
-          <Row style={{ background: "blue" }}>
-            <Col>
-              <h1>f</h1>
-            </Col>
-          </Row>
-        </Container> */}
+        </Container>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Container fluid="md" style={{ margin: "60px auto" }}>
@@ -162,16 +236,23 @@ const MenuJugador = () => {
                     <Typography className={classes2.title} color="textSecondary" gutterBottom>
                       Nombre: {jugador.nombre}
                     </Typography>
-
+                    <Link
+                      to={{
+                        pathname: `/verJugador`,
+                        state: { IDJugador: jugador._id }
+                      }}
+                    >
+                      <a href="#" className="btn btn-secondary" id="botton1" color>
+                        Ver
+                      </a>
+                    </Link>
                   </CardContent >
                   <CardActions style={{ backgroundColor: "gray" }}>
-                    <Button variant="contained" color="default">Ver</Button>
                     <Button variant="contained" color="default">Eliminar</Button>
                   </CardActions>
                 </Card>
               );
             })}
-
 
           </Row>
         </Container>
