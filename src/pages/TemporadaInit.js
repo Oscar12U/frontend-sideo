@@ -6,14 +6,11 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import AssessmentIcon from "@material-ui/icons/Assessment";
-import DirectionsRunIcon from "@material-ui/icons/DirectionsRun";
-import CreateIcon from "@material-ui/icons/Create";
-import PanToolIcon from "@material-ui/icons/PanTool";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
+import AddIcon from '@material-ui/icons/Add';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 
-const Temporada = () => {
+
+const TemporadaInit = () => {
   const useStyles = makeStyles((theme) => ({
     root: {
       width: "100%",
@@ -51,27 +48,6 @@ const Temporada = () => {
   return (
     <>
       <TopMenuBar></TopMenuBar>
-      <br></br>
-      <br></br>
-      <br></br>
-
-      <Container
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <TextField
-          id="outlined-basic"
-          label="Temporada"
-          variant="outlined"
-          size="small"
-        />
-        <Button className={classes.btn} variant="contained">
-          Guardar
-        </Button>
-      </Container>
 
       <br></br>
       <br></br>
@@ -86,44 +62,24 @@ const Temporada = () => {
         }}
       >
         <List component="nav" className={classes.root} aria-label="contacts">
-          <ListItem button component="a" href="/Partido">
+          <ListItem button component="a" href="/Temporada">
             <ListItemIcon className={classes.icon}>
-              <CreateIcon />
+              <ArrowForwardIcon />
             </ListItemIcon>
             <ListItemText
               className={classes.txt}
               inset
-              primary="Crear Partido"
+              primary="Seleccionar Temporada"
             />
           </ListItem>
           <ListItem button>
             <ListItemIcon className={classes.icon}>
-              <AssessmentIcon />
+              <AddIcon />
             </ListItemIcon>
             <ListItemText
               className={classes.txt}
               inset
-              primary="Estadisticas de Temporada"
-            />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon className={classes.icon}>
-              <DirectionsRunIcon />
-            </ListItemIcon>
-            <ListItemText
-              className={classes.txt}
-              inset
-              primary="Crear Entrenamiento"
-            />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon className={classes.icon}>
-              <PanToolIcon />
-            </ListItemIcon>
-            <ListItemText
-              className={classes.txt}
-              inset
-              primary="Gestionar Partido"
+              primary="Añadir Temporada"
             />
           </ListItem>
         </List>
@@ -132,4 +88,4 @@ const Temporada = () => {
   );
 };
 
-export default Temporada;
+export default TemporadaInit;

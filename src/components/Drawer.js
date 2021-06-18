@@ -2,16 +2,17 @@ import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import { withRouter } from "react-router-dom";
 
 const useStyles = makeStyles({
   list: {
@@ -22,7 +23,9 @@ const useStyles = makeStyles({
   },
 });
 
-export default function TemporaryDrawer() {
+const TempDrawel = (props) => {
+  console.log(props);
+  const { history } = props;
   const classes = useStyles();
   const [state, setState] = React.useState({
     left: false,
@@ -39,6 +42,28 @@ export default function TemporaryDrawer() {
     setState({ ...state, [anchor]: open });
   };
 
+  const itemlist = [
+    {
+      text: "Inicio",
+      icon: <PlayArrowIcon />,
+      onClick: () => history.push("/"),
+    },
+    {
+      text: "Temporada",
+      icon: <ArrowForwardIcon />,
+      onClick: () => history.push("/TemporadaInit"),
+    },
+    {
+      text: "Administrar Jugadores",
+      icon: <AccountCircleIcon />,
+      onClick: () => history.push("/TemporadaInit"),
+    },
+    {
+      text: "Adminsitrar Asistentes",
+      icon: <AssignmentIndIcon />,
+      onClick: () => history.push("/TemporadaInit"),
+    },
+  ];
   const list = (anchor) => (
     <div
       className={clsx(classes.list, {
@@ -49,43 +74,34 @@ export default function TemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        {itemlist.map((item, index) => {
+          const { text, icon, onClick } = item;
+          return (
+            <ListItem button key={text} onClick={onClick}>
+              {icon && <ListItemIcon>{icon}</ListItemIcon>}
+              <ListItemText primary={text} />
+            </ListItem>
+          );
+        })}
       </List>
     </div>
   );
 
   return (
     <div>
-        {["left"].map((anchor) => (
+      {["left"].map((anchor) => (
         <React.Fragment key={anchor}>
-      <IconButton onClick={toggleDrawer(anchor, true)}
-        edge="start"
-        className={classes.menuButton}
-        color="inherit"
-        aria-label="menu"
-      >
-        <MenuIcon />
-      </IconButton>
+          <IconButton
+            onClick={toggleDrawer(anchor, true)}
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+          >
+            <MenuIcon />
+          </IconButton>
 
-      <Drawer
+          <Drawer
             anchor={anchor}
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}
@@ -93,7 +109,7 @@ export default function TemporaryDrawer() {
             {list(anchor)}
           </Drawer>
         </React.Fragment>
-))}
+      ))}
       {/* {["left"].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
@@ -108,4 +124,6 @@ export default function TemporaryDrawer() {
       ))} */}
     </div>
   );
-}
+};
+
+export default withRouter(TempDrawel);
