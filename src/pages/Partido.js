@@ -24,6 +24,7 @@ import {
   Tabs,
   AppBar,
 } from "@material-ui/core";
+import GestorPartido from "../containers/GestorPartido";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -86,7 +87,20 @@ export default function ScrollableTabsButtonForce() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  let gestorPartido = new GestorPartido("Partido 1");
 
+  const CrearPartido = () => {
+    gestorPartido.crearPartido();
+  };
+
+  const AddGol = () => {
+    gestorPartido.agregarGol(
+      "60c17846a44ca10e58b3ae5a",
+      "60c17855a44ca10e58b3ae5b",
+      5,
+      1
+    );
+  };
   return (
     <Box sx={{ pb: 7 }}>
       <TopMenuBar></TopMenuBar>
@@ -187,7 +201,8 @@ export default function ScrollableTabsButtonForce() {
                 >
                   Seleccionar jugador
                 </div>
-                <DropdownButton  variant="primary"
+                <DropdownButton
+                  variant="primary"
                   id="dropdown-item-button"
                   title="Seleccionar Jugador"
                   style={{
