@@ -1,0 +1,42 @@
+.timer {
+  width: 400px;
+  display: inline;
+  align-items: center;
+  justify-content: center;
+}
+
+.time {
+  width: 50px;
+  height: 50px;
+  /* Center vertically and horizontally */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -25px 0 0 -25px;
+}
+.time img {
+  width: 500%;
+  height: 250%;
+  /* Center vertically and horizontally */
+  position: absolute;
+  top: -50%;
+  left: -150%;
+  margin: -25px 0 0 -25px;
+}
+.time h2 {
+  font-size: 30px;
+  color: rgb(0, 0, 0);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btns input {
+  margin: 5px;
+}

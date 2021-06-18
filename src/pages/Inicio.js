@@ -1,4 +1,5 @@
 import { Button1, Col, Row, Container } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import React from "react";
 import TopMenuBar from "../components/TopMenuBar";
 import { makeStyles } from "@material-ui/core/styles";
@@ -6,14 +7,11 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import AssessmentIcon from "@material-ui/icons/Assessment";
-import DirectionsRunIcon from "@material-ui/icons/DirectionsRun";
-import CreateIcon from "@material-ui/icons/Create";
-import PanToolIcon from "@material-ui/icons/PanTool";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 
-const Temporada = () => {
+const Inicio = () => {
   const useStyles = makeStyles((theme) => ({
     root: {
       width: "100%",
@@ -51,30 +49,19 @@ const Temporada = () => {
   return (
     <>
       <TopMenuBar></TopMenuBar>
-      <br></br>
-      <br></br>
-      <br></br>
 
+      <br></br>
+      <br></br>
       <Container
         style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          fontSize: "160%",
         }}
       >
-        <TextField
-          id="outlined-basic"
-          label="Temporada"
-          variant="outlined"
-          size="small"
-        />
-        <Button className={classes.btn} variant="contained">
-          Guardar
-        </Button>
+        Bienvenido *Usuario*
       </Container>
-
-      <br></br>
-      <br></br>
       <br></br>
       <br></br>
 
@@ -86,44 +73,30 @@ const Temporada = () => {
         }}
       >
         <List component="nav" className={classes.root} aria-label="contacts">
-          <ListItem button component="a" href="/Partido">
+          <ListItem button component="a" href="/TemporadaInit">
             <ListItemIcon className={classes.icon}>
-              <CreateIcon />
+              <ArrowForwardIcon />
+            </ListItemIcon>
+            <ListItemText className={classes.txt} inset primary="Temporadas" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon className={classes.icon}>
+              <AssignmentIndIcon />
             </ListItemIcon>
             <ListItemText
               className={classes.txt}
               inset
-              primary="Crear Partido"
+              primary="Administrar Jugadores"
             />
           </ListItem>
           <ListItem button>
             <ListItemIcon className={classes.icon}>
-              <AssessmentIcon />
+              <AccountCircleIcon />
             </ListItemIcon>
             <ListItemText
               className={classes.txt}
               inset
-              primary="Estadisticas de Temporada"
-            />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon className={classes.icon}>
-              <DirectionsRunIcon />
-            </ListItemIcon>
-            <ListItemText
-              className={classes.txt}
-              inset
-              primary="Crear Entrenamiento"
-            />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon className={classes.icon}>
-              <PanToolIcon />
-            </ListItemIcon>
-            <ListItemText
-              className={classes.txt}
-              inset
-              primary="Gestionar Partido"
+              primary="Administrar Asistentes"
             />
           </ListItem>
         </List>
@@ -132,4 +105,4 @@ const Temporada = () => {
   );
 };
 
-export default Temporada;
+export default Inicio;
