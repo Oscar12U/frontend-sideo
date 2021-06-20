@@ -25,6 +25,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import * as moment from "moment";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -279,15 +280,17 @@ const VerJugador = () => {
             <Table className={classes5.table} aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell>Descripcion</StyledTableCell>
                   <StyledTableCell>Fecha</StyledTableCell>
+                  <StyledTableCell>Descripcion</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {Lesion.map((number) => {
                   return (
                     <StyledTableRow>
-                      <StyledTableCell>{number.fechaLesion}</StyledTableCell>
+                      <StyledTableCell>
+                        {moment(number.fechaLesion).format("DD/MM/YYYY")}
+                      </StyledTableCell>
                       <StyledTableCell>{number.descripcion}</StyledTableCell>
                     </StyledTableRow>
                   );
