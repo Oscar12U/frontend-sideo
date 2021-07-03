@@ -17,7 +17,6 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
-import VerJugador from "./VerJugador";
 import GestorJugador from "../containers/GestorJugador";
 import Swal from "sweetalert2";
 
@@ -95,7 +94,7 @@ const MenuJugador = () => {
         //console.log(jugadores[0].nombre);
         //console.log("variablex: " + listaJugadores);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   const [jugadores, setJugadores] = React.useState([]);

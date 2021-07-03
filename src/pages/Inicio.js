@@ -1,5 +1,4 @@
 import { Button1, Col, Row, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import React from "react";
 import TopMenuBar from "../components/TopMenuBar";
 import { makeStyles } from "@material-ui/core/styles";
@@ -12,6 +11,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 
 const Inicio = () => {
+
   const useStyles = makeStyles((theme) => ({
     root: {
       width: "100%",
@@ -25,7 +25,6 @@ const Inicio = () => {
       color: "#FBFEF9",
       height: "40px",
       marginLeft: "8px",
-      // margin: "auto",
     },
     txt: {
       color: "#FBFEF9",
@@ -48,8 +47,9 @@ const Inicio = () => {
 
   return (
     <>
-      <TopMenuBar></TopMenuBar>
 
+      {console.log("USUARIO LOGUEADO")}
+      < TopMenuBar></TopMenuBar>
       <br></br>
       <br></br>
       <Container
@@ -60,11 +60,11 @@ const Inicio = () => {
           fontSize: "160%",
         }}
       >
-        Bienvenido *Usuario*
+        Bienvenido
+
       </Container>
       <br></br>
       <br></br>
-
       <Container
         style={{
           display: "flex",
@@ -89,20 +89,23 @@ const Inicio = () => {
               primary="Administrar Jugadores"
             />
           </ListItem>
+
           <ListItem button>
             <ListItemIcon className={classes.icon}>
               <AccountCircleIcon />
             </ListItemIcon>
+
             <ListItemText
               className={classes.txt}
               inset
               primary="Administrar Asistentes"
             />
           </ListItem>
+
         </List>
       </Container>
     </>
-  );
+  )
 };
 
 export default Inicio;
