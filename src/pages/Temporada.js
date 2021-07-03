@@ -38,6 +38,12 @@ export default function Temporada() {
   const [descripcionActividad, setDescripcionActividad] = React.useState("");
   const [tiempoActividad, setTiempoActividad] = React.useState();
   const [entrenamientoUltimo, setEntrenamientoUltimo] = React.useState([]);
+
+  const [openEntrenamiento, setOpenEntrenamiento] = React.useState(false);
+  const [nombreEntrenamiento, setNombreEntrenamiento] = React.useState("");
+  const [descripcionEntrenamiento, setDescripcionEntrenamiento] =
+    React.useState("");
+
   const useStyles3 = makeStyles((theme) => ({
     formControl: {
       margin: theme.spacing(1),
@@ -86,8 +92,16 @@ export default function Temporada() {
     setOpenActividad(true);
   };
 
+  const handleClickOpenEntrenamiento = () => {
+    setOpenEntrenamiento(true);
+  };
+
   const handleActividad = () => {
     setOpenActividad(false);
+  };
+
+  const handleEntrenamiento = () => {
+    setOpenEntrenamiento(false);
   };
 
   const handleNombreActividad = (event) => {
@@ -97,6 +111,16 @@ export default function Temporada() {
 
   const handleDescripcionActividad = (event) => {
     setDescripcionActividad(event.target.value);
+    //console.log("comentario:  ", comentarioEntrenamieto);
+  };
+
+  const handleNombreEntrenamiento = (event) => {
+    setNombreEntrenamiento(event.target.value);
+    //console.log("comentario:  ", comentarioEntrenamieto);
+  };
+
+  const handleDescripcionEntrenamiento = (event) => {
+    setDescripcionEntrenamiento(event.target.value);
     //console.log("comentario:  ", comentarioEntrenamieto);
   };
 
@@ -115,6 +139,20 @@ export default function Temporada() {
     setTiempoActividad("");
     setDescripcionActividad("");
     setOpenActividad(false);
+  };
+
+  const crearEntrenamiento = () => {
+    gestorEntrenamiento.crearNuevoEntrenamiento(
+      nombreEntrenamiento,
+      descripcionEntrenamiento
+    );
+    setDescripcionEntrenamiento("");
+    setNombreEntrenamiento("");
+    setOpenEntrenamiento(false);
+
+    setTimeout(() => {
+      ultimoEntrenamiento();
+    }, 1000);
   };
 
   function ultimoEntrenamiento() {
@@ -189,7 +227,7 @@ export default function Temporada() {
               primary="Estadisticas de Temporada"
             />
           </ListItem>
-          <ListItem button>
+          <ListItem button onClick={handleClickOpenEntrenamiento}>
             <ListItemIcon className={classes.icon}>
               <DirectionsRunIcon />
             </ListItemIcon>
@@ -320,6 +358,72 @@ export default function Temporada() {
               Cancelar
             </Button>
             <Button onClick={enviarActividad} color="primary" autoFocus>
+              Aceptar
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={openEntrenamiento}
+          onClose={handleEntrenamiento}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle
+            id="alert-dialog-title"
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              margin: "auto",
+            }}
+          >
+            {"Actividad Nueva"}
+          </DialogTitle>
+          <DialogContent
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              margin: "10px",
+            }}
+          >
+            <FormControl className={classes5.formControl}></FormControl>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Nombre"
+              type="email"
+              fullWidth
+              value={nombreEntrenamiento}
+              onChange={handleNombreEntrenamiento}
+            />
+            <FormControl className={classes5.formControl}></FormControl>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Descripcion de la Actividad"
+              type="email"
+              fullWidth
+              value={descripcionEntrenamiento}
+              onChange={handleDescripcionEntrenamiento}
+            />
+          </DialogContent>
+
+          <DialogActions
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              margin: "10px",
+            }}
+          >
+            <Button onClick={handleEntrenamiento} color="primary">
+              Cancelar
+            </Button>
+            <Button onClick={crearEntrenamiento} color="primary" autoFocus>
               Aceptar
             </Button>
           </DialogActions>

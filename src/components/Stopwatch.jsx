@@ -2,6 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import StopwatchDisplay from './StopwatchDisplay.jsx';
 import axios from "axios";
+import {
+  Snackbar,Button,IconButton,
+} from "@material-ui/core";
+import CloseIcon from '@material-ui/icons/Close';
+
 
 class Stopwatch extends React.Component {
   constructor(props) {
@@ -13,18 +18,50 @@ class Stopwatch extends React.Component {
       currentTimeMs: 0,
       currentTimeSec: 0,
       currentTimeMin: 0,
+      open: false,
+      notificacion: false,
+      nombre: "El tiempo de la actividad: "+this.props.nombre
     };
     
+    
   }
+  
 //  componentDidMount(){
 //    console.log("dentro",this.props.iniciar)
 //     this.inicioAutomatico()
 //   } 
+
+
+
   componentDidUpdate() {
     // Uso tipico (no olvides de comparar las props):
    // console.log("dentro",this.props.iniciar)
     this.inicioAutomatico()
+    this.notificarTiempo()
   }
+
+
+  
+
+   handleClick = () => {
+    this.setState({ open: true });
+  
+  };
+
+   handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ open: false });
+  };
+
+
+
+
+
+
+
 
    ingresarTiempoJugador = (entrenamiento1, jugador1, actividad1) =>{
     if(!this.state.running){
@@ -43,6 +80,17 @@ class Stopwatch extends React.Component {
               .catch((err) => {});
 
     }
+  }
+
+  notificarTiempo = () =>{
+    if(this.props.limite !== 0){
+
+    
+        if(this.props.limite === this.state.currentTimeMin && this.state.notificacion ===false){
+          this.handleClick();
+          this.setState({ notificacion: true });
+        }
+   }
   }
 
 
@@ -106,7 +154,27 @@ class Stopwatch extends React.Component {
   };
 
   render() {
+
     return (
+      <>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={this.state.open}
+        autoHideDuration={6000}
+        onClose={this.handleClose}
+        message = {this.state.nombre}
+        action={
+          <React.Fragment>
+            
+            <IconButton size="small" aria-label="close" color="inherit" onClick={this.handleClose}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+      />
 
       <div className={'stopwatch'} style={{
         alignItems: "center",
@@ -154,7 +222,7 @@ class Stopwatch extends React.Component {
         />
      
       </div>
-    );
+    </>);
   }
 }
 

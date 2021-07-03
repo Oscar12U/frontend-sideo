@@ -85,4 +85,76 @@ export default class GestorEntrenamiento {
       })
       .catch((err) => {});
   }
+
+  crearNuevoEntrenamiento(nombre1, descripcion1) {
+    axios
+      .post(`http://localhost:3000/api/newEntrenamiento`, {
+        nombre: nombre1,
+        descripcion: descripcion1,
+      })
+      .then((resultado) => {
+        console.log(resultado);
+      })
+      .catch((err) => {});
+  }
+
+  crearNuevoComentarioActividad(
+    entrenamiento1,
+    actividad1,
+    jugador1,
+    comentario1
+  ) {
+    axios
+      .post(`http://localhost:3000/api/newActividadComentario`, {
+        jugador: jugador1,
+        entrenamiento: entrenamiento1,
+        actividad: actividad1,
+        comentario: comentario1,
+      })
+      .then((resultado) => {
+        console.log(resultado);
+      })
+      .catch((err) => {});
+  }
+
+  ausenciaJustificada(jugadorID, entrenamiento1) {
+    //console.log("asdasd", jugadorID);
+    axios
+      .post(`http://localhost:3000/api/newAusencia`, {
+        jugador: jugadorID,
+        entrenamiento: entrenamiento1,
+        justificada: true,
+        injustificada: false,
+      })
+      .then((resultado) => {
+        console.log(resultado);
+      })
+      .catch((err) => {});
+  }
+
+  ausenciaInjustificada(jugadorID, entrenamiento1) {
+    //console.log("asdasd", jugadorID);
+    axios
+      .post(`http://localhost:3000/api/newAusencia`, {
+        jugador: jugadorID,
+        entrenamiento: entrenamiento1,
+        justificada: false,
+        injustificada: true,
+      })
+      .then((resultado) => {
+        console.log(resultado);
+      })
+      .catch((err) => {});
+  }
+
+  actualizarAusenciaJugador(jugadorID) {
+    axios
+      .post(`http://localhost:3000/api/ausenteJugador`, {
+        jugador: jugadorID,
+      })
+      .then((resultado) => {
+        console.log(resultado);
+      })
+      .catch((err) => {});
+  }
 }

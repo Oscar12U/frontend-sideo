@@ -298,6 +298,9 @@ export default function Entrenamiento() {
   const [openComentario, setOpenComentarion] = React.useState(false);
   const [openActividad, setOpenActividad] = React.useState(false);
 
+  const [openComentarioActividad, setOpenComentarioActividad] =
+    React.useState(false);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -320,6 +323,14 @@ export default function Entrenamiento() {
 
   const handleActividad = () => {
     setOpenActividad(false);
+  };
+
+  const handleClickOpenCometarioActividad = () => {
+    setOpenComentarioActividad(true);
+  };
+
+  const handleComentarioActividad = () => {
+    setOpenComentarioActividad(false);
   };
 
   const agregarActividad = () => {
@@ -346,14 +357,22 @@ export default function Entrenamiento() {
   };
 
   const [jugadorLesionado, setJugadorLesionado] = React.useState("");
+  const [actividadSelecionada, setActividadSelecionada] = React.useState("");
+
   const [desJugadorLesionado, setDesJugadorLesionado] = React.useState("");
 
   const [comentarioEntrenamieto, setComentarioEntrenamieto] =
     React.useState("");
+  const [comentarioActividad, setComentarioActividad] = React.useState("");
 
   const handleJugadorLesionado = (event) => {
     setJugadorLesionado(event.target.value);
     console.log("jugador lesionado: ", jugadorLesionado);
+  };
+
+  const handleActividadSelecionada = (event) => {
+    setActividadSelecionada(event.target.value);
+    //console.log("jugador lesionado: ", jugadorLesionado);
   };
 
   const handleDesJugadorLesionado = (event) => {
@@ -363,7 +382,12 @@ export default function Entrenamiento() {
 
   const handleDesComentario = (event) => {
     setComentarioEntrenamieto(event.target.value);
-    console.log("comentario:  ", comentarioEntrenamieto);
+    //console.log("comentario:  ", comentarioEntrenamieto);
+  };
+
+  const handleDesComentarioActividad = (event) => {
+    setComentarioActividad(event.target.value);
+    //console.log("comentario:  ", comentarioEntrenamieto);
   };
 
   const agregarActividadNueva = (actividad) => {
@@ -387,6 +411,20 @@ export default function Entrenamiento() {
     //axiosConsulta2(IDEntrenamiento);
   };
 
+  const enviarComentarioActividad = () => {
+    //console.log("la actividad es: ", actividad);
+    gestorEntrenamiento.crearNuevoComentarioActividad(
+      IDEntrenamiento,
+      actividadSelecionada,
+      jugadorLesionado,
+      comentarioActividad
+    );
+    setActividadSelecionada("");
+    setJugadorLesionado("");
+    setComentarioActividad("");
+    setOpenComentarioActividad(false);
+  };
+
   const finalizarEntrenamieto = () => {
     Swal.fire({
       title: "¿Seguro de terminar el entrenamiento actual?",
@@ -398,6 +436,44 @@ export default function Entrenamiento() {
       if (result.isConfirmed) {
         gestorEntrenamiento.finalizarEntrenamiento(IDEntrenamiento);
         window.location.href = "/";
+      }
+    });
+  };
+
+  const enviarJustificada = (jugador) => {
+    Swal.fire({
+      title: "¿Seguro de poner a este jugador en Ausencia Justificada?",
+      showDenyButton: true,
+      confirmButtonText: `Aceptar`,
+      denyButtonText: `Cancelar`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        gestorEntrenamiento.ausenciaJustificada(jugador, IDEntrenamiento);
+        gestorEntrenamiento.actualizarAusenciaJugador(jugador);
+        setTimeout(() => {
+          axiosConsulta();
+          axiosConsulta2(IDEntrenamiento);
+        }, 1000);
+      }
+    });
+  };
+
+  const enviarInjustificada = (jugador) => {
+    Swal.fire({
+      title: "¿Seguro de poner a este jugador en Ausencia Injustificada?",
+      showDenyButton: true,
+      confirmButtonText: `Aceptar`,
+      denyButtonText: `Cancelar`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        gestorEntrenamiento.ausenciaInjustificada(jugador, IDEntrenamiento);
+        gestorEntrenamiento.actualizarAusenciaJugador(jugador);
+        setTimeout(() => {
+          axiosConsulta();
+          axiosConsulta2(IDEntrenamiento);
+        }, 1000);
       }
     });
   };
@@ -642,15 +718,183 @@ export default function Entrenamiento() {
                       color: "#FFFFFF",
                     }}
                   >
-                    Comentario de una Actividad
+                    Comentarios
                   </div>
                   <Button
                     variant="primary"
                     size="lg"
                     onClick={handleClickOpenComentario}
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                      margin: "25px",
+                    }}
                   >
-                    Comentario
+                    Comentario del Entrenamiento
                   </Button>{" "}
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    onClick={handleClickOpenCometarioActividad}
+                  >
+                    {" "}
+                    Comentario de Actividad
+                  </Button>{" "}
+                  <Dialog
+                    open={openComentarioActividad}
+                    onClose={handleComentarioActividad}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle
+                      id="alert-dialog-title"
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textAlign: "center",
+                        margin: "auto",
+                      }}
+                    >
+                      {"Comentario Nuevo"}
+                    </DialogTitle>
+                    <DialogContent
+                      style={{
+                        alignItems: "center",
+                        justifyContent: "center",
+                        textAlign: "center",
+                        margin: "10px",
+                      }}
+                    >
+                      <FormControl className={classes5.formControl}>
+                        <Typography
+                          style={{
+                            alignItems: "center",
+                            justifyContent: "center",
+
+                            color: "black",
+                            fontSize: "15px",
+                            fontFamily: "Arial",
+                            textAlign: "center",
+                            textJustify: "inter-word",
+                            margin: "10px",
+                          }}
+                        >
+                          Seleccione un jugador:
+                        </Typography>
+
+                        <InputLabel
+                          id="demo-simple-select-label"
+                          style={{
+                            display: "inline-block",
+                            margin: "47px 0",
+                          }}
+                        >
+                          Jugador
+                        </InputLabel>
+
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          displayEmpty
+                          value={jugadorLesionado}
+                          onChange={handleJugadorLesionado}
+                        >
+                          {jugadores
+                            .filter(
+                              (jugador) =>
+                                jugador.activo === true &&
+                                jugador.entrenando === true
+                            )
+                            .map((jugador) => {
+                              return (
+                                <MenuItem value={jugador._id}>
+                                  {jugador.nombre}
+                                </MenuItem>
+                              );
+                            })}
+                        </Select>
+                      </FormControl>
+                      <FormControl className={classes5.formControl}>
+                        <Typography
+                          style={{
+                            alignItems: "center",
+                            justifyContent: "center",
+
+                            color: "black",
+                            fontSize: "15px",
+                            fontFamily: "Arial",
+                            textAlign: "center",
+                            textJustify: "inter-word",
+                            margin: "10px",
+                          }}
+                        >
+                          Seleccione una actividad:
+                        </Typography>
+
+                        <InputLabel
+                          id="demo-simple-select-label"
+                          style={{
+                            display: "inline-block",
+                            margin: "47px 0",
+                          }}
+                        >
+                          Actividad
+                        </InputLabel>
+
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          displayEmpty
+                          value={actividadSelecionada}
+                          onChange={handleActividadSelecionada}
+                        >
+                          {actividades.map((actividad) => {
+                            return (
+                              <MenuItem value={actividad._id}>
+                                {actividad.nombre}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
+                      <FormControl
+                        className={classes5.formControl}
+                      ></FormControl>
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Comentario de la Actividad"
+                        type="email"
+                        fullWidth
+                        value={comentarioActividad}
+                        onChange={handleDesComentarioActividad}
+                      />
+                    </DialogContent>
+
+                    <DialogActions
+                      style={{
+                        alignItems: "center",
+                        justifyContent: "center",
+                        textAlign: "center",
+                        margin: "10px",
+                      }}
+                    >
+                      <Button
+                        onClick={handleComentarioActividad}
+                        color="primary"
+                      >
+                        Cancelar
+                      </Button>
+                      <Button
+                        onClick={enviarComentarioActividad}
+                        color="primary"
+                      >
+                        Aceptar
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
                   <Dialog
                     open={openComentario}
                     onClose={handleComentario}
@@ -947,7 +1191,6 @@ export default function Entrenamiento() {
                         Reiniciar
                       </button>
                     )} */}
-
                     <button
                       id="iniciarBTN"
                       onClick={() => cambiarActividadesAuto(index)}
@@ -1019,6 +1262,8 @@ export default function Entrenamiento() {
                                 actividad={actividad._id}
                                 entrenamiento={entrenamiento._id}
                                 jugador={jugador._id}
+                                limite={actividad.tiempoMinutos}
+                                nombre={actividad.nombre}
                               />
                             </div>
                           </Col>
@@ -1152,7 +1397,9 @@ export default function Entrenamiento() {
             {jugadores
               .filter(
                 (jugador) =>
-                  jugador.activo === true && jugador.entrenando === false
+                  jugador.activo === true &&
+                  jugador.entrenando === false &&
+                  jugador.ausente === false
               )
               .map((jugador, index) => {
                 return (
@@ -1196,6 +1443,52 @@ export default function Entrenamiento() {
                         onClick={() => agregarEntrenamiento(jugador._id)}
                       >
                         Presente
+                      </Button>
+                      <Typography
+                        className={classes2.title}
+                        color="textSecondary"
+                        gutterBottom
+                        style={{
+                          alignItems: "center",
+                          justifyContent: "center",
+                          display: "flex",
+                          color: "black",
+                          fontSize: "20px",
+                          fontFamily: "Arial",
+                          margin: "10px",
+                        }}
+                      >
+                        Ausencias:
+                      </Typography>
+                      <Button
+                        style={{
+                          background: "#0F98C2",
+                          color: "white",
+                          textTransform: "none",
+                          fontSize: 18,
+                          alignItems: "center",
+                          justifyContent: "center",
+                          display: "flex",
+                          margin: "15px",
+                        }}
+                        onClick={() => enviarJustificada(jugador._id)}
+                      >
+                        Justificada
+                      </Button>
+                      <Button
+                        style={{
+                          background: "#0F98C2",
+                          color: "white",
+                          textTransform: "none",
+                          fontSize: 18,
+                          alignItems: "center",
+                          justifyContent: "center",
+                          display: "flex",
+                          margin: "15px",
+                        }}
+                        onClick={() => enviarInjustificada(jugador._id)}
+                      >
+                        Injustificada
                       </Button>
 
                       {/* {jugadoresID
