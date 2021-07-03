@@ -20,6 +20,8 @@ import TextField from "@material-ui/core/TextField";
 import VerJugador from "./VerJugador";
 import GestorJugador from "../containers/GestorJugador";
 import Swal from "sweetalert2";
+import TopMenuBar from "../components/TopMenuBar";
+import Divider from "@material-ui/core/Divider";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -165,6 +167,7 @@ const MenuJugador = () => {
   let gestorJugador = new GestorJugador();
   return (
     <Box sx={{ pb: 7 }}>
+      <TopMenuBar></TopMenuBar>
       <AppBar style={{ position: "relative", bottom: 0 }} color="default">
         <Tabs
           value={value}
@@ -190,36 +193,50 @@ const MenuJugador = () => {
             margin: "60px auto",
           }}
         >
-          <Typography
+          <Container
             style={{
-              color: "black",
-              fontSize: "25px",
-              fontFamily: "Arial",
-            }}
-            align="center"
-          >
-            Ingrese el nombre del nuevo jugador a incluir al equipo
-          </Typography>
-          <Row
-            style={{
-              background: "lightblue",
-              borderRadius: "15px",
-              border: "3px solid #000000",
+              backgroundImage: "linear-gradient(#005da4, #00233D)",
+              //backgroundColor: "#005da4",
+              maxWidth: "700px",
             }}
           >
-            <Col sm="12">
-              <Form align="center">
-                <Form.Label
-                  style={{
-                    color: "black",
-                    fontSize: "20px",
-                    fontFamily: "Arial",
-                  }}
-                >
-                  Nombre del Jugador:
-                </Form.Label>
+            <br />
+            <Typography
+              style={{
+                color: "#FFFFFF",
+                fontSize: "25px",
+                fontFamily: "Arial",
+                fontWeight: "bold",
+              }}
+              align="center"
+            >
+              Ingrese el nombre del nuevo jugador a incluir al equipo
+            </Typography>
+            <br />
+          </Container>
+          <Container
+            style={{
+              backgroundImage: "linear-gradient( #00233D, #33A7FF)",
+              //backgroundColor: "#8ed8f8",
+              maxWidth: "700px",
+            }}
+          >
+            <Row>
+              <Col sm="12">
+                <Form align="center">
+                  <Form.Label
+                    style={{
+                      color: "#ffffff",
+                      fontSize: "20px",
+                      fontFamily: "Arial",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <br />
+                    Nombre del Jugador:
+                  </Form.Label>
 
-                {/* <Form.Control
+                  {/* <Form.Control
                     controlId="nombreJugador"
                     placeholder="Nombre"
                     style={{
@@ -231,67 +248,82 @@ const MenuJugador = () => {
                     onChange={(event) => setJugador(event.target.value)}
                   /> */}
 
-                <TextField
-                  id="filled-full-width"
-                  style={{
-                    width: "55%",
-                    display: "flex",
-                    textColor: "black",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                    margin: "auto",
-                    marginBottom: "10px",
-                    backgroundColor: "white",
-                    borderRadius: "5px",
-                  }}
-                  //placeholder="Nombre"
-                  fullWidth
-                  margin="normal"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  variant="filled"
-                  value={jugador}
-                  onChange={(event) => setJugador(event.target.value)}
-                />
+                  <TextField
+                    id="filled-full-width"
+                    style={{
+                      width: "55%",
+                      display: "flex",
+                      textColor: "black",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                      margin: "auto",
+                      marginBottom: "10px",
+                      backgroundColor: "white",
+                      borderRadius: "5px",
+                    }}
+                    //placeholder="Nombre"
+                    fullWidth
+                    margin="normal"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    variant="filled"
+                    value={jugador}
+                    onChange={(event) => setJugador(event.target.value)}
+                  />
 
-                <Button
-                  style={{
-                    background: "#0F98C2",
-                    color: "white",
-                    textTransform: "none",
-                    fontSize: 20,
-                  }}
-                  onClick={notificacionAgregar}
-                >
-                  Agregar
-                </Button>
-              </Form>
-            </Col>
-          </Row>
+                  <Button
+                    style={{
+                      background: "#E6E8E6",
+                      color: "#000000",
+                      textTransform: "none",
+                      fontSize: 20,
+                      fontWeight: "bold",
+                    }}
+                    onClick={notificacionAgregar}
+                  >
+                    Agregar
+                  </Button>
+                </Form>
+              </Col>
+            </Row>
+            <br />
+          </Container>
         </Container>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Container fluid="md" style={{ margin: "60px auto" }}>
-          <Row
-            style={{
-              background: "lightblue",
-              borderRadius: "15px",
-              border: "3px solid #000000",
-            }}
-          >
+        <Container
+          fluid="md"
+          style={{
+            marginTop: "40px",
+            backgroundImage: "linear-gradient( #00233D, #33A7FF)",
+          }}
+        >
+          <Row style={{}}>
             {jugadores
               .filter((jugador) => jugador.activo === true)
               .map((jugador, index) => {
                 return (
                   <Card
-                    style={{ margin: "60px auto" }}
+                    style={{
+                      margin: "30px auto",
+                      backgroundColor: "#FFFFFF",
+                      maxWidth: "250px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
                     className={classes2.root}
                   >
                     <CardContent
                       style={{
-                        backgroundColor: "gray",
+                        backgroundColor: "#FFFFFF",
+                        maxWidth: "250px",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textAlign: "center",
+                        margin: "auto",
                       }}
                     >
                       <Typography
@@ -305,10 +337,13 @@ const MenuJugador = () => {
                           color: "black",
                           fontSize: "20px",
                           fontFamily: "Arial",
+                          fontWeight: "bold",
                         }}
                       >
-                        Nombre: {jugador.nombre}
+                        {jugador.nombre}
                       </Typography>
+                      <Divider />
+                      <br />
                       <Link
                         to={{
                           pathname: `/verJugador`,
@@ -321,10 +356,12 @@ const MenuJugador = () => {
                         }}
                       >
                         <a
+                          style={{
+                            backgroundColor: "#005da4",
+                          }}
                           href="#"
                           className="btn btn-secondary"
                           id="botton1"
-                          color
                         >
                           Ver
                         </a>
@@ -332,7 +369,7 @@ const MenuJugador = () => {
                     </CardContent>
                     <CardActions
                       style={{
-                        backgroundColor: "gray",
+                        backgroundColor: "#FFFFFF",
                         alignItems: "center",
                         justifyContent: "center",
                         display: "flex",
@@ -343,9 +380,11 @@ const MenuJugador = () => {
                         color="default"
                         onClick={() => notificacionEliminar(jugador._id)}
                         style={{
+                          backgroundColor: "#DE1A1A",
                           alignItems: "center",
                           justifyContent: "center",
                           display: "flex",
+                          color: "#FFFFFF",
                         }}
                       >
                         Eliminar
