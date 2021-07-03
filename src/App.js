@@ -9,6 +9,9 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import TemporadaInit from "./pages/TemporadaInit";
 import Inicio from "./pages/Inicio";
 import Entrenamiento from "./pages/Entrenamiento";
+import Estadisticas from "./pages/Estadisticas";
+
+
 function App() {
   return (
     <>
@@ -34,8 +37,14 @@ function App() {
           <VerJugador></VerJugador>
         </Route>
 
+
         <Route path="/Entrenamiento">
           <Entrenamiento></Entrenamiento>
+     </Route>
+
+        <Route path="/Estadisticas">
+          <Estadisticas></Estadisticas>
+
         </Route>
       </Router>
     </>

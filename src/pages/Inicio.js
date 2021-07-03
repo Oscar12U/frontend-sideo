@@ -10,13 +10,16 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
+import Divider from "@material-ui/core/Divider";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
 
 const Inicio = () => {
   const useStyles = makeStyles((theme) => ({
     root: {
       width: "100%",
       maxWidth: 360,
-      backgroundColor: "#445074",
+      backgroundColor: "#005da4",
       borderRadius: "15px",
       margin: "auto",
     },
@@ -49,22 +52,40 @@ const Inicio = () => {
   return (
     <>
       <TopMenuBar></TopMenuBar>
-
-      <br></br>
-      <br></br>
       <Container
         style={{
+          backgroundColor: "#00c0f3",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           fontSize: "160%",
+          fontWeight: "bold",
+          borderBottomRightRadius: "15px",
+          borderBottomLeftRadius: "15px",
+          boxShadow: "0px 2px 3px -2px",
+          // marginLeft: "50px",
+          // marginRight: "50px",
         }}
       >
-        Bienvenido *Usuario*
+        <Typography
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "100%",
+            fontWeight: "bold",
+            marginBottom: "10px",
+          }}
+        >
+          Bienvenido *Usuario*
+        </Typography>
+
+        <br></br>
       </Container>
       <br></br>
       <br></br>
-
+      <Divider variant="middle" />
+      <br></br>
+      <br></br>
       <Container
         style={{
           display: "flex",
@@ -79,7 +100,7 @@ const Inicio = () => {
             </ListItemIcon>
             <ListItemText className={classes.txt} inset primary="Temporadas" />
           </ListItem>
-          <ListItem button>
+          <ListItem button component="a" href="/menuJugador">
             <ListItemIcon className={classes.icon}>
               <AssignmentIndIcon />
             </ListItemIcon>

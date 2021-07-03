@@ -6,16 +6,15 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import AddIcon from '@material-ui/icons/Add';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-
+import AddIcon from "@material-ui/icons/Add";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 
 const TemporadaInit = () => {
   const useStyles = makeStyles((theme) => ({
     root: {
       width: "100%",
       maxWidth: 360,
-      backgroundColor: "#445074",
+      backgroundColor: "#005da4",
       borderRadius: "15px",
       margin: "auto",
     },

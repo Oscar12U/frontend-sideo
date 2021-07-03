@@ -56,7 +56,7 @@ const TempDrawel = (props) => {
     {
       text: "Administrar Jugadores",
       icon: <AccountCircleIcon />,
-      onClick: () => history.push("/TemporadaInit"),
+      onClick: () => history.push("/menuJugador"),
     },
     {
       text: "Adminsitrar Asistentes",
