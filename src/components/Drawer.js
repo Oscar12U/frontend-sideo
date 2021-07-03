@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 });
 
 const TempDrawel = (props) => {
-  console.log(props);
+  //console.log(props);
   const { history } = props;
   const classes = useStyles();
   const [state, setState] = React.useState({

@@ -1,5 +1,5 @@
 import { Button1, Col, Row, Container } from "react-bootstrap";
-import React from "react";
+import React, { useEffect } from "react";
 import TopMenuBar from "../components/TopMenuBar";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
@@ -12,6 +12,24 @@ import AddIcon from "@material-ui/icons/Add";
 import PanToolIcon from "@material-ui/icons/PanTool";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+
+import ControlPointIcon from "@material-ui/icons/ControlPoint";
+import GestorEntrenamiento from "../containers/GestorEntrenamiento";
+import SlowMotionVideoIcon from "@material-ui/icons/SlowMotionVideo";
+import { Link } from "react-router-dom";
+import {
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+} from "@material-ui/core";
+import axios from "axios";
+
 import Swal from "sweetalert2";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormHelperText from "@material-ui/core/FormHelperText";
@@ -19,7 +37,32 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import NativeSelect from "@material-ui/core/NativeSelect";
 
-const Temporada = () => {
+
+export default function Temporada() {
+  useEffect(() => {
+    ultimoEntrenamiento();
+  }, []);
+  const [openActividad, setOpenActividad] = React.useState(false);
+  const [nombreActividad, setNombreActividad] = React.useState("");
+  const [descripcionActividad, setDescripcionActividad] = React.useState("");
+  const [tiempoActividad, setTiempoActividad] = React.useState();
+  const [entrenamientoUltimo, setEntrenamientoUltimo] = React.useState([]);
+
+  const [openEntrenamiento, setOpenEntrenamiento] = React.useState(false);
+  const [nombreEntrenamiento, setNombreEntrenamiento] = React.useState("");
+  const [descripcionEntrenamiento, setDescripcionEntrenamiento] =
+    React.useState("");
+
+  const useStyles3 = makeStyles((theme) => ({
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
+  }));
+  const classes5 = useStyles3();
   const useStyles = makeStyles((theme) => ({
     root: {
       width: "100%",
@@ -54,6 +97,89 @@ const Temporada = () => {
 
   const classes = useStyles();
 
+
+  const handleClickOpenActividad = () => {
+    setOpenActividad(true);
+  };
+
+  const handleClickOpenEntrenamiento = () => {
+    setOpenEntrenamiento(true);
+  };
+
+  const handleActividad = () => {
+    setOpenActividad(false);
+  };
+
+  const handleEntrenamiento = () => {
+    setOpenEntrenamiento(false);
+  };
+
+  const handleNombreActividad = (event) => {
+    setNombreActividad(event.target.value);
+    //console.log("comentario:  ", comentarioEntrenamieto);
+  };
+
+  const handleDescripcionActividad = (event) => {
+    setDescripcionActividad(event.target.value);
+    //console.log("comentario:  ", comentarioEntrenamieto);
+  };
+
+  const handleNombreEntrenamiento = (event) => {
+    setNombreEntrenamiento(event.target.value);
+    //console.log("comentario:  ", comentarioEntrenamieto);
+  };
+
+  const handleDescripcionEntrenamiento = (event) => {
+    setDescripcionEntrenamiento(event.target.value);
+    //console.log("comentario:  ", comentarioEntrenamieto);
+  };
+
+  const handleTiempoActividad = (event) => {
+    setTiempoActividad(event.target.value);
+    //console.log("comentario:  ", comentarioEntrenamieto);
+  };
+
+  const enviarActividad = () => {
+    gestorEntrenamiento.crearActividad(
+      nombreActividad,
+      descripcionActividad,
+      tiempoActividad
+    );
+    setNombreActividad("");
+    setTiempoActividad("");
+    setDescripcionActividad("");
+    setOpenActividad(false);
+  };
+
+  const crearEntrenamiento = () => {
+    gestorEntrenamiento.crearNuevoEntrenamiento(
+      nombreEntrenamiento,
+      descripcionEntrenamiento
+    );
+    setDescripcionEntrenamiento("");
+    setNombreEntrenamiento("");
+    setOpenEntrenamiento(false);
+
+    setTimeout(() => {
+      ultimoEntrenamiento();
+    }, 1000);
+  };
+
+  function ultimoEntrenamiento() {
+    axios
+      .get(`http://localhost:3000/api/ultimoEntrenamiento`)
+      .then((resultado) => {
+        const entrenamiento1 = resultado.data.data[0];
+        //console.log("entrenamiento adentro: ", entrenamiento1);
+        setEntrenamientoUltimo(entrenamiento1);
+        //console.log("entrenamiento ultimo: ", entrenamientoUltimo);
+      })
+      .catch((err) => {});
+  }
+
+  let gestorEntrenamiento = new GestorEntrenamiento();
+
+
   const AjaxNotify = () => {
     (async () => {
       const { value: formValues } = await Swal.fire({
@@ -84,6 +210,7 @@ const Temporada = () => {
       }
     })();
   };
+
 
   return (
     <>
@@ -159,7 +286,7 @@ const Temporada = () => {
               primary="Estadisticas de Temporada"
             />
           </ListItem>
-          <ListItem button>
+          <ListItem button onClick={handleClickOpenEntrenamiento}>
             <ListItemIcon className={classes.icon}>
               <DirectionsRunIcon />
             </ListItemIcon>
@@ -179,10 +306,188 @@ const Temporada = () => {
               primary="Gestionar Partido"
             />
           </ListItem>
+
+          {entrenamientoUltimo.finalizado === false && (
+            <Link
+              to={{
+                pathname: `/entrenamiento`,
+                state: { IDEntrenamiento: entrenamientoUltimo._id },
+              }}
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                display: "flex",
+              }}
+            >
+              <ListItem button component="a">
+                <ListItemIcon className={classes.icon}>
+                  <SlowMotionVideoIcon />
+                </ListItemIcon>
+                <ListItemText
+                  className={classes.txt}
+                  inset
+                  primary="Entrenamiento en Curso"
+                />
+              </ListItem>
+            </Link>
+          )}
+
+          <ListItem button component="a" onClick={handleClickOpenActividad}>
+            <ListItemIcon className={classes.icon}>
+              <ControlPointIcon />
+            </ListItemIcon>
+            <ListItemText
+              className={classes.txt}
+              inset
+              primary="Crear Actividad de Entrenamiento"
+            />
+          </ListItem>
         </List>
+
+        <Dialog
+          open={openActividad}
+          onClose={handleActividad}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle
+            id="alert-dialog-title"
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              margin: "auto",
+            }}
+          >
+            {"Actividad Nueva"}
+          </DialogTitle>
+          <DialogContent
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              margin: "10px",
+            }}
+          >
+            <FormControl className={classes5.formControl}></FormControl>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Nombre"
+              type="email"
+              fullWidth
+              value={nombreActividad}
+              onChange={handleNombreActividad}
+            />
+            <FormControl className={classes5.formControl}></FormControl>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Descripcion de la Actividad"
+              type="email"
+              fullWidth
+              value={descripcionActividad}
+              onChange={handleDescripcionActividad}
+            />
+            <FormControl className={classes5.formControl}></FormControl>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Tiempo en Min"
+              type="number"
+              helperText="En caso de no tener poner 0"
+              fullWidth
+              value={tiempoActividad}
+              onChange={handleTiempoActividad}
+            />
+          </DialogContent>
+
+          <DialogActions
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              margin: "10px",
+            }}
+          >
+            <Button onClick={handleActividad} color="primary">
+              Cancelar
+            </Button>
+            <Button onClick={enviarActividad} color="primary" autoFocus>
+              Aceptar
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={openEntrenamiento}
+          onClose={handleEntrenamiento}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle
+            id="alert-dialog-title"
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              margin: "auto",
+            }}
+          >
+            {"Actividad Nueva"}
+          </DialogTitle>
+          <DialogContent
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              margin: "10px",
+            }}
+          >
+            <FormControl className={classes5.formControl}></FormControl>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Nombre"
+              type="email"
+              fullWidth
+              value={nombreEntrenamiento}
+              onChange={handleNombreEntrenamiento}
+            />
+            <FormControl className={classes5.formControl}></FormControl>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Descripcion de la Actividad"
+              type="email"
+              fullWidth
+              value={descripcionEntrenamiento}
+              onChange={handleDescripcionEntrenamiento}
+            />
+          </DialogContent>
+
+          <DialogActions
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              margin: "10px",
+            }}
+          >
+            <Button onClick={handleEntrenamiento} color="primary">
+              Cancelar
+            </Button>
+            <Button onClick={crearEntrenamiento} color="primary" autoFocus>
+              Aceptar
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </>
   );
-};
-
-export default Temporada;
+}
