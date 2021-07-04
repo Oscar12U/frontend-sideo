@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
   p1: {
     fontSize: "25px",
     color: "#000000",
-    font: "Bold",
+    fontWeight: "bold",
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
@@ -374,9 +374,14 @@ const Partido = () => {
   };
 
   return (
-    <Box sx={{ pb: 7 }}>
+    <Box
+      sx={{ pb: 7 }}
+      style={{
+        //border: "3px solid #456990",
+        backgroundColor: "#FFFFFF",
+      }}
+    >
       <TopMenuBar></TopMenuBar>
-      <br></br>
 
       <AppBar style={{ position: "relative" }} color="default">
         <Tabs
@@ -401,15 +406,15 @@ const Partido = () => {
       </AppBar>
       <TabPanel value={value} index={0}>
         <Container
-          fluid="md"
           style={{
-            border: "3px solid #456990",
-            margin: "60px auto",
-            backgroundColor: "#456990",
+            //border: "3px solid #456990",
+            margin: "30px auto",
+            backgroundColor: "#005da4",
             borderRadius: "15px",
           }}
           elevation={3}
         >
+
           <br></br>
           <Paper
             elevation={3}
@@ -453,46 +458,60 @@ const Partido = () => {
                   handleTime={handleInitTimer}
                   handleClearTimer={handleClearTimer}
                   handleEndPeriodo={handleEndPeriodo}
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                    margin: "auto",
-                  }}
-                />
-                <br></br>
-              </Col>
-            </Row>
-          </Paper>
-          <br></br>
-          <Container elevation={3}>
-            <Row
+
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                      margin: "auto",
+                    }}
+                  />
+                  <br></br>
+                </Col>
+              </Row>
+            </Paper>
+          </div>
+          <br />
+          <Row
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              color: "#000000",
+              fontWeight: "bold",
+              margin: "auto",
+            }}
+          >
+            <Container
               style={{
                 justifyContent: "center",
                 alignItems: "center",
                 textAlign: "center",
-                color: "#FFFFFF",
                 margin: "auto",
+                backgroundColor: "#FFFFFF",
+                borderRadius: "15px",
               }}
             >
-              <Col
+              <br />
+
+              <br />
+              <Row
                 style={{
                   justifyContent: "center",
                   alignItems: "center",
                   textAlign: "center",
                   margin: "auto",
-                  backgroundColor: "#00070",
-                  borderRadius: "15px",
                 }}
               >
                 <div
                   className={classes.p1}
                   style={{
-                    color: "#FFFFFF",
+                    color: "#000000",
                   }}
                 >
                   Seleccionar jugador
                 </div>
+
                 <Dropdown as={ButtonGroup}>
                   <Button id="btnCategoria">
                     {""}
@@ -517,10 +536,26 @@ const Partido = () => {
                 </Dropdown>
                 <div
                   className={classes.p1}
+
+              </Row>
+              <Row
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                  margin: "auto",
+                }}
+              >
+                <DropdownButton
+                  variant="primary"
+                  id="dropdown-item-button"
+                  title="Seleccionar Jugador"
+
                   style={{
                     color: "#FFFFFF",
                   }}
                 >
+
                   Seleccionar jugador Asistente
                 </div>
                 <Dropdown as={ButtonGroup}>
@@ -539,21 +574,19 @@ const Partido = () => {
                 </Dropdown>
               </Col>
 
-              <Col
-                style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                  margin: "auto",
-                }}
-              >
-                <Container
-                  fluid="md"
+
+              <Divider variant="middle" />
+
+              <Row>
+                <Col
+                  md={6}
                   style={{
                     justifyContent: "center",
                     alignItems: "center",
                     textAlign: "center",
-                    margin: "auto",
+                    margin: "center",
+                    backgroundColor: "#FFFFFF",
+                    borderRadius: "15px",
                   }}
                 >
                   <br></br>
@@ -563,23 +596,27 @@ const Partido = () => {
                   <br></br>
                   <Form
                     style={{
+                      marginTop: "10px",
                       justifyContent: "center",
                       alignItems: "center",
                       textAlign: "center",
-                      margin: "auto",
+                      margin: "center",
                     }}
                   >
                     {["A favor", "En contra"].map((type) => (
                       <div key={`default-${type}`} className="mb-3">
                         <Form.Check
+
                           name="group1"
                           type={"radio"}
+
                           id={`${type}`}
                           label={`${type}`}
                         />
                       </div>
                     ))}
                   </Form>
+
                   <Button
                     variant="primary"
                     style={{
@@ -614,27 +651,32 @@ const Partido = () => {
               <Col>
                 <Container
                   fluid="md"
+
                   style={{
                     justifyContent: "center",
-                    alignItems: "center",
                     textAlign: "center",
-                    margin: "auto",
+                    margin: "center",
                   }}
                 >
-                  <Col
+                  <Container
                     style={{
                       justifyContent: "center",
                       alignItems: "center",
                       textAlign: "center",
                       margin: "auto",
+                      backgroundColor: "#FFFFFF",
                     }}
                   >
-                    <div
-                      className={classes.p1}
+                    <br />
+                    <br />
+                    <Button
+                      variant="primary"
                       style={{
-                        color: "#FFFFFF",
+                        margin: "5px",
                       }}
+                      size="lg"
                     >
+
                       Jugador Entra
                     </div>
                     <Dropdown as={ButtonGroup}>
@@ -662,10 +704,13 @@ const Partido = () => {
                     <br></br>
                     <div
                       className={classes.p1}
+
                       style={{
-                        color: "#FFFFFF",
+                        margin: "5px",
                       }}
+                      size="lg"
                     >
+
                       Jugador Sale
                     </div>
                     <Dropdown as={ButtonGroup}>
@@ -705,6 +750,7 @@ const Partido = () => {
               </Col>
             </Row>
           </Container>
+
           <br></br>
           <Card style={{ margin: "60px auto" }}>
             <CardContent style={{ backgroundColor: "gray" }}>

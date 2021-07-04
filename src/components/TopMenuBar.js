@@ -12,6 +12,8 @@ import FormGroup from "@material-ui/core/FormGroup";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Drawer from "./Drawer";
+import logOut from "./LogOut";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,13 +41,20 @@ export default function TopMenuBar() {
     setAnchorEl(event.currentTarget);
   };
 
+  const history = useHistory();
   const handleClose = () => {
-    setAnchorEl(null);
+    logOut();
+    history.push("/iniciarSesion")
+    window.location.reload();
   };
+
+  const handleCerrar = () => {
+    setAnchorEl(false);
+  }
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" style={{backgroundColor:"#BD0F15"}}>
+      <AppBar position="static" style={{ backgroundColor: "#00c0f3" }}>
         <Toolbar>
           <div>
             <Drawer></Drawer>
@@ -86,10 +95,10 @@ export default function TopMenuBar() {
                   horizontal: "right",
                 }}
                 open={open}
-                onClose={handleClose}
+                onClose={handleCerrar}
               >
-                <MenuItem onClick={handleClose}>Perfil</MenuItem>
-                <MenuItem onClick={handleClose}>Mi Cuenta</MenuItem>
+                <MenuItem >Perfil</MenuItem>
+                <MenuItem >Mi Cuenta</MenuItem>
                 <MenuItem onClick={handleClose}>Salir</MenuItem>
               </Menu>
             </div>
