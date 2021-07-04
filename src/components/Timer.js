@@ -7,6 +7,7 @@ class Timer extends Component {
     super(props);
     this.state = {
       actualTime: 0,
+      periodo: 1,
       btnPlayPause: "Iniciar",
     };
 
@@ -14,6 +15,7 @@ class Timer extends Component {
     this.initTimer = this.initTimer.bind(this);
     this.clearTimer = this.clearTimer.bind(this);
     this.pauseTimer = this.pauseTimer.bind(this);
+    this.endPeriod = this.endPeriod.bind(this);
   }
 
   initTimer() {
@@ -23,9 +25,11 @@ class Timer extends Component {
     } else {
       this.counter = setInterval(() => {
         this.setState({ actualTime: this.state.actualTime + 1 });
-      }, 60000);
+      }, 1000);
+      //60000
       this.setState({ btnPlayPause: "Pausar" });
     }
+    this.props.handleTime();
   }
 
   pauseTimer() {
@@ -38,6 +42,11 @@ class Timer extends Component {
     clearInterval(this.counter);
     this.counter = null;
     this.setState({ btnPlayPause: "Iniciar" });
+    this.props.handleClearTimer();
+  }
+
+  endPeriod() {
+    this.props.handleEndPeriodo();
   }
 
   render() {
@@ -59,6 +68,11 @@ class Timer extends Component {
             onClick={this.initTimer}
           />
           <input type="button" value="Reiniciar" onClick={this.clearTimer} />
+          <input
+            type="button"
+            value="Finalizar Periodo"
+            onClick={this.endPeriod}
+          />
         </div>
       </div>
     );

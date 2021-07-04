@@ -17,10 +17,15 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
+
+import VerJugador from "./VerJugador";
+
+
 import GestorJugador from "../containers/GestorJugador";
 import Swal from "sweetalert2";
 import TopMenuBar from "../components/TopMenuBar";
 import Divider from "@material-ui/core/Divider";
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -81,10 +86,12 @@ const useStyles2 = makeStyles({
 });
 
 const MenuJugador = () => {
+
   const [count, setCount] = React.useState(0);
   useEffect(() => {
     axiosConsulta();
   }, []);
+
 
   function axiosConsulta() {
     axios
@@ -96,7 +103,9 @@ const MenuJugador = () => {
         //console.log(jugadores[0].nombre);
         //console.log("variablex: " + listaJugadores);
       })
+
       .catch((err) => { });
+
   }
 
   const [jugadores, setJugadores] = React.useState([]);
@@ -111,7 +120,6 @@ const MenuJugador = () => {
   const EnviarJugador = () => {
     gestorJugador.crearJugador(jugador);
 
-    //console.log(jugador);
   };
 
   const EliminarJugdador = (jugador) => {
@@ -161,12 +169,15 @@ const MenuJugador = () => {
     });
   };
 
+
   const bull = <span className={classes.bullet}>•</span>;
   const classes2 = useStyles2();
   let gestorJugador = new GestorJugador();
   return (
     <Box sx={{ pb: 7 }}>
+
       <TopMenuBar></TopMenuBar>
+
       <AppBar style={{ position: "relative", bottom: 0 }} color="default">
         <Tabs
           value={value}
@@ -177,12 +188,15 @@ const MenuJugador = () => {
           aria-label="icon label tabs example"
         >
           <Tab label="Añadir Jugador" icon={<PartidoIcon />} />
+
+
           <Tab
             label="Lista Jugadores"
             icon={<TeamIcon />}
             onClick={axiosConsulta}
           />
           <Tab label="Volver" icon={<HomeIcon />} href="/" />
+
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -192,6 +206,8 @@ const MenuJugador = () => {
             margin: "60px auto",
           }}
         >
+
+
           <Container
             style={{
               backgroundImage: "linear-gradient(#005da4, #00233D)",
@@ -236,6 +252,7 @@ const MenuJugador = () => {
                   </Form.Label>
 
                   {/* <Form.Control
+
                     controlId="nombreJugador"
                     placeholder="Nombre"
                     style={{
@@ -246,6 +263,7 @@ const MenuJugador = () => {
                     }}
                     onChange={(event) => setJugador(event.target.value)}
                   /> */}
+
 
                   <TextField
                     id="filled-full-width"
@@ -392,11 +410,15 @@ const MenuJugador = () => {
                   </Card>
                 );
               })}
+
           </Row>
         </Container>
       </TabPanel>
       <TabPanel value={value} index={2}>
+
+
         Volviendo a la pagina principal...
+
       </TabPanel>
       <TabPanel value={value} index={3}>
         Bienvenido A la Seccion De Jugadores
