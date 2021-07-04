@@ -1,5 +1,4 @@
 import { Button1, Col, Row, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import React from "react";
 import TopMenuBar from "../components/TopMenuBar";
 import { makeStyles } from "@material-ui/core/styles";
@@ -15,6 +14,7 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 
 const Inicio = () => {
+
   const useStyles = makeStyles((theme) => ({
     root: {
       width: "100%",
@@ -28,7 +28,6 @@ const Inicio = () => {
       color: "#FBFEF9",
       height: "40px",
       marginLeft: "8px",
-      // margin: "auto",
     },
     txt: {
       color: "#FBFEF9",
@@ -51,7 +50,11 @@ const Inicio = () => {
 
   return (
     <>
-      <TopMenuBar></TopMenuBar>
+
+
+      < TopMenuBar></TopMenuBar>
+      <br></br>
+      <br></br>
       <Container
         style={{
           backgroundColor: "#00c0f3",
@@ -67,6 +70,7 @@ const Inicio = () => {
           // marginRight: "50px",
         }}
       >
+
         <Typography
           style={{
             justifyContent: "center",
@@ -110,20 +114,23 @@ const Inicio = () => {
               primary="Administrar Jugadores"
             />
           </ListItem>
+
           <ListItem button>
             <ListItemIcon className={classes.icon}>
               <AccountCircleIcon />
             </ListItemIcon>
+
             <ListItemText
               className={classes.txt}
               inset
               primary="Administrar Asistentes"
             />
           </ListItem>
+
         </List>
       </Container>
     </>
-  );
+  )
 };
 
 export default Inicio;
