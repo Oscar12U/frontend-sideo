@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   p1: {
     fontSize: "25px",
     color: "#000000",
-    font: "Bold",
+    fontWeight: "bold",
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
@@ -102,9 +102,14 @@ export default function ScrollableTabsButtonForce() {
     );
   };
   return (
-    <Box sx={{ pb: 7 }}>
+    <Box
+      sx={{ pb: 7 }}
+      style={{
+        //border: "3px solid #456990",
+        backgroundColor: "#FFFFFF",
+      }}
+    >
       <TopMenuBar></TopMenuBar>
-      <br></br>
 
       <AppBar style={{ position: "relative" }} color="default">
         <Tabs
@@ -122,85 +127,107 @@ export default function ScrollableTabsButtonForce() {
       </AppBar>
       <TabPanel value={value} index={0}>
         <Container
-          fluid="md"
           style={{
-            border: "3px solid #456990",
-            margin: "60px auto",
-            backgroundColor: "#456990",
+            //border: "3px solid #456990",
+            margin: "30px auto",
+            backgroundColor: "#005da4",
             borderRadius: "15px",
           }}
           elevation={3}
         >
-          <br></br>
-          <Paper
-            elevation={3}
-            borderRadius={50}
-            style={{
-              backgroundColor: "#FFFFFF",
-            }}
-          >
-            <Row style={{ margin: "auto 20px" }}>
-              <Col sm="6" style={{}}>
-                <div className={classes.p1}>Detalles del Partido</div>
-                <br></br>
-                <div className={classes.p2}>
-                  Partido Contra:<br></br> YYY
-                </div>
-                <div className={classes.p3}>
-                  Temporada:<br></br> X
-                </div>
-              </Col>
-              <Col
-                sm="6"
-                style={{
-                  font: "bold",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <div className={classes.p1}>Tiempo del partido</div>
-                <br></br>
-                <Timer
+          <br />
+          <div>
+            <Paper
+              elevation={0}
+              borderRadius={50}
+              style={{
+                backgroundColor: "#F5F5F5",
+                borderRadius: "15px",
+              }}
+            >
+              <Row style={{ margin: "auto 20px" }}>
+                <Col sm="6" style={{}}>
+                  <div className={classes.p1}>Detalles del Partido</div>
+                  <br></br>
+                  <div className={classes.p2}>
+                    Partido Contra:<br></br> YYY
+                  </div>
+                  <div className={classes.p3}>
+                    Temporada:<br></br> X
+                  </div>
+                </Col>
+                <Col
+                  sm="6"
                   style={{
+                    font: "bold",
                     justifyContent: "center",
                     alignItems: "center",
-                    textAlign: "center",
-                    margin: "auto",
                   }}
-                />
-                <br></br>
-              </Col>
-            </Row>
-          </Paper>
-          <br></br>
-          <Container elevation={3}>
-            <Row
+                >
+                  <div className={classes.p1}>Tiempo del partido</div>
+                  <br></br>
+                  <Timer
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                      margin: "auto",
+                    }}
+                  />
+                  <br></br>
+                </Col>
+              </Row>
+            </Paper>
+          </div>
+          <br />
+          <Row
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              color: "#000000",
+              fontWeight: "bold",
+              margin: "auto",
+            }}
+          >
+            <Container
               style={{
                 justifyContent: "center",
                 alignItems: "center",
                 textAlign: "center",
-                color: "#FFFFFF",
                 margin: "auto",
+                backgroundColor: "#FFFFFF",
+                borderRadius: "15px",
               }}
             >
-              <Col
+              <br />
+
+              <br />
+              <Row
                 style={{
                   justifyContent: "center",
                   alignItems: "center",
                   textAlign: "center",
                   margin: "auto",
-                  backgroundColor: "#00070",
-                  borderRadius: "15px",
                 }}
               >
                 <div
                   className={classes.p1}
                   style={{
-                    color: "#FFFFFF",
+                    color: "#000000",
                   }}
                 >
                   Seleccionar jugador
                 </div>
+              </Row>
+              <Row
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                  margin: "auto",
+                }}
+              >
                 <DropdownButton
                   variant="primary"
                   id="dropdown-item-button"
@@ -215,23 +242,20 @@ export default function ScrollableTabsButtonForce() {
                   <Dropdown.Item as="button">Jugador 2</Dropdown.Item>
                   <Dropdown.Item as="button">Jugador 3</Dropdown.Item>
                 </DropdownButton>
-              </Col>
+              </Row>
 
-              <Col
-                style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                  margin: "auto",
-                }}
-              >
-                <Container
-                  fluid="md"
+              <Divider variant="middle" />
+
+              <Row>
+                <Col
+                  md={6}
                   style={{
                     justifyContent: "center",
                     alignItems: "center",
                     textAlign: "center",
-                    margin: "auto",
+                    margin: "center",
+                    backgroundColor: "#FFFFFF",
+                    borderRadius: "15px",
                   }}
                 >
                   <br></br>
@@ -241,15 +265,17 @@ export default function ScrollableTabsButtonForce() {
                   <br></br>
                   <Form
                     style={{
+                      marginTop: "10px",
                       justifyContent: "center",
                       alignItems: "center",
                       textAlign: "center",
-                      margin: "auto",
+                      margin: "center",
                     }}
                   >
                     {["A favor", "En contra"].map((type) => (
                       <div key={`default-${type}`} className="mb-3">
                         <Form.Check
+                          style={{}}
                           type={"checkbox"}
                           id={`${type}`}
                           label={`${type}`}
@@ -257,84 +283,129 @@ export default function ScrollableTabsButtonForce() {
                       </div>
                     ))}
                   </Form>
-                  <Button
-                    variant="primary"
-                    style={{
-                      margin: "5px",
-                    }}
-                    size="lg"
-                  >
-                    Falta
-                  </Button>
-                  <Button
-                    variant="primary"
-                    style={{
-                      margin: "5px",
-                    }}
-                    size="lg"
-                  >
-                    Lesion
-                  </Button>
-                </Container>
-              </Col>
-              <Col>
-                <Container
-                  fluid="md"
+                </Col>
+
+                <Col
+                  md={6}
                   style={{
                     justifyContent: "center",
-                    alignItems: "center",
                     textAlign: "center",
-                    margin: "auto",
+                    margin: "center",
                   }}
                 >
-                  <Col
+                  <Container
                     style={{
                       justifyContent: "center",
                       alignItems: "center",
                       textAlign: "center",
                       margin: "auto",
+                      backgroundColor: "#FFFFFF",
                     }}
                   >
-                    <div
-                      className={classes.p1}
+                    <br />
+                    <br />
+                    <Button
+                      variant="primary"
                       style={{
-                        color: "#FFFFFF",
+                        margin: "5px",
                       }}
+                      size="lg"
                     >
-                      Jugador Entra
-                    </div>
-                    <DropdownButton
-                      id="dropdown-item-button"
-                      title="Seleccionar Jugador"
-                    >
-                      <Dropdown.ItemText>Lista Jugadores</Dropdown.ItemText>
-                      <Dropdown.Item as="button">Jugador 1</Dropdown.Item>
-                      <Dropdown.Item as="button">Jugador 2</Dropdown.Item>
-                      <Dropdown.Item as="button">Jugador 3</Dropdown.Item>
-                    </DropdownButton>
-                    <br></br>
-                    <div
-                      className={classes.p1}
+                      Falta
+                    </Button>
+                    <Button
+                      variant="primary"
                       style={{
-                        color: "#FFFFFF",
+                        margin: "5px",
                       }}
+                      size="lg"
                     >
-                      Jugador Sale
-                    </div>
-                    <DropdownButton
-                      id="dropdown-item-button"
-                      title="Seleccionar Jugador"
-                    >
-                      <Dropdown.ItemText>Lista Jugadores</Dropdown.ItemText>
-                      <Dropdown.Item as="button">Jugador 1</Dropdown.Item>
-                      <Dropdown.Item as="button">Jugador 2</Dropdown.Item>
-                      <Dropdown.Item as="button">Jugador 3</Dropdown.Item>
-                    </DropdownButton>
-                  </Col>
-                </Container>
-              </Col>
-            </Row>
-          </Container>
+                      Lesion
+                    </Button>
+                  </Container>
+                </Col>
+              </Row>
+              <br />
+            </Container>
+            <br />
+
+            <Container
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+                margin: "auto",
+              }}
+            >
+              <br />
+              <Row>
+                <Col
+                  md={6}
+                  style={{
+                    justifyContent: "center",
+                    textAlign: "center",
+                    margin: "center",
+                  }}
+                >
+                  <div
+                    className={classes.p1}
+                    style={{
+                      color: "#FFFFFF",
+                    }}
+                  >
+                    Jugador Entra
+                  </div>
+                  <DropdownButton
+                    id="dropdown-item-button"
+                    title="Seleccionar Jugador"
+                  >
+                    <Dropdown.ItemText>Lista Jugadores</Dropdown.ItemText>
+                    <Dropdown.Item as="button">Jugador 1</Dropdown.Item>
+                    <Dropdown.Item as="button">Jugador 2</Dropdown.Item>
+                    <Dropdown.Item as="button">Jugador 3</Dropdown.Item>
+                  </DropdownButton>
+                  <br></br>
+                </Col>
+                <Col
+                  md={6}
+                  style={{
+                    justifyContent: "center",
+                    textAlign: "center",
+                    margin: "center",
+                  }}
+                >
+                  <div
+                    className={classes.p1}
+                    style={{
+                      color: "#FFFFFF",
+                    }}
+                  >
+                    Jugador Sale
+                  </div>
+                  <DropdownButton
+                    id="dropdown-item-button"
+                    title="Seleccionar Jugador"
+                  >
+                    <Dropdown.ItemText>Lista Jugadores</Dropdown.ItemText>
+                    <Dropdown.Item as="button">Jugador 1</Dropdown.Item>
+                    <Dropdown.Item as="button">Jugador 2</Dropdown.Item>
+                    <Dropdown.Item as="button">Jugador 3</Dropdown.Item>
+                  </DropdownButton>
+                </Col>
+              </Row>
+              <br />
+
+              <Button
+                variant="primary"
+                style={{
+                  margin: "5px",
+                }}
+                size="lg"
+              >
+                Ejecutar Cambio
+              </Button>
+            </Container>
+          </Row>
           <br></br>
         </Container>
       </TabPanel>

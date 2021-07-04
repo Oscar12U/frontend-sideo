@@ -26,6 +26,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import * as moment from "moment";
+import TopMenuBar from "../components/TopMenuBar";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -89,6 +90,7 @@ const useStyles2 = makeStyles({
     textAlign: "center",
     margin: "auto",
     marginBottom: "10px",
+    color: "#FFFFFF",
   },
 });
 
@@ -188,6 +190,7 @@ const VerJugador = () => {
 
   return (
     <>
+      <TopMenuBar />
       <br></br>
       <Container
         style={{
@@ -195,18 +198,16 @@ const VerJugador = () => {
           alignItems: "center",
           textAlign: "center",
           margin: "auto",
-          marginBottom: "10px",
           fontWeight: "bold",
-          backgroundColor: "#456990",
-          borderRadius: "15px",
-          border: "3px solid #000000",
-          width: "90%",
+          backgroundImage: "linear-gradient(#005da4, #00233D)",
+          maxWidth: "700px",
         }}
       >
+        <br />
         <Row style={{}}>
           <Typography
             style={{
-              color: "black",
+              color: "#FFFFFF",
               fontSize: "34px",
               justifyContent: "center",
               alignItems: "center",
@@ -221,9 +222,9 @@ const VerJugador = () => {
           >
             Ha continuacion se mostrarán los datos del jugador
           </Typography>
+          <br />
         </Row>
       </Container>
-      <br></br>
       <Container
         style={{
           justifyContent: "center",
@@ -232,12 +233,11 @@ const VerJugador = () => {
           margin: "auto",
           marginBottom: "10px",
           fontWeight: "bold",
-          backgroundColor: "#456990",
-          borderRadius: "15px",
-          border: "3px solid #000000",
-          width: "70%",
+          backgroundImage: "linear-gradient( #00233D, #33A7FF)",
+          maxWidth: "700px",
         }}
       >
+        <br />
         <Row
           style={{
             justifyContent: "center",
@@ -246,6 +246,7 @@ const VerJugador = () => {
             margin: "auto",
             marginBottom: "10px",
             fontSize: "40px",
+            color: "#FFFFFF",
           }}
         >
           <div>{Jugador.nombre}</div>
@@ -258,6 +259,7 @@ const VerJugador = () => {
             margin: "auto",
             marginBottom: "10px",
             fontSize: "20px",
+            color: "#FFFFFF",
           }}
         >
           <div>Cantidad de goles: {Jugador.cantGoles}</div>
@@ -311,6 +313,7 @@ const VerJugador = () => {
             </Table>
           </TableContainer>
         </Row>
+        <br />
       </Container>
     </>
   );

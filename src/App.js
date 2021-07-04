@@ -9,6 +9,8 @@ import Inicio from "./pages/Inicio";
 import Login from "./pages/Login";
 import IniciarSesion from "./components/IniciarSesion";
 import LoginComponent from './components/LoginComponent'
+import Entrenamiento from "./pages/Entrenamiento";
+import Estadisticas from "./pages/Estadisticas";
 
 function App() {
 
@@ -60,11 +62,19 @@ function App() {
             <Route path="/registrarse">
               <LoginComponent></LoginComponent>
             </Route>
+    
+    <Route path="/Entrenamiento">
+          <Entrenamiento></Entrenamiento>
+     </Route>
+
+        <Route path="/Estadisticas">
+          <Estadisticas></Estadisticas>
 
           </Switch>
         </BrowserRouter>
       </>
     );
   }
+
 }
 export default App;
