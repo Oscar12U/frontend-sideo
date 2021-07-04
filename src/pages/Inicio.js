@@ -14,7 +14,6 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 
 const Inicio = () => {
-
   const useStyles = makeStyles((theme) => ({
     root: {
       width: "100%",
@@ -50,11 +49,7 @@ const Inicio = () => {
 
   return (
     <>
-
-
-      < TopMenuBar></TopMenuBar>
-      <br></br>
-      <br></br>
+      <TopMenuBar></TopMenuBar>
       <Container
         style={{
           backgroundColor: "#00c0f3",
@@ -70,7 +65,6 @@ const Inicio = () => {
           // marginRight: "50px",
         }}
       >
-
         <Typography
           style={{
             justifyContent: "center",
@@ -126,11 +120,10 @@ const Inicio = () => {
               primary="Administrar Asistentes"
             />
           </ListItem>
-
         </List>
       </Container>
     </>
-  )
+  );
 };
 
 export default Inicio;

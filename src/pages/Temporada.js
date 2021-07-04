@@ -27,16 +27,11 @@ import {
   Select,
   FormControl,
   InputLabel,
+  FormHelperText,
 } from "@material-ui/core";
 import axios from "axios";
-
 import Swal from "sweetalert2";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import NativeSelect from "@material-ui/core/NativeSelect";
-
 
 export default function Temporada() {
   useEffect(() => {
@@ -96,7 +91,6 @@ export default function Temporada() {
   }));
 
   const classes = useStyles();
-
 
   const handleClickOpenActividad = () => {
     setOpenActividad(true);
@@ -179,7 +173,6 @@ export default function Temporada() {
 
   let gestorEntrenamiento = new GestorEntrenamiento();
 
-
   const AjaxNotify = () => {
     (async () => {
       const { value: formValues } = await Swal.fire({
@@ -210,7 +203,6 @@ export default function Temporada() {
       }
     })();
   };
-
 
   return (
     <>
