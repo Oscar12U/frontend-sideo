@@ -159,6 +159,20 @@ export default function Temporada() {
     }, 1000);
   };
 
+  // const CrearUnPartido = () => {
+  //   gestorEntrenamiento.crearNuevoEntrenamiento(
+  //     nombreEntrenamiento,
+  //     descripcionEntrenamiento
+  //   );
+  //   setDescripcionEntrenamiento("");
+  //   setNombreEntrenamiento("");
+  //   setOpenEntrenamiento(false);
+
+  //   setTimeout(() => {
+  //     ultimoEntrenamiento();
+  //   }, 1000);
+  // };
+
   function ultimoEntrenamiento() {
     axios
       .get(`http://localhost:3000/api/ultimoEntrenamiento`)

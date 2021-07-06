@@ -1,7 +1,13 @@
 import React, { useEffect } from "react";
-import { Line } from "react-chartjs-2";
-import { MDBContainer } from "mdbreact";
-import { Bar } from "react-chartjs-2";
+import Paper from "@material-ui/core/Paper";
+import {
+  Chart,
+  BarSeries,
+  Title,
+  ArgumentAxis,
+  ValueAxis,
+} from "@devexpress/dx-react-chart-material-ui";
+import { Animation } from "@devexpress/dx-react-chart";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 
@@ -18,73 +24,37 @@ const ChartGolesTemporada = () => {
       .get(`http://localhost:3000/api/jugadores`)
       .then((resultado) => {
         let jugadoresList = resultado.data.data;
-        setJugadores(jugadoresList);
+        let prueba = getList(resultado.data.data);
+        setJugadores(prueba);
       })
       .catch((err) => {});
   }
 
-  const getNombres = () => {
-    let nombres = [];
+  const getList = (jugadores) => {
+    let listJugadores = [];
     jugadores.map((jugador, index) => {
-      nombres.push(jugador.nombre);
+      let jugadorNuevo = {
+        nombre: jugador.nombre,
+        cantGoles: jugador.cantGoles,
+      };
+      listJugadores.push(jugadorNuevo);
     });
-    return nombres;
-  };
-
-  const getGoles = () => {
-    let goles = [];
-    jugadores.map((jugador, index) => {
-      goles.push(jugador.cantGoles);
-    });
-    return goles;
-  };
-
-  const dataBar = {
-    labels: getNombres(),
-    datasets: [
-      {
-        label: "Cantidad Goles",
-        data: getGoles(),
-
-        borderWidth: 2,
-      },
-    ],
-  };
-
-  const barChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      xAxes: [
-        {
-          barPercentage: 1,
-          gridLines: {
-            display: true,
-
-            color: "rgba(0, 0, 0, 0.1)",
-          },
-        },
-      ],
-      yAxes: [
-        {
-          gridLines: {
-            display: true,
-            color: "rgba(0, 0, 0, 0.1)",
-          },
-          ticks: {
-            beginAtZero: true,
-          },
-        },
-      ],
-    },
+    console.log(listJugadores);
+    return listJugadores;
   };
 
   return (
     <>
-      <MDBContainer>
-        <h3 className="mt-5">Goles por Temporada</h3>
-        <Bar data={dataBar} options={barChartOptions} />
-      </MDBContainer>
+      <Paper>
+        <Chart data={jugadores}>
+          <ArgumentAxis />
+          <ValueAxis max={7} />
+
+          <BarSeries valueField="cantGoles" argumentField="nombre" />
+          <Title text="Goles" />
+          <Animation />
+        </Chart>
+      </Paper>
     </>
   );
 };

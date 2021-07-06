@@ -61,7 +61,7 @@ const TempDrawel = (props) => {
     {
       text: "Adminsitrar Asistentes",
       icon: <AssignmentIndIcon />,
-      onClick: () => history.push("/TemporadaInit"),
+      onClick: () => history.push("/AdminAsistentes"),
     },
   ];
   const list = (anchor) => (

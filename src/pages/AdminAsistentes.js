@@ -13,7 +13,7 @@ import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 
-const Inicio = () => {
+const AdminAsistentes = () => {
   const useStyles = makeStyles((theme) => ({
     root: {
       width: "100%",
@@ -50,37 +50,8 @@ const Inicio = () => {
   return (
     <>
       <TopMenuBar></TopMenuBar>
-      <Container
-        style={{
-          backgroundColor: "#00c0f3",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontSize: "160%",
-          fontWeight: "bold",
-          borderBottomRightRadius: "15px",
-          borderBottomLeftRadius: "15px",
-          boxShadow: "0px 2px 3px -2px",
-        }}
-      >
-        <Typography
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            fontSize: "100%",
-            fontWeight: "bold",
-            marginBottom: "10px",
-            color: "#FFFFFF",
-          }}
-        >
-          Bienvenido
-        </Typography>
-
-        <br></br>
-      </Container>
       <br></br>
       <br></br>
-      <Divider variant="middle" />
       <br></br>
       <br></br>
       <Container
@@ -91,24 +62,18 @@ const Inicio = () => {
         }}
       >
         <List component="nav" className={classes.root} aria-label="contacts">
-          <ListItem button component="a" href="/TemporadaInit">
-            <ListItemIcon className={classes.icon}>
-              <ArrowForwardIcon />
-            </ListItemIcon>
-            <ListItemText className={classes.txt} inset primary="Temporadas" />
-          </ListItem>
-          <ListItem button component="a" href="/menuJugador">
+          <ListItem button component="a" href="/registrarse">
             <ListItemIcon className={classes.icon}>
               <AssignmentIndIcon />
             </ListItemIcon>
             <ListItemText
               className={classes.txt}
               inset
-              primary="Administrar Jugadores"
+              primary="Registrar Asistente"
             />
           </ListItem>
 
-          <ListItem button component="a" href="/AdminAsistentes">
+          <ListItem button>
             <ListItemIcon className={classes.icon}>
               <AccountCircleIcon />
             </ListItemIcon>
@@ -116,7 +81,7 @@ const Inicio = () => {
             <ListItemText
               className={classes.txt}
               inset
-              primary="Administrar Asistentes"
+              primary="Gestionar Asistentes"
             />
           </ListItem>
         </List>
@@ -125,4 +90,4 @@ const Inicio = () => {
   );
 };
 
-export default Inicio;
+export default AdminAsistentes;

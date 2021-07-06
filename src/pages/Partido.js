@@ -502,15 +502,40 @@ export default function ScrollableTabsButtonForce() {
                   margin: "auto",
                 }}
               >
-                <div
-                  className={classes.p1}
-                  style={{
-                    color: "#000000",
-                  }}
-                >
-                  Seleccionar jugador
-                </div>
+                <Col>
+                  <div
+                    className={classes.p1}
+                    style={{
+                      color: "#000000",
+                    }}
+                  >
+                    Seleccionar Jugador
+                  </div>
+                  <Dropdown as={ButtonGroup}>
+                    <Button id="btnMenuTitular">
+                      {""}
+                      {selectIndexTitular === -1
+                        ? "Seleccionar Jugador"
+                        : jugadoresTitulares[selectIndexTitular]}
+                    </Button>
+                    <Dropdown.Toggle split id="dropdown-custom-2" />
+                    <Dropdown.Menu className="super-colors">
+                      {jugadoresTitulares.map((option, index) => (
+                        <Dropdown.Item
+                          key={index}
+                          selected={index === selectIndexTitular}
+                          onClick={(event) =>
+                            handleMenuTitularClick(event, index)
+                          }
+                        >
+                          {option}
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Col>
               </Row>
+              <br />
               <Row
                 style={{
                   justifyContent: "center",
@@ -519,58 +544,38 @@ export default function ScrollableTabsButtonForce() {
                   margin: "auto",
                 }}
               >
-                <Dropdown as={ButtonGroup}>
-                  <Button id="btnMenuTitular">
-                    {""}
-                    {selectIndexTitular === -1
-                      ? "Seleccionar Jugador"
-                      : jugadoresTitulares[selectIndexTitular]}
-                  </Button>
-                  <Dropdown.Toggle split id="dropdown-custom-2" />
-                  <Dropdown.Menu className="super-colors">
-                    {jugadoresTitulares.map((option, index) => (
-                      <Dropdown.Item
-                        key={index}
-                        selected={index === selectIndexTitular}
-                        onClick={(event) =>
-                          handleMenuTitularClick(event, index)
-                        }
-                      >
-                        {option}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-
-                <div
-                  className={classes.p1}
-                  style={{
-                    color: "#000000",
-                  }}
-                >
-                  Seleccionar jugador Asistente
-                </div>
-                <Dropdown as={ButtonGroup}>
-                  <Button id="btnAsistente">
-                    {""}
-                    {selectIndexAsistente === -1
-                      ? "Seleccionar Jugador"
-                      : jugadoresTitulares[selectIndexAsistente]}
-                  </Button>
-                  <Dropdown.Toggle split id="dropdown-custom-2" />
-                  <Dropdown.Menu className="super-colors">
-                    {jugadoresTitulares.map((option, index) =>
-                      getAsistentes(option, index)
-                    )}
-                  </Dropdown.Menu>
-                </Dropdown>
+                <Col>
+                  <div
+                    className={classes.p1}
+                    style={{
+                      color: "#000000",
+                    }}
+                  >
+                    Seleccionar Jugador Asistente
+                  </div>
+                  <Dropdown as={ButtonGroup}>
+                    <Button id="btnAsistente">
+                      {""}
+                      {selectIndexAsistente === -1
+                        ? "Seleccionar Jugador"
+                        : jugadoresTitulares[selectIndexAsistente]}
+                    </Button>
+                    <Dropdown.Toggle split id="dropdown-custom-2" />
+                    <Dropdown.Menu className="super-colors">
+                      {jugadoresTitulares.map((option, index) =>
+                        getAsistentes(option, index)
+                      )}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Col>
               </Row>
 
+              <br />
               <Divider variant="middle" />
 
               <Row>
                 <Col
-                  md={6}
+                  md={3}
                   style={{
                     justifyContent: "center",
                     alignItems: "center",
@@ -608,6 +613,46 @@ export default function ScrollableTabsButtonForce() {
                 </Col>
 
                 <Col
+                  md={3}
+                  style={{
+                    justifyContent: "center",
+                    textAlign: "center",
+                    margin: "center",
+                  }}
+                >
+                  <br />
+                  <Button
+                    variant="primary"
+                    style={{
+                      margin: "5px",
+                    }}
+                    size="lg"
+                    onClick={ActionFalta}
+                  >
+                    Falta
+                  </Button>
+                  <Form
+                    style={{
+                      marginTop: "10px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                      margin: "center",
+                    }}
+                  >
+                    {["A favor", "En contra"].map((type) => (
+                      <div key={`default-${type}`} className="mb-3">
+                        <Form.Check
+                          name="group1"
+                          type={"radio"}
+                          id={`${type}`}
+                          label={`${type}`}
+                        />
+                      </div>
+                    ))}
+                  </Form>
+                </Col>
+                <Col
                   md={6}
                   style={{
                     justifyContent: "center",
@@ -635,16 +680,7 @@ export default function ScrollableTabsButtonForce() {
                         />
                       </Form.Group>
                     </Form>
-                    <Button
-                      variant="primary"
-                      style={{
-                        margin: "5px",
-                      }}
-                      size="lg"
-                      onClick={ActionFalta}
-                    >
-                      Falta
-                    </Button>
+
                     <Button
                       variant="primary"
                       style={{

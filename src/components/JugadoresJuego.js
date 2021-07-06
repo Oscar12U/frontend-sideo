@@ -3,6 +3,12 @@ import Jugador from "./Jugador";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import { Button } from "react-bootstrap";
+import Divider from "@material-ui/core/Divider";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import { Container, Row, Col, Form } from "react-bootstrap";
+import Typography from "@material-ui/core/Typography";
 
 const JugadoresJuego = () => {
   const [jugadoresTitulares, setJugadoresTitulares] = React.useState([]);
@@ -111,7 +117,245 @@ const JugadoresJuego = () => {
 
   return (
     <>
-      <h2>Jugadores Titulares</h2>
+      <Container
+        fluid="md"
+        style={{
+          marginTop: "40px",
+          backgroundImage: "linear-gradient( #00233D, #33A7FF)",
+        }}
+      >
+        <Container
+          fluid="md"
+          style={{
+            marginTop: "40px",
+          }}
+        >
+          <br />
+          <h2
+            style={{
+              margin: "30px auto",
+              color: "#ffffff",
+              maxWidth: "500px",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              fontWeight: "Bold",
+            }}
+          >
+            Jugadores Titulares
+          </h2>
+        </Container>
+        <Row style={{}}>
+          {jugadoresTitulares.map((jugador, index) => {
+            return (
+              <Card
+                style={{
+                  margin: "30px auto",
+                  backgroundColor: "#ffffff",
+                  maxWidth: "250px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                <CardContent
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    maxWidth: "250px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    margin: "auto",
+                  }}
+                >
+                  <>
+                    <Jugador
+                      style={{
+                        backgroundColor: "#DE1A1A",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        textAlign: "center",
+                        display: "flex",
+                        color: "#FFFFFF",
+                      }}
+                      key={index}
+                      jugador={jugador}
+                    />
+                    <Divider
+                      style={{
+                        backgroundColor: "#000000",
+                      }}
+                    />
+                    <br />
+                    <Button
+                      style={{
+                        backgroundColor: "#005da4",
+                      }}
+                      className="btn btn-secondary"
+                      variant="contained"
+                      onClick={() => QuitJugadorTitular(jugador)}
+                    >
+                      Agregar Jugador Sustituto
+                    </Button>
+                    <br />
+                    <br />
+                    <Button
+                      style={{
+                        backgroundColor: "#DE1A1A",
+                        alignItems: "center",
+                        color: "#FFFFFF",
+                      }}
+                      className="btn btn-secondary"
+                      variant="contained"
+                      onClick={() => RemoveJugador(jugador, true)}
+                    >
+                      Sacar de la Convocatoria
+                    </Button>
+                  </>
+
+                  <br />
+
+                  {/* <a
+                    style={{
+                      backgroundColor: "#005da4",
+                    }}
+                    href="#"
+                    className="btn btn-secondary"
+                    id="botton1"
+                  >
+                    Ver
+                  </a> */}
+                </CardContent>
+                <CardActions
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    display: "flex",
+                  }}
+                >
+                  {/* <Button
+                    variant="contained"
+                    color="default"
+                    // onClick={() => notificacionEliminar(jugador._id)}
+                    style={{
+                      backgroundColor: "#DE1A1A",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      display: "flex",
+                      color: "#FFFFFF",
+                    }}
+                  >
+                    Eliminar
+                  </Button> */}
+                </CardActions>
+              </Card>
+            );
+          })}
+        </Row>
+      </Container>
+      <Container
+        fluid="md"
+        style={{
+          marginTop: "40px",
+          backgroundImage: "linear-gradient( #00233D, #33A7FF)",
+        }}
+      >
+        <Container
+          fluid="md"
+          style={{
+            marginTop: "40px",
+          }}
+        >
+          <br />
+          <h2
+            style={{
+              margin: "30px auto",
+              color: "#ffffff",
+              maxWidth: "500px",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              fontWeight: "Bold",
+            }}
+          >
+            Jugadores Sustitutos
+          </h2>
+        </Container>
+        <Row style={{}}>
+          {jugadoresSustitutos.map((jugador, index) => {
+            return (
+              <Card
+                style={{
+                  margin: "30px auto",
+                  backgroundColor: "#ffffff",
+                  maxWidth: "250px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                <CardContent
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    maxWidth: "250px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    margin: "auto",
+                  }}
+                >
+                  <>
+                    <Jugador key={index} jugador={jugador} />
+                    <Divider
+                      style={{
+                        backgroundColor: "#000000",
+                      }}
+                    />
+                    <br />
+
+                    <Button
+                      style={{
+                        backgroundColor: "#005da4",
+                      }}
+                      className="btn btn-secondary"
+                      variant="contained"
+                      onClick={() => AddJugadorTitular(jugador, false)}
+                    >
+                      Agregar Jugador Titular
+                    </Button>
+                    <br />
+                    <br />
+                    <Button
+                      style={{
+                        backgroundColor: "#DE1A1A",
+                        alignItems: "center",
+                        color: "#FFFFFF",
+                      }}
+                      className="btn btn-secondary"
+                      variant="contained"
+                      onClick={() => RemoveJugador(jugador, false)}
+                    >
+                      Sacar de la Convocatoria
+                    </Button>
+                  </>
+
+                  <br />
+                </CardContent>
+                <CardActions
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    display: "flex",
+                  }}
+                ></CardActions>
+              </Card>
+            );
+          })}
+        </Row>
+      </Container>
+      {/* <h2>Jugadores Titulares</h2>
       {jugadoresTitulares.map((jugador, index) => {
         return (
           <>
@@ -132,8 +376,8 @@ const JugadoresJuego = () => {
             </Button>
           </>
         );
-      })}
-      <h2>Jugadores Sustitutos</h2>
+      })} */}
+      {/* <h2>Jugadores Sustitutos</h2>
       {jugadoresSustitutos.map((jugador, index) => {
         return (
           <>
@@ -154,8 +398,111 @@ const JugadoresJuego = () => {
             </Button>
           </>
         );
-      })}
-      <h2>Jugadores No Convocados</h2>
+      })} */}
+
+      <Container
+        fluid="md"
+        style={{
+          marginTop: "40px",
+          backgroundImage: "linear-gradient( #00233D, #33A7FF)",
+        }}
+      >
+        <Container
+          fluid="md"
+          style={{
+            marginTop: "40px",
+          }}
+        >
+          <br />
+          <h2
+            style={{
+              margin: "30px auto",
+              color: "#ffffff",
+              maxWidth: "500px",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              fontWeight: "Bold",
+            }}
+          >
+            Jugadores No Convocados
+          </h2>
+        </Container>
+        <Row style={{}}>
+          {jugadoresFuera.map((jugador, index) => {
+            return (
+              <Card
+                style={{
+                  margin: "30px auto",
+                  backgroundColor: "#ffffff",
+                  maxWidth: "250px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                <CardContent
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    maxWidth: "250px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    margin: "auto",
+                  }}
+                >
+                  <>
+                    <Jugador key={index} jugador={jugador} />
+                    <Divider
+                      style={{
+                        backgroundColor: "#000000",
+                      }}
+                    />
+                    <br />
+
+                    <Button
+                      style={{
+                        backgroundColor: "#005da4",
+                      }}
+                      className="btn btn-secondary"
+                      variant="contained"
+                      onClick={() => AddJugadorTitular(jugador, true)}
+                    >
+                      Agregar Jugador Titular
+                    </Button>
+                    <br />
+                    <br />
+                    <Button
+                      style={{
+                        backgroundColor: "#DE1A1A",
+                        alignItems: "center",
+                        color: "#FFFFFF",
+                      }}
+                      className="btn btn-secondary"
+                      variant="contained"
+                      onClick={() => AddJugadorSustituto(jugador)}
+                    >
+                      Agregar Jugador Sustituto
+                    </Button>
+                  </>
+
+                  <br />
+                </CardContent>
+                <CardActions
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    display: "flex",
+                  }}
+                ></CardActions>
+              </Card>
+            );
+          })}
+        </Row>
+      </Container>
+
+      {/* <h2>Jugadores No Convocados</h2>
       {jugadoresFuera.map((jugador, index) => {
         return (
           <>
@@ -176,7 +523,7 @@ const JugadoresJuego = () => {
             </Button>
           </>
         );
-      })}
+      })} */}
     </>
   );
 };

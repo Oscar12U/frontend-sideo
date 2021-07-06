@@ -28,18 +28,43 @@ const Jugador = memo(({ jugador }) => {
 
   return (
     <>
-      <Card style={{ margin: "60px auto" }} className={classes2.root}>
-        <CardContent style={{ backgroundColor: "gray" }}>
-          <Typography
-            className={classes2.title}
-            color="textSecondary"
-            gutterBottom
-          >
-            Nombre: {jugador}
-          </Typography>
-        </CardContent>
-        <CardActions style={{ backgroundColor: "gray" }}></CardActions>
-      </Card>
+      {/* <Card
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          margin: "auto",
+        }}
+        className={classes2.root}
+      >
+        <CardContent
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            margin: "auto",
+          }}
+        > */}
+      <Typography
+        style={{
+          fontFamily: "Arial",
+          color: "#000000",
+          fontSize: "150%",
+          display: "flex",
+          fontWeight: "bold",
+          justifyContent: "center",
+          textAlign: "justify",
+          textJustify: "inter-word",
+        }}
+        className={classes2.title}
+        //color="textSecondary"
+        gutterBottom
+      >
+        <br /> {jugador}
+      </Typography>
+      {/* </CardContent> */}
+      {/* <CardActions style={{ backgroundColor: "gray" }}></CardActions> */}
+      {/*</Card>*/}
     </>
   );
 });
