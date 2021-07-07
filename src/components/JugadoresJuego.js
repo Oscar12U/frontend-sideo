@@ -122,6 +122,7 @@ const JugadoresJuego = () => {
         style={{
           marginTop: "40px",
           backgroundImage: "linear-gradient( #00233D, #33A7FF)",
+          borderRadius: "15px",
         }}
       >
         <Container
@@ -259,6 +260,7 @@ const JugadoresJuego = () => {
         style={{
           marginTop: "40px",
           backgroundImage: "linear-gradient( #00233D, #33A7FF)",
+          borderRadius: "15px",
         }}
       >
         <Container
@@ -405,6 +407,7 @@ const JugadoresJuego = () => {
         style={{
           marginTop: "40px",
           backgroundImage: "linear-gradient( #00233D, #33A7FF)",
+          borderRadius: "15px",
         }}
       >
         <Container

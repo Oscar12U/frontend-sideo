@@ -96,7 +96,7 @@ const MenuJugador = () => {
         //console.log(jugadores[0].nombre);
         //console.log("variablex: " + listaJugadores);
       })
-      .catch((err) => { });
+      .catch((err) => {});
   }
 
   const [jugadores, setJugadores] = React.useState([]);
@@ -195,6 +195,8 @@ const MenuJugador = () => {
           <Container
             style={{
               backgroundImage: "linear-gradient(#005da4, #00233D)",
+              borderTopRightRadius: "15px",
+              borderTopLeftRadius: "15px",
               //backgroundColor: "#005da4",
               maxWidth: "700px",
             }}
@@ -216,6 +218,8 @@ const MenuJugador = () => {
           <Container
             style={{
               backgroundImage: "linear-gradient( #00233D, #33A7FF)",
+              borderBottomRightRadius: "15px",
+              borderBottomLeftRadius: "15px",
               //backgroundColor: "#8ed8f8",
               maxWidth: "700px",
             }}
@@ -297,6 +301,7 @@ const MenuJugador = () => {
           style={{
             marginTop: "40px",
             backgroundImage: "linear-gradient( #00233D, #33A7FF)",
+            borderRadius: "15px",
           }}
         >
           <Row style={{}}>

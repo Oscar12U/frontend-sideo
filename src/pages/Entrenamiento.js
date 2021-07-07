@@ -514,8 +514,6 @@ export default function Entrenamiento() {
   return (
     <Box sx={{ pb: 7 }}>
       <TopMenuBar></TopMenuBar>
-      <br></br>
-
       <AppBar style={{ position: "relative" }} color="default">
         <Tabs
           value={value}
@@ -535,9 +533,8 @@ export default function Entrenamiento() {
         <Container
           fluid="md"
           style={{
-            border: "3px solid #456990",
             margin: "60px auto",
-            backgroundColor: "#456990",
+            backgroundImage: "linear-gradient(#005da4, #00233D)",
             borderRadius: "15px",
           }}
           elevation={3}
@@ -1143,45 +1140,67 @@ export default function Entrenamiento() {
                 fluid="md"
                 style={{
                   margin: "60px auto",
-                  background: "lightblue",
-                  borderRadius: "5px",
-                  border: "3px solid #000000",
+                  backgroundColor: "lightblue",
+                  borderRadius: "15px",
+                  backgroundImage: "linear-gradient(#005da4, #00233D)",
                 }}
               >
                 <Row
                   style={{
-                    background: "lightblue",
-
                     alignItems: "center",
                     justifyContent: "center",
                     display: "flex",
+                    borderRadius: "15px",
+                    font: "bold",
                   }}
                 >
-                  <Col
-                    sm="6"
+                  <Typography
+                    color="textSecondary"
+                    gutterBottom
                     style={{
-                      font: "bold",
-                      justifyContent: "center",
                       alignItems: "center",
+                      justifyContent: "center",
+                      display: "flex",
+                      fontSize: "25px",
+                      fontFamily: "Arial",
+                      textAlign: "center",
+                      textJustify: "inter-word",
+                      fontWeight: "bold",
+                      color: "#FFFFFF",
                     }}
                   >
-                    <Typography
-                      color="textSecondary"
-                      gutterBottom
-                      style={{
-                        alignItems: "center",
-                        justifyContent: "center",
-                        display: "flex",
-                        color: "black",
-                        fontSize: "20px",
-                        fontFamily: "Arial",
-                        textAlign: "center",
-                        textJustify: "inter-word",
-                      }}
-                    >
-                      Actividad: {actividad.nombre}
-                    </Typography>
-                    {/* {this.state.finalizar === false && (
+                    Actividad: {actividad.nombre}
+                  </Typography>
+                </Row>
+                <Row
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    display: "flex",
+                    borderRadius: "15px",
+                    font: "bold",
+                    marginBottom: "15px",
+                  }}
+                >
+                  <br />
+                  <button
+                    style={{
+                      background: "lightblue",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      display: "flex",
+                      backgroundColor: "#FFFFFF",
+                      borderRadius: "8px",
+                      fontWeight: "bold",
+                    }}
+                    id="iniciarBTN"
+                    onClick={() => cambiarActividadesAuto(index)}
+                  >
+                    Iniciar Todos
+                  </button>
+                  <br />
+                </Row>
+                {/* {this.state.finalizar === false && (
                       <button
                         style={{
                           margin: "5px ",
@@ -1191,14 +1210,7 @@ export default function Entrenamiento() {
                         Reiniciar
                       </button>
                     )} */}
-                    <button
-                      id="iniciarBTN"
-                      onClick={() => cambiarActividadesAuto(index)}
-                    >
-                      iniciar
-                    </button>
-                  </Col>
-                </Row>
+
                 {jugadores
                   .filter(
                     (jugador) =>
@@ -1216,8 +1228,7 @@ export default function Entrenamiento() {
                         />
                         <Row
                           style={{
-                            background: "lightblue",
-
+                            borderRadius: "15px",
                             alignItems: "center",
                             justifyContent: "center",
                             display: "flex",
@@ -1232,14 +1243,13 @@ export default function Entrenamiento() {
                             }}
                           >
                             <Typography
-                              color="textSecondary"
                               gutterBottom
                               style={{
                                 alignItems: "center",
                                 justifyContent: "center",
                                 display: "flex",
-                                color: "black",
-                                fontSize: "20px",
+                                color: "#FFFFFF",
+                                fontSize: "30px",
                                 fontFamily: "Arial",
                                 textAlign: "center",
                                 textJustify: "inter-word",
@@ -1281,26 +1291,27 @@ export default function Entrenamiento() {
         <Container fluid="md" style={{ margin: "60px auto" }}>
           <Row
             style={{
-              background: "lightblue",
-              borderRadius: "15px",
-              border: "3px solid #000000",
+              borderTopRightRadius: "15px",
+              borderTopLeftRadius: "15px",
               alignItems: "center",
               justifyContent: "center",
               display: "flex",
+              backgroundColor: "#008641",
             }}
           >
             <Typography
-              color="textSecondary"
               gutterBottom
               style={{
                 alignItems: "center",
                 justifyContent: "center",
                 display: "flex",
-                color: "black",
                 fontSize: "20px",
+                fontWeight: "bold",
                 fontFamily: "Arial",
                 textAlign: "center",
                 textJustify: "inter-word",
+                color: "#FFFFFF",
+                margin: "10px",
               }}
             >
               Jugadores Presentes en el Entrenamiento
@@ -1308,9 +1319,9 @@ export default function Entrenamiento() {
           </Row>
           <Row
             style={{
-              background: "lightblue",
-              borderRadius: "15px",
-              border: "3px solid #000000",
+              borderBottomRightRadius: "15px",
+              borderBottomLeftRadius: "15px",
+              border: "2px solid #008641",
             }}
           >
             {jugadores
@@ -1326,7 +1337,7 @@ export default function Entrenamiento() {
                   >
                     <CardContent
                       style={{
-                        backgroundColor: "gray",
+                        backgroundColor: "#FFFFFF",
                       }}
                     >
                       <Typography
@@ -1338,16 +1349,16 @@ export default function Entrenamiento() {
                           justifyContent: "center",
                           display: "flex",
                           color: "black",
-                          fontSize: "20px",
+                          fontSize: "25px",
                           fontFamily: "Arial",
                         }}
                       >
-                        Nombre: {jugador.nombre}
+                        {jugador.nombre}
                       </Typography>
                     </CardContent>
                     <CardActions
                       style={{
-                        backgroundColor: "gray",
+                        backgroundColor: "#008641",
                         alignItems: "center",
                         justifyContent: "center",
                         display: "flex",
@@ -1362,26 +1373,27 @@ export default function Entrenamiento() {
         <Container fluid="md" style={{ margin: "60px auto" }}>
           <Row
             style={{
-              background: "lightblue",
-              borderRadius: "15px",
-              border: "3px solid #000000",
+              borderTopRightRadius: "15px",
+              borderTopLeftRadius: "15px",
               alignItems: "center",
               justifyContent: "center",
               display: "flex",
+              backgroundColor: "#008641",
             }}
           >
             <Typography
-              color="textSecondary"
               gutterBottom
               style={{
                 alignItems: "center",
                 justifyContent: "center",
                 display: "flex",
-                color: "black",
                 fontSize: "20px",
+                fontWeight: "bold",
                 fontFamily: "Arial",
                 textAlign: "center",
                 textJustify: "inter-word",
+                color: "#FFFFFF",
+                margin: "10px",
               }}
             >
               Jugadores Disponibles para el Entrenamiento
@@ -1389,9 +1401,9 @@ export default function Entrenamiento() {
           </Row>
           <Row
             style={{
-              background: "lightblue",
-              borderRadius: "15px",
-              border: "3px solid #000000",
+              borderBottomRightRadius: "15px",
+              borderBottomLeftRadius: "15px",
+              border: "2px solid #008641",
             }}
           >
             {jugadores
@@ -1409,9 +1421,14 @@ export default function Entrenamiento() {
                   >
                     <CardContent
                       style={{
-                        backgroundColor: "gray",
-                        alignItems: "center",
                         justifyContent: "center",
+                        alignItems: "center",
+                        textAlign: "center",
+                        margin: "auto",
+                        color: "#FFFFFF",
+                        fontSize: "25px",
+                        fontFamily: "Arial",
+                        backgroundColor: "#FFFFFF",
                       }}
                     >
                       <Typography
@@ -1427,18 +1444,17 @@ export default function Entrenamiento() {
                           fontFamily: "Arial",
                         }}
                       >
-                        Nombre: {jugador.nombre}
+                        {jugador.nombre}
                       </Typography>
 
                       <Button
                         style={{
                           background: "#0F98C2",
-                          color: "white",
+                          color: "#FFFFFF",
                           textTransform: "none",
                           fontSize: 18,
                           alignItems: "center",
                           justifyContent: "center",
-                          display: "flex",
                         }}
                         onClick={() => agregarEntrenamiento(jugador._id)}
                       >
@@ -1451,7 +1467,6 @@ export default function Entrenamiento() {
                         style={{
                           alignItems: "center",
                           justifyContent: "center",
-                          display: "flex",
                           color: "black",
                           fontSize: "20px",
                           fontFamily: "Arial",
@@ -1468,7 +1483,6 @@ export default function Entrenamiento() {
                           fontSize: 18,
                           alignItems: "center",
                           justifyContent: "center",
-                          display: "flex",
                           margin: "15px",
                         }}
                         onClick={() => enviarJustificada(jugador._id)}
@@ -1483,7 +1497,6 @@ export default function Entrenamiento() {
                           fontSize: 18,
                           alignItems: "center",
                           justifyContent: "center",
-                          display: "flex",
                           margin: "15px",
                         }}
                         onClick={() => enviarInjustificada(jugador._id)}
@@ -1503,7 +1516,7 @@ export default function Entrenamiento() {
                     </CardContent>
                     <CardActions
                       style={{
-                        backgroundColor: "gray",
+                        backgroundColor: "#008641",
                         alignItems: "center",
                         justifyContent: "center",
                         display: "flex",
