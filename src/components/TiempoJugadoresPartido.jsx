@@ -1,11 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import StopwatchDisplay from "./StopwatchDisplay.jsx";
-import axios from "axios";
 import { Snackbar, Button, IconButton } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
-class Stopwatch extends React.Component {
+class TiempoJugadoresPartido extends React.Component {
   constructor(props) {
     super(props);
 
@@ -21,16 +20,30 @@ class Stopwatch extends React.Component {
     };
   }
 
-  //  componentDidMount(){
-  //    console.log("dentro",this.props.iniciar)
-  //     this.inicioAutomatico()
-  //   }
+  componentWillUnmount() {}
+  // componentDidUpdate() {
+  //   this.inicioAutomatico();
+  //   this.notificarTiempo();
+  // }
 
-  componentDidUpdate() {
+  componentDidMount() {
+    console.log("Inicia automatico");
+  }
+
+  componentDidUpdate(prevProps, prevState) {
     // Uso tipico (no olvides de comparar las props):
-    // console.log("dentro",this.props.iniciar)
-    this.inicioAutomatico();
-    this.notificarTiempo();
+
+    if (prevProps.iniciar !== this.props.iniciar) {
+      if (this.props.iniciar) {
+        this.inicioAutomatico();
+      } else {
+        this.stop();
+      }
+    }
+    if (prevState.currentTimeSec !== this.state.currentTimeSec) {
+      this.notificarTiempo();
+    }
+    // this.notificarTiempo()
   }
 
   handleClick = () => {
@@ -48,29 +61,18 @@ class Stopwatch extends React.Component {
   ingresarTiempoJugador = (entrenamiento1, jugador1, actividad1) => {
     if (!this.state.running) {
       this.setState({ finalizar: true });
-      axios
-        .post(`http://localhost:3000/api/newActividadJugador`, {
-          entrenamiento: entrenamiento1,
-          jugador: jugador1,
-          actividad: actividad1,
-          minutos: this.state.currentTimeMin,
-          segundos: this.state.currentTimeSec,
-        })
-        .then((resultado) => {
-          console.log(resultado);
-        })
-        .catch((err) => {});
     }
   };
 
   notificarTiempo = () => {
     if (this.props.limite !== 0) {
       if (
-        this.props.limite === this.state.currentTimeMin &&
+        6 === this.state.currentTimeSec &&
         this.state.notificacion === false
       ) {
         this.handleClick();
         this.setState({ notificacion: true });
+        this.props.handleNotificacion(this.props.jugador);
       }
     }
   };
@@ -86,14 +88,18 @@ class Stopwatch extends React.Component {
     return value;
   };
 
-  inicioAutomatico = () => {
+  inicioAutomatico() {
     //console.log("aqui va el boleano",this.props.iniciar)
     if (this.props.iniciar && this.state.finalizar === false) {
       if (!this.state.running) {
         this.start();
       }
     }
-  };
+    console.log("se llama el component update");
+    // } else if (!this.props.iniciar) {
+    //   console.log("se detuvo");
+    // }
+  }
 
   start = () => {
     if (!this.state.running) {
@@ -104,11 +110,6 @@ class Stopwatch extends React.Component {
 
   stop = () => {
     this.setState({ running: false });
-    // console.log("entranamientoID: ",this.props.entrenamiento)
-    // console.log("jugadorID: ",this.props.jugador)
-    // console.log("actividadID: ",this.props.actividad)
-    // console.log("mins: ",this.state.currentTimeMin)
-    // console.log("sec: ",this.state.currentTimeSec)
     clearInterval(this.watch);
   };
 
@@ -170,54 +171,6 @@ class Stopwatch extends React.Component {
           }}
         >
           <h4 ref="header">Tiempo:</h4>
-          {this.state.running === false && this.state.finalizar === false && (
-            <button
-              style={{
-                margin: "5px ",
-              }}
-              onClick={this.start}
-            >
-              Iniciar
-            </button>
-          )}
-          {this.state.running === true && this.state.finalizar === false && (
-            <button
-              style={{
-                margin: "5px ",
-              }}
-              onClick={this.stop}
-            >
-              Detener
-            </button>
-          )}
-
-          {this.state.finalizar === false && (
-            <button
-              style={{
-                margin: "5px ",
-              }}
-              onClick={this.reset}
-            >
-              Reiniciar
-            </button>
-          )}
-
-          {this.state.finalizar === false && (
-            <button
-              style={{
-                margin: "5px ",
-              }}
-              onClick={() =>
-                this.ingresarTiempoJugador(
-                  this.props.entrenamiento,
-                  this.props.jugador,
-                  this.props.actividad
-                )
-              }
-            >
-              Finalizar
-            </button>
-          )}
 
           {this.state.finalizar === true && <h4 ref="header">Finalizada</h4>}
           <StopwatchDisplay
@@ -231,4 +184,4 @@ class Stopwatch extends React.Component {
   }
 }
 
-export default Stopwatch;
+export default TiempoJugadoresPartido;

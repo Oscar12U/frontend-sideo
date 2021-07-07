@@ -26,7 +26,6 @@ import {
 } from "@material-ui/core";
 import GestorPartido from "../containers/GestorPartido";
 import ChartGoles from "../components/ChartGoles";
-import ChartGolesTemp from "../components/ChartGolesTemp";
 import GolesxTemporada from "../components/ChartGolesTemporada";
 
 const Estadisticas = () => {

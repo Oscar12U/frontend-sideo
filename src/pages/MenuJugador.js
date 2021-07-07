@@ -96,7 +96,7 @@ const MenuJugador = () => {
         //console.log(jugadores[0].nombre);
         //console.log("variablex: " + listaJugadores);
       })
-      .catch((err) => { });
+      .catch((err) => {});
   }
 
   const [jugadores, setJugadores] = React.useState([]);
