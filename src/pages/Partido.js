@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import Timer from "../components/Timer";
 import axios from "axios";
 import JugadoresJuego from "../components/JugadoresJuego";
@@ -9,14 +9,12 @@ import {
   Col,
   Button,
   Form,
-  DropdownButton,
   Dropdown,
   ButtonGroup,
 } from "react-bootstrap";
 import TopMenuBar from "../components/TopMenuBar";
 import PartidoIcon from "@material-ui/icons/SportsSoccer";
 import TeamIcon from "@material-ui/icons/People";
-import HomeIcon from "@material-ui/icons/Home";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -34,6 +32,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import TiempoJugadoresPartido from "../components/TiempoJugadoresPartido";
 import JugadorClass from "../containers/JugadorClass";
 import NotificacionJugadores from "../components/NotificacionJugadores";
+import GestorJugadorTimer from "../containers/GestorJugadorTimer";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -90,59 +89,119 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+let timeMin = 0;
+let timeSec = 0;
+let timeMls = 0;
+
 export default function ScrollableTabsButtonForce() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  const [time, setTime] = React.useState(0);
+  const [changeTab, setChangeTab] = React.useState(false);
   const [iniciarTiempoJugador, setIniciarTiempoJugador] = React.useState(false);
+  const [actualizarDetalles, setActualizarDetalles] = React.useState(false);
   const [running, setRunning] = React.useState(false);
-  const [detener, setDetener] = React.useState(true);
-  const [time2, setTime2] = React.useState(0);
-  const [iniciarTiempoJugador2, setIniciarTiempoJugador2] =
-    React.useState(false);
+  const [reset, setReset] = React.useState(false);
+  // const [time, setTime] = React.useState(0);
+  // const [timeMin, setTimeMin] = React.useState(0);
+  // const [timeSec, setTimeSec] = React.useState(0);
+  // const [timeMls, setTimeMls] = React.useState(0);
+
   const [periodo, setPeriodo] = React.useState(0);
   const [counter, setCounter] = React.useState(null);
-  const [counter2, setCounter2] = React.useState(null);
   const [selectIndexTitular, setSelectIndexTitular] = React.useState(-1);
   const [selectIndexSustituto, setSelectIndexSustituto] = React.useState(-1);
   const [selectIndexEntra, setSelectIndexEntra] = React.useState(-1);
   const [selectIndexAsistente, setSelectIndexAsistente] = React.useState(-1);
   let gestorPartido = new GestorPartido("Partido 1");
-
   const [timeJugadores, setTimeJugadores] = React.useState([]);
-
   const [notification, setNotification] = React.useState(0);
   const [listNotificaciones, setListNotificaciones] = React.useState([]);
-
+  const [gestorTimersTitulares, setGestorTimersTitulares] = React.useState([]);
+  const [gestorTimersSustitutos, setGestorTimersSustitutos] = React.useState(
+    []
+  );
   const [jugadoresTitulares, setJugadoresTitulares] = React.useState([]);
   const [jugadoresSustitutos, setJugadoresSustitutos] = React.useState([]);
 
   useEffect(() => {
-    actualizarJugadoresBD();
-    console.log("enta a pedir");
-  }, [selectIndexTitular]);
+    function actualizarJugadoresBD() {
+      axios
+        .get(`http://localhost:3000/api/jugadores`)
+        .then((resultado) => {
+          let jugadoresList = resultado.data.data;
+          let listEnJuego = [];
+          let listFueraJuego = [];
+          let objctJugador;
 
-  function actualizarJugadoresBD() {
-    axios
-      .get(`http://localhost:3000/api/jugadores`)
-      .then((resultado) => {
-        let jugadoresList = resultado.data.data;
-        let listEnJuego = [];
-        let listFueraJuego = [];
-        let objctJugador;
-        jugadoresList.forEach((element) => {
-          objctJugador = new JugadorClass(element.nombre);
-          if (element.jugando) {
-            listEnJuego.push(objctJugador);
-          } else if (element.convocado) {
-            listFueraJuego.push(objctJugador);
+          jugadoresList.forEach((element) => {
+            objctJugador = new JugadorClass(element.nombre);
+
+            if (element.jugando) {
+              listEnJuego.push(objctJugador);
+            } else if (element.convocado) {
+              listFueraJuego.push(objctJugador);
+            }
+          });
+
+          setJugadoresTitulares(listEnJuego);
+          setJugadoresSustitutos(listFueraJuego);
+        })
+        .catch((err) => {});
+    }
+    console.log("entra actualizar BD");
+    actualizarJugadoresBD();
+  }, [changeTab]);
+
+  useEffect(() => {
+    function actualizarGestores() {
+      axios
+        .get(`http://localhost:3000/api/jugadores`)
+        .then((resultado) => {
+          let jugadoresList = resultado.data.data;
+          let listGestoresTimers = [];
+          let listGestoresSustitutos = [];
+
+          let gestorTimer;
+          let lista;
+          let storedListTiempos = localStorage.getItem("listaTiempos");
+          if (storedListTiempos != null) {
+            lista = JSON.parse(storedListTiempos);
           }
-        });
-        setJugadoresTitulares(listEnJuego);
-        setJugadoresSustitutos(listFueraJuego);
-      })
-      .catch((err) => {});
-  }
+
+          jugadoresList.forEach((element) => {
+            if (storedListTiempos != null) {
+              gestorTimer = lista.find((gestorStored) => {
+                return gestorStored.nombre === element.nombre;
+              });
+            } else {
+              gestorTimer = new GestorJugadorTimer(element.nombre, 0, 0, 0);
+            }
+
+            if (element.jugando) {
+              listGestoresTimers.push(gestorTimer);
+            } else if (element.convocado) {
+              listGestoresSustitutos.push(gestorTimer);
+            }
+          });
+
+          setGestorTimersTitulares(listGestoresTimers);
+          setGestorTimersSustitutos(listGestoresSustitutos);
+        })
+        .catch((err) => {});
+    }
+    console.log("entra actualizar Gestores Timers");
+    actualizarGestores();
+  }, []);
+
+  // useEffect(() => {
+  //   return () => {
+  //     console.log("se desmonta actualizar Gestores Timers");
+  //     // let listaGestores = [...gestorTimersTitulares];
+  //     let listaGestores = [...listGestTitulares];
+  //     console.log(listGestTitulares);
+  //     localStorage.setItem("listaTiempos", JSON.stringify(listaGestores));
+  //   };
+  // }, []);
 
   const [partidoObjct, setPartidoObjct] = React.useState([]);
   useEffect(() => {
@@ -159,120 +218,126 @@ export default function ScrollableTabsButtonForce() {
 
     obtenerDetallesPartido();
     console.log("enta a pedir al de detalles del partido");
-  }, [gestorPartido._nombrePartido, selectIndexTitular]);
+  }, [gestorPartido._nombrePartido, actualizarDetalles]);
 
-  function obtenerTiempoJugadores() {
-    let listTiempos = [];
-    let storedListTiempos = localStorage.getItem("listaTiempos");
-    if (storedListTiempos != null) {
-      let lista = JSON.parse(storedListTiempos);
+  // useEffect(() => {
+  //   console.log("Se llamo el nuevo useEfecct");
 
-      lista.forEach((element) => {
-        listTiempos.push(element);
-        console.log(element);
-      });
-      //this.setState({ listComentario: listaComenatriosObject });
-      console.log(listTiempos);
-    }
-    return listTiempos;
-  }
+  //   function obtenerTiempoJugadores() {
+  //     let listTiempos = [];
+  //     let storedListTiempos = localStorage.getItem("listaTiempos");
+  //     if (storedListTiempos != null) {
+  //       let lista = JSON.parse(storedListTiempos);
 
-  const actualizarTiempoJugadores = (jugador, tiempoCambiado) => {
-    let tiemposJugadores = timeJugadores;
-    let pos = tiemposJugadores.indexOf(jugador);
+  //       lista.forEach((element) => {
+  //         listTiempos.push(element);
+  //         console.log(element);
+  //       });
+  //       //this.setState({ listComentario: listaComenatriosObject });
+  //       console.log(listTiempos);
+  //     }
+  //     return listTiempos;
+  //   }
 
-    if (pos !== -1) {
-    } else {
-    }
+  //   setTimeJugadores(obtenerTiempoJugadores);
 
-    let objctTiempoJugador = {
-      nombre: jugador,
-      tiempo: {
-        min: tiempoCambiado.min,
-        sec: tiempoCambiado.sec,
-        mls: tiempoCambiado.mls,
-      },
-    };
+  //   return function cleanUp() {
+  //     actualizarTiempoJugadores();
+  //   };
+  // }, [timeJugadores, selectIndexTitular]);
 
-    tiemposJugadores.push(objctTiempoJugador);
-    this.setState({
-      timeJugadores: tiemposJugadores,
-    });
-    localStorageListTiempos(tiemposJugadores);
-    setTimeJugadores(tiemposJugadores);
-  };
+  // const actualizarTiempoJugadores = () => {
+  //   let tiemposJugadores = [];
+  //   let objctTiempoJugador;
 
-  const localStorageListTiempos = (listTimeJugadores) => {
-    localStorage.setItem("listaTiempos", JSON.stringify(listTimeJugadores));
-  };
+  //   gestorTimersTitulares.map((gestor) => {
+  //     objctTiempoJugador = {
+  //       nombre: gestor.nombre,
+  //       tiempo: {
+  //         min: gestor.min,
+  //         sec: gestor.sec,
+  //         mls: gestor.mls,
+  //       },
+  //     };
+  //     tiemposJugadores.push(objctTiempoJugador);
+  //   });
 
-  const clearLocalStorage = () => {
-    localStorage.removeItem("listaTiempos");
-  };
+  //   localStorageListTiempos(tiemposJugadores);
+  // };
+
+  // const localStorageListTiempos = (listTimeJugadores) => {
+  //   localStorage.setItem("listaTiempos", JSON.stringify(listTimeJugadores));
+  // };
+
+  // const clearLocalStorage = () => {
+  //   localStorage.removeItem("listaTiempos");
+  // };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+
+    if (newValue === 0) setChangeTab(!changeTab);
   };
 
+  //Gestionando tiempo General
   const handleInitTimer = () => {
+    setReset(false);
     if (!running) {
       setRunning(true);
-      handleInitTimer2();
+      iniciarTiempoLocal();
+      iniciarTiemposJugadores();
       setIniciarTiempoJugador(true);
     } else {
-      pauseTimer2();
+      pauseTimerLocal();
+      detenerTiemposJugadores();
       setRunning(false);
     }
-
-    // if (counter) {
-    //   pauseTimer();
-    // } else {
-    //   setIniciarTiempoJugador(true);
-    //   setCounter(
-    //     setInterval(() => {
-    //       setTime((time) => time + 1);
-    //     }, 1000)
-    //   );
-    // }
   };
 
-  const handleInitTimer2 = () => {
-    //setIniciarTiempoJugador(true);
-    setCounter2(
-      setInterval(() => {
-        setTime2((time2) => time2 + 1);
-      }, 1000)
-    );
+  const iniciarTiempoLocal = () => {
+    setCounter(setInterval(() => pace(), 10));
+  };
+
+  const pace = () => {
+    timeMls += 10;
+
+    if (timeMls >= 1000) {
+      timeSec += 1;
+      timeMls = 0;
+    }
+    if (timeSec >= 60) {
+      timeMin += 1;
+      timeSec = 0;
+    }
   };
 
   const handleEndPeriodo = () => {
     setPeriodo(periodo + 1);
+    timeSec = 0;
+    timeMin = 0;
+    timeMls = 0;
+    clearInterval(counter);
+    // setCounter(null);
+    setIniciarTiempoJugador(false);
+    setRunning(false);
   };
 
-  // const pauseTimer = () => {
-  //   clearInterval(counter);
-  //   setCounter(null);
-  //   setIniciarTiempoJugador(false);
-  // };
-
-  // const handleClearTimer = () => {
-  //   setTime(0);
-  //   clearInterval(counter);
-  //   setCounter(null);
-  //   setIniciarTiempoJugador(false);
-  // };
-
-  const pauseTimer2 = () => {
-    clearInterval(counter2);
-    setCounter2(null);
+  const pauseTimerLocal = () => {
+    clearInterval(counter);
+    // setCounter(null);
     setIniciarTiempoJugador(false);
   };
 
   const handleClearTimer = () => {
-    setTime2(0);
-    clearInterval(counter2);
-    setCounter2(null);
+    timeSec = 0;
+    timeMin = 0;
+    timeMls = 0;
+    clearInterval(counter);
+    setCounter(null);
+    resetTiemposJugadores();
     setIniciarTiempoJugador(false);
+    setReset(true);
+    setRunning(false);
   };
 
   const handleNotificacion = (jugador) => {
@@ -282,6 +347,38 @@ export default function ScrollableTabsButtonForce() {
 
     setListNotificaciones(listaNotificaciones);
     setNotification(notification + 1);
+
+    gestorTimersTitulares.find(
+      (element) => element.nombre === jugador
+    ).notificacion = true;
+  };
+
+  //Gestionando tiempo Jugadores
+
+  const iniciarTiemposJugadores = () => {
+    gestorTimersTitulares.map((gestor) => {
+      gestor.start();
+    });
+  };
+
+  const detenerTiemposJugadores = () => {
+    gestorTimersTitulares.map((gestor) => {
+      gestor.stop();
+    });
+  };
+
+  const resetTiemposJugadores = () => {
+    gestorTimersTitulares.map((gestor) => {
+      gestor.reset();
+    });
+  };
+
+  const handleEliminarNotif = (nombreJugador) => {
+    let listaNotificaciones = listNotificaciones;
+    let pos = listaNotificaciones.indexOf(nombreJugador);
+    listaNotificaciones.splice(pos, 1);
+    setListNotificaciones(listaNotificaciones);
+    setNotification(notification - 1);
   };
 
   const CrearPartido = () => {
@@ -289,18 +386,24 @@ export default function ScrollableTabsButtonForce() {
   };
 
   const ActionGolFavor = () => {
-    Notification.fire({
-      icon: "success",
-      title: `Gol agregado a ${jugadoresTitulares[selectIndexTitular].nombre} `,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        AddGolFavor();
-      } else if (result.isDenied) {
-        console.log("Goooool Cancelado");
-      } else {
-        AddGolFavor();
-      }
-    });
+    if (selectIndexTitular === -1 || selectIndexAsistente === -1) {
+      ErrorNotify(
+        "Se debe seleccionar el jugador anotador y el asistente del gol"
+      );
+    } else {
+      Notification.fire({
+        icon: "success",
+        title: `Gol agregado a ${jugadoresTitulares[selectIndexTitular].nombre} `,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          AddGolFavor();
+        } else if (result.isDenied) {
+          console.log("Goooool Cancelado");
+        } else {
+          AddGolFavor();
+        }
+      });
+    }
   };
 
   const ActionGolContra = () => {
@@ -320,48 +423,62 @@ export default function ScrollableTabsButtonForce() {
   };
 
   const ActionLesion = () => {
-    Notification.fire({
-      icon: "success",
-      title: `Lesión agregada a ${jugadoresTitulares[selectIndexTitular].nombre} `,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        AddLesion();
-      } else if (result.isDenied) {
-        console.log("Lesioooooooon Cancelada");
-      } else {
-        AddLesion();
-      }
-    });
+    if (selectIndexTitular === -1) {
+      ErrorNotify("Se debe seleccionar el jugador que se ha lesionado");
+    } else if (document.getElementById("descLesion").value === "") {
+      ErrorNotify("Se debe agregar una descripción de la lesión");
+    } else {
+      Notification.fire({
+        icon: "success",
+        title: `Lesión agregada a ${jugadoresTitulares[selectIndexTitular].nombre} `,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          AddLesion();
+        } else if (result.isDenied) {
+          console.log("Lesioooooooon Cancelada");
+        } else {
+          AddLesion();
+        }
+      });
+    }
   };
 
   const ActionFalta = () => {
-    Notification.fire({
-      icon: "success",
-      title: `Falta agregada a ${jugadoresTitulares[selectIndexTitular].nombre} `,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        AddFalta();
-      } else if (result.isDenied) {
-        console.log("Lesioooooooon Cancelada");
-      } else {
-        AddFalta();
-      }
-    });
+    if (selectIndexTitular === -1) {
+      ErrorNotify("Se debe seleccionar el jugador que ha realizado la falta");
+    } else {
+      Notification.fire({
+        icon: "success",
+        title: `Falta agregada a ${jugadoresTitulares[selectIndexTitular].nombre} `,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          AddFalta();
+        } else if (result.isDenied) {
+          console.log("Lesioooooooon Cancelada");
+        } else {
+          AddFalta();
+        }
+      });
+    }
   };
 
   const ActionCambio = () => {
-    Notification.fire({
-      icon: "success",
-      title: `Entra: ${jugadoresSustitutos[selectIndexEntra].nombre} Sale: ${jugadoresTitulares[selectIndexSustituto].nombre}`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        CambioJugador();
-      } else if (result.isDenied) {
-        console.log("Cambio Cancelado");
-      } else {
-        CambioJugador();
-      }
-    });
+    if (selectIndexEntra === -1 || selectIndexSustituto === -1) {
+      ErrorNotify("Se debe seleccionar los jugadores para realizar el cambio");
+    } else {
+      Notification.fire({
+        icon: "success",
+        title: `Entra: ${jugadoresSustitutos[selectIndexEntra].nombre} Sale: ${jugadoresTitulares[selectIndexSustituto].nombre}`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          CambioJugador();
+        } else if (result.isDenied) {
+          console.log("Cambio Cancelado");
+        } else {
+          CambioJugador();
+        }
+      });
+    }
   };
 
   const Notification = Swal.mixin({
@@ -378,6 +495,14 @@ export default function ScrollableTabsButtonForce() {
       toast.addEventListener("mouseleave", Swal.resumeTimer);
     },
   });
+
+  const ErrorNotify = (text) => {
+    Swal.fire({
+      icon: "error",
+      title: "Error...",
+      text: text,
+    });
+  };
 
   //Cambios en los DropDowns
   const handleMenuTitularClick = (event, index) => {
@@ -429,6 +554,9 @@ export default function ScrollableTabsButtonForce() {
 
     setJugadoresSustitutos(sustitutosNew);
     setJugadoresTitulares(titularesNew);
+    setActualizarDetalles(!actualizarDetalles);
+    setSelectIndexEntra(-1);
+    setSelectIndexSustituto(-1);
   };
 
   const actualizarListaCambioAdd = (lista, jugadorAdd) => {
@@ -450,13 +578,17 @@ export default function ScrollableTabsButtonForce() {
     gestorPartido.agregarGolFavor(
       jugadoresTitulares[selectIndexTitular].nombre,
       jugadoresTitulares[selectIndexAsistente].nombre,
-      time,
+      timeMin,
       periodo
     );
+    setTimeout(setActualizarDetalles(!actualizarDetalles), 3000);
+    setSelectIndexTitular(-1);
+    setSelectIndexAsistente(-1);
   };
 
   const AddGolContra = () => {
     gestorPartido.agregarGolContra();
+    setTimeout(setActualizarDetalles(!actualizarDetalles), 3000);
   };
 
   const VerificarGol = () => {
@@ -469,6 +601,9 @@ export default function ScrollableTabsButtonForce() {
 
   const AddFalta = () => {
     gestorPartido.agregarFalta(jugadoresTitulares[selectIndexTitular].nombre);
+    setTimeout(setActualizarDetalles(!actualizarDetalles), 3000);
+
+    setSelectIndexTitular(-1);
   };
 
   const AddLesion = () => {
@@ -478,6 +613,9 @@ export default function ScrollableTabsButtonForce() {
       jugadoresTitulares[selectIndexTitular].nombre,
       document.getElementById("descLesion").value
     );
+
+    setSelectIndexTitular(-1);
+    document.getElementById("descLesion").value = "Descripción de la lesión";
   };
 
   return (
@@ -566,8 +704,12 @@ export default function ScrollableTabsButtonForce() {
                     handleTime={handleInitTimer}
                     handleClearTimer={handleClearTimer}
                     handleEndPeriodo={handleEndPeriodo}
-                    time2={time2}
+                    // time2={time}
+                    min={timeMin}
+                    sec={timeSec}
+                    mls={timeMls}
                     running={running}
+                    counter={counter}
                     style={{
                       justifyContent: "center",
                       alignItems: "center",
@@ -875,7 +1017,7 @@ export default function ScrollableTabsButtonForce() {
                 Ejecutar Cambio
               </Button>
             </Container>
-            {jugadoresTitulares.map((jugador, index) => {
+            {gestorTimersTitulares.map((jugador, index) => {
               return (
                 <>
                   <h4>Jugador {jugador.nombre}</h4>
@@ -883,18 +1025,22 @@ export default function ScrollableTabsButtonForce() {
                   <TiempoJugadoresPartido
                     iniciar={iniciarTiempoJugador}
                     actividad={5}
-                    entrenamiento={1}
+                    notificacion={jugador.notificacion}
                     jugador={jugador.nombre}
                     limite={1}
                     handleNotificacion={(element) =>
                       handleNotificacion(element)
                     }
                     nombre={"actividad.nombre"}
+                    min={jugador.min}
+                    sec={jugador.sec}
+                    mls={jugador.mls}
+                    reset={reset}
                   />
                 </>
               );
             })}
-            {jugadoresSustitutos.map((jugador, index) => {
+            {/* {jugadoresSustitutos.map((jugador, index) => {
               return (
                 <>
                   <h4>Jugador {jugador.nombre}</h4>
@@ -909,7 +1055,7 @@ export default function ScrollableTabsButtonForce() {
                   />
                 </>
               );
-            })}
+            })} */}
           </Row>
           <br></br>
         </Container>
@@ -926,7 +1072,10 @@ export default function ScrollableTabsButtonForce() {
           }}
         >
           <Row style={{}}>
-            <NotificacionJugadores notificaciones={listNotificaciones} />
+            <NotificacionJugadores
+              notificaciones={listNotificaciones}
+              handleEliminarNotif={(element) => handleEliminarNotif(element)}
+            />
           </Row>
         </Container>
       </TabPanel>

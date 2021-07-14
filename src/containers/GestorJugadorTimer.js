@@ -1,8 +1,8 @@
 export default class GestorJugadorTimer {
-  constructor(props, nombre, running, min, sec, mls) {
-    super(props);
+  constructor(nombre, min, sec, mls) {
     this.nombre = nombre;
     this.running = false;
+    this.notificacion = false;
     this.min = 0;
     this.sec = 0;
     this.mls = 0;
@@ -22,6 +22,14 @@ export default class GestorJugadorTimer {
 
   set running(running) {
     this._running = running;
+  }
+
+  get notificacion() {
+    return this._notificacion;
+  }
+
+  set notificacion(notificacion) {
+    this._notificacion = notificacion;
   }
 
   get min() {
@@ -48,54 +56,33 @@ export default class GestorJugadorTimer {
     this._mls = mls;
   }
 
-  formatTime = (val, ...rest) => {
-    let value = val.toString();
-    if (value.length < 2) {
-      value = "0" + value;
-    }
-    if (rest[0] === "ms" && value.length < 3) {
-      value = "0" + value;
-    }
-    return value;
-  };
-
-  inicioAutomatico() {
-    //console.log("aqui va el boleano",this.props.iniciar)
-    if (this.props.iniciar && this.state.finalizar === false) {
-      if (!this.state.running) {
-        this.start();
-      }
-    }
-  }
-
   start = () => {
-    if (!this.state.running) {
+    if (!this.running) {
       this.watch = setInterval(() => this.pace(), 10);
     }
   };
 
   stop = () => {
-    this.setState({ running: false });
+    this._running = false;
     clearInterval(this.watch);
   };
 
   pace = () => {
-    this.setState({ currentTimeMs: this.state.currentTimeMs + 10 });
-    if (this.state.currentTimeMs >= 1000) {
-      this.setState({ currentTimeSec: this.state.currentTimeSec + 1 });
-      this.setState({ currentTimeMs: 0 });
+    this._mls = this.mls + 10;
+    if (this._mls >= 1000) {
+      this._sec = this.sec + 1;
+      this._mls = 0;
     }
-    if (this.state.currentTimeSec >= 60) {
-      this.setState({ currentTimeMin: this.state.currentTimeMin + 1 });
-      this.setState({ currentTimeSec: 0 });
+    if (this.sec >= 60) {
+      this._min = this.min + 1;
+      this._sec = 0;
     }
   };
 
   reset = () => {
-    this.setState({
-      currentTimeMs: 0,
-      currentTimeSec: 0,
-      currentTimeMin: 0,
-    });
+    this._mls = 0;
+    this._sec = 0;
+    this._min = 0;
+    this._running = false;
   };
 }

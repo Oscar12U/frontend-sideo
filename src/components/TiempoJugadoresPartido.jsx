@@ -11,11 +11,12 @@ class TiempoJugadoresPartido extends React.Component {
     this.state = {
       running: false,
       finalizar: false,
-      currentTimeMs: 0,
-      currentTimeSec: 0,
-      currentTimeMin: 0,
+      currentTimeMin: this.props.min,
+      currentTimeSec: this.props.sec,
+      currentTimeMs: this.props.mls,
+
       open: false,
-      notificacion: false,
+      notificacion: this.props.notificacion,
       nombre: "El tiempo de la actividad: " + this.props.nombre,
     };
   }
@@ -27,7 +28,11 @@ class TiempoJugadoresPartido extends React.Component {
   // }
 
   componentDidMount() {
-    console.log("Inicia automatico");
+    if (this.props.iniciar) {
+      this.start();
+    } else {
+      this.stop();
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -35,11 +40,16 @@ class TiempoJugadoresPartido extends React.Component {
 
     if (prevProps.iniciar !== this.props.iniciar) {
       if (this.props.iniciar) {
-        this.inicioAutomatico();
+        this.start();
       } else {
         this.stop();
       }
     }
+
+    if (prevProps.reset !== this.props.reset) {
+      this.reset();
+    }
+
     if (prevState.currentTimeSec !== this.state.currentTimeSec) {
       this.notificarTiempo();
     }
@@ -58,18 +68,9 @@ class TiempoJugadoresPartido extends React.Component {
     this.setState({ open: false });
   };
 
-  ingresarTiempoJugador = (entrenamiento1, jugador1, actividad1) => {
-    if (!this.state.running) {
-      this.setState({ finalizar: true });
-    }
-  };
-
   notificarTiempo = () => {
     if (this.props.limite !== 0) {
-      if (
-        6 === this.state.currentTimeSec &&
-        this.state.notificacion === false
-      ) {
+      if (6 <= this.state.currentTimeSec && this.state.notificacion === false) {
         this.handleClick();
         this.setState({ notificacion: true });
         this.props.handleNotificacion(this.props.jugador);
@@ -88,24 +89,9 @@ class TiempoJugadoresPartido extends React.Component {
     return value;
   };
 
-  inicioAutomatico() {
-    //console.log("aqui va el boleano",this.props.iniciar)
-    if (this.props.iniciar && this.state.finalizar === false) {
-      if (!this.state.running) {
-        this.start();
-      }
-    }
-    console.log("se llama el component update");
-    // } else if (!this.props.iniciar) {
-    //   console.log("se detuvo");
-    // }
-  }
-
   start = () => {
-    if (!this.state.running) {
-      this.setState({ running: true });
-      this.watch = setInterval(() => this.pace(), 10);
-    }
+    this.setState({ running: true });
+    this.watch = setInterval(() => this.pace(), 10);
   };
 
   stop = () => {
@@ -130,6 +116,7 @@ class TiempoJugadoresPartido extends React.Component {
       currentTimeMs: 0,
       currentTimeSec: 0,
       currentTimeMin: 0,
+      running: false,
     });
   };
 

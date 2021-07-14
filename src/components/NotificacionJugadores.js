@@ -98,6 +98,7 @@ class TiempoJugadoresPartido extends React.Component {
                       display: "flex",
                       color: "#FFFFFF",
                     }}
+                    onClick={() => this.props.handleEliminarNotif(jugador)}
                   >
                     Eliminar
                   </Button>
