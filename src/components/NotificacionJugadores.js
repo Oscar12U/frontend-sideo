@@ -1,5 +1,5 @@
 import React, { memo, useEffect } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Container, Row, Col } from "react-bootstrap";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
@@ -35,74 +35,89 @@ class TiempoJugadoresPartido extends React.Component {
   render() {
     return (
       <>
-        <h2>Notificaciones</h2>
+        <Container
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            margin: "10px",
+            fontWeight: "bold",
+            fontSize: "35px",
+          }}
+        >
+          Notificaciones
+        </Container>
+        <br />
         {this.props.notificaciones.map((notificacion, index) => {
           return (
             <>
-              <Card
+              <Container
                 style={{
-                  margin: "30px auto",
-                  backgroundColor: "#FFFFFF",
-                  maxWidth: "250px",
                   justifyContent: "center",
                   alignItems: "center",
-                  textAlign: "center",
+                  maxWidth: "90%",
+                  maxHeight: "90%",
+                  marginBottom: "20px",
                 }}
-                className={this.useStyles.root}
               >
-                <CardContent
+                <Card
                   style={{
+                    // margin: "30px auto",
                     backgroundColor: "#FFFFFF",
-                    maxWidth: "250px",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                    margin: "auto",
+                    maxWidth: "1",
+                    maxHeight: "1",
                   }}
+                  className={this.useStyles.root}
                 >
-                  <Typography
-                    className={this.useStyles.title}
-                    color="textSecondary"
-                    gutterBottom
+                  <CardContent
                     style={{
-                      alignItems: "center",
-                      justifyContent: "center",
-                      display: "flex",
-                      color: "black",
-                      fontSize: "20px",
-                      fontFamily: "Arial",
-                      fontWeight: "bold",
+                      backgroundColor: "#FFFFFF",
+                      margin: "auto",
+                      maxWidth: "60%",
+                      maxHeight: "60%",
                     }}
                   >
-                    {notificacion.descripcion}
-                  </Typography>
-                  <Divider />
-                  <br />
-                </CardContent>
-                <CardActions
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    display: "flex",
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    color="default"
+                    <Typography
+                      className={this.useStyles.title}
+                      color="textSecondary"
+                      gutterBottom
+                      style={{
+                        color: "black",
+                        fontSize: "20px",
+                        fontFamily: "Arial",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {notificacion.descripcion}
+                    </Typography>
+                    <Divider variant="fullWidth" />
+                  </CardContent>
+                  <CardActions
                     style={{
-                      backgroundColor: "#DE1A1A",
+                      backgroundColor: "#FFFFFF",
                       alignItems: "center",
                       justifyContent: "center",
-                      display: "flex",
-                      color: "#FFFFFF",
                     }}
-                    onClick={() => this.props.handleEliminarNotif(notificacion)}
                   >
-                    Eliminar
-                  </Button>
-                </CardActions>
-              </Card>
+                    <Button
+                      variant="contained"
+                      color="default"
+                      style={{
+                        backgroundColor: "#DE1A1A",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        display: "flex",
+                        color: "#FFFFFF",
+                      }}
+                      onClick={() =>
+                        this.props.handleEliminarNotif(notificacion)
+                      }
+                    >
+                      Eliminar
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Container>
             </>
           );
         })}

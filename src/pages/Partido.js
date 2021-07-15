@@ -920,60 +920,16 @@ export default function ScrollableTabsButtonForce() {
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
-                </Col>
-              </Row>
-              <br />
-              <Row
-                style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                  margin: "auto",
-                }}
-              >
-                <Col>
-                  <div
-                    className={classes.p1}
+                  <br />
+                  <br />
+                  <Divider
                     style={{
-                      color: "#000000",
+                      marginBottom: "5px",
                     }}
-                  >
-                    Seleccionar Jugador Asistente
-                  </div>
-                  <Dropdown as={ButtonGroup}>
-                    <Button id="btnAsistente">
-                      {""}
-                      {selectIndexAsistente === -1 ||
-                      selectIndexAsistente === jugadoresTitulares.length
-                        ? "Seleccionar Jugador"
-                        : jugadoresTitulares[selectIndexAsistente].nombre}
-                    </Button>
-                    <Dropdown.Toggle split id="dropdown-custom-3" />
-                    <Dropdown.Menu className="super-colors">
-                      {jugadoresTitulares.map((option, index) =>
-                        getAsistentes(option.nombre, index)
-                      )}
-                      <Dropdown.Divider />
-                      <Dropdown.Item
-                        key={jugadoresTitulares.length}
-                        selected={
-                          jugadoresTitulares.length === selectIndexAsistente
-                        }
-                        onClick={(event) =>
-                          handleMenuAsistenteClick(
-                            event,
-                            jugadoresTitulares.length
-                          )
-                        }
-                      >
-                        Cancelar Selección
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
+                    variant="middle"
+                  />
                 </Col>
               </Row>
-
-              <br />
 
               <Row>
                 <Col
@@ -1012,6 +968,49 @@ export default function ScrollableTabsButtonForce() {
                       </div>
                     ))}
                   </Form>
+                  <div
+                    className={classes.p3}
+                    style={{
+                      color: "#000000",
+                    }}
+                  >
+                    Seleccionar Jugador {<br />} Asistente de Gol
+                  </div>
+                  <Dropdown
+                    style={{
+                      marginTop: "5px",
+                    }}
+                    as={ButtonGroup}
+                  >
+                    <Button id="btnAsistente">
+                      {""}
+                      {selectIndexAsistente === -1 ||
+                      selectIndexAsistente === jugadoresTitulares.length
+                        ? "Seleccionar Jugador"
+                        : jugadoresTitulares[selectIndexAsistente].nombre}
+                    </Button>
+                    <Dropdown.Toggle split id="dropdown-custom-3" />
+                    <Dropdown.Menu className="super-colors">
+                      {jugadoresTitulares.map((option, index) =>
+                        getAsistentes(option.nombre, index)
+                      )}
+                      <Dropdown.Divider />
+                      <Dropdown.Item
+                        key={jugadoresTitulares.length}
+                        selected={
+                          jugadoresTitulares.length === selectIndexAsistente
+                        }
+                        onClick={(event) =>
+                          handleMenuAsistenteClick(
+                            event,
+                            jugadoresTitulares.length
+                          )
+                        }
+                      >
+                        Cancelar Selección
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
                 </Col>
 
                 <Col
@@ -1235,27 +1234,84 @@ export default function ScrollableTabsButtonForce() {
                 Ejecutar Cambio
               </Button>
             </Container>
-            {gestorTimersTitulares.map((jugador, index) => {
-              return (
-                <>
-                  <h4>Jugador {jugador.nombre}</h4>
+            <Container
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+                margin: "auto",
+              }}
+            >
+              <br />
+              <Divider
+                style={{
+                  marginBottom: "5px",
+                }}
+                variant="middle"
+              />
+              <br />
+              <Typography
+                style={{
+                  fontSize: "30px",
+                  color: "#FFFFFF",
+                  fontWeight: "bold",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                Tiempo Jugadores
+              </Typography>
+              <br />
+              {gestorTimersTitulares.map((jugador, index) => {
+                return (
+                  <Container
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                      margin: "auto",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <Divider
+                      style={{
+                        marginBottom: "5px",
+                        color: "#FFFFFF",
+                        backgroudColor: "#FFFFFF",
+                      }}
+                      variant="middle"
+                    />
+                    <h4
+                      style={{
+                        fontSize: "25px",
+                        color: "#0000000",
+                        fontWeight: "bold",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textAlign: "center",
+                      }}
+                    >
+                      {jugador.nombre}
+                    </h4>
 
-                  <TiempoJugadoresPartido
-                    iniciar={iniciarTiempoJugador}
-                    notificacion={jugador.notificacion}
-                    jugador={jugador.nombre}
-                    handleNotificacion={(element) =>
-                      handleNotificacion(element)
-                    }
-                    nombre={"actividad.nombre"}
-                    min={jugador.min}
-                    sec={jugador.sec}
-                    mls={jugador.mls}
-                    reset={reset}
-                  />
-                </>
-              );
-            })}
+                    <TiempoJugadoresPartido
+                      iniciar={iniciarTiempoJugador}
+                      notificacion={jugador.notificacion}
+                      jugador={jugador.nombre}
+                      handleNotificacion={(element) =>
+                        handleNotificacion(element)
+                      }
+                      nombre={"actividad.nombre"}
+                      min={jugador.min}
+                      sec={jugador.sec}
+                      mls={jugador.mls}
+                      reset={reset}
+                    />
+                  </Container>
+                );
+              })}
+            </Container>
           </Row>
           <br></br>
         </Container>
@@ -1267,11 +1323,24 @@ export default function ScrollableTabsButtonForce() {
         <Container
           fluid="md"
           style={{
-            marginTop: "40px",
+            marginTop: "20px",
             backgroundImage: "linear-gradient( #00233D, #33A7FF)",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            borderRadius: "15px",
           }}
         >
-          <Row style={{}}>
+          <Row
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              fontSize: "15px",
+              color: "#FFFFFF",
+              fontWeight: "bold",
+            }}
+          >
             <NotificacionJugadores
               notificaciones={listNotificaciones}
               handleEliminarNotif={(element) => handleEliminarNotif(element)}

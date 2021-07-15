@@ -155,7 +155,14 @@ class TiempoJugadoresPartido extends React.Component {
             textAlign: "center",
           }}
         >
-          <h4 ref="header">Tiempo:</h4>
+          <h4
+            style={{
+              fontSize: "25px",
+            }}
+            ref="header"
+          >
+            Tiempo
+          </h4>
 
           {this.state.finalizar === true && <h4 ref="header">Finalizada</h4>}
           <StopwatchDisplay

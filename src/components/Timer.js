@@ -125,7 +125,11 @@ class Timer extends Component {
         <div className="time">
           {/* <img src={cronometroImage} alt="" /> */}
           {/* <h2>{this.state.actualTime.toFixed(0)}</h2> */}
-          <span>
+          <span
+            style={{
+              fontSize: "25px",
+            }}
+          >
             {this.formatTime(this.state.currentTimeMin)}:
             {this.formatTime(this.state.currentTimeSec)}
           </span>
@@ -134,14 +138,54 @@ class Timer extends Component {
         <br></br>
         <div className="btns">
           <input
+            style={{
+              justifyContent: "center",
+              justifySelf: "center",
+              alignItems: "center",
+              textAlign: "center",
+              fontSize: "15px",
+              display: "inline-block",
+              backgroundColor: "#287ACC",
+              color: "#FFFFFF",
+              borderRadius: "3px",
+              fontWeight: "bold",
+            }}
             type="button"
             value={this.state.btnPlayPause}
             onClick={this.initTimer}
           />
-          <input type="button" value="Reiniciar" onClick={this.clearTimer} />
           <input
+            style={{
+              justifyContent: "center",
+              justifySelf: "center",
+              alignItems: "center",
+              textAlign: "center",
+              fontSize: "15px",
+              display: "inline-block",
+              backgroundColor: "#287ACC",
+              color: "#FFFFFF",
+              borderRadius: "3px",
+              fontWeight: "bold",
+            }}
             type="button"
-            value="Finalizar Periodo"
+            value="Reiniciar"
+            onClick={this.clearTimer}
+          />
+          <input
+            style={{
+              justifyContent: "center",
+              justifySelf: "center",
+              alignItems: "center",
+              textAlign: "center",
+              fontSize: "15px",
+              display: "inline-block",
+              backgroundColor: "#287ACC",
+              color: "#FFFFFF",
+              borderRadius: "3px",
+              fontWeight: "bold",
+            }}
+            type="button"
+            value={"Finalizar Periodo"}
             onClick={this.endPeriod}
           />
         </div>

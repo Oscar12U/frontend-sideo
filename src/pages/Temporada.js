@@ -12,7 +12,7 @@ import AddIcon from "@material-ui/icons/Add";
 import PanToolIcon from "@material-ui/icons/PanTool";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-
+import { Dropdown } from "react-bootstrap";
 import ControlPointIcon from "@material-ui/icons/ControlPoint";
 import GestorEntrenamiento from "../containers/GestorEntrenamiento";
 import SlowMotionVideoIcon from "@material-ui/icons/SlowMotionVideo";
@@ -38,6 +38,8 @@ import * as moment from "moment";
 export default function Temporada() {
   useEffect(() => {
     ultimoEntrenamiento();
+    ultimaTemporada();
+    getTemporadas();
   }, []);
 
   const [openPartido, setOpenPartido] = React.useState(false);
@@ -52,11 +54,16 @@ export default function Temporada() {
   const [descripcionActividad, setDescripcionActividad] = React.useState("");
   const [tiempoActividad, setTiempoActividad] = React.useState();
   const [entrenamientoUltimo, setEntrenamientoUltimo] = React.useState([]);
+  const [temporadaUltima, setTemporadaUltima] = React.useState([]);
+  const [nombreTemporada, setNombreTemporada] = React.useState("");
 
   const [openEntrenamiento, setOpenEntrenamiento] = React.useState(false);
   const [nombreEntrenamiento, setNombreEntrenamiento] = React.useState("");
   const [descripcionEntrenamiento, setDescripcionEntrenamiento] =
     React.useState("");
+
+  const [indexTemporada, setIndexTemporada] = React.useState(-1);
+  const [listaTemporadas, setListaTemporadas] = React.useState([]);
 
   const [incorrecto, setIncorrecto] = React.useState("");
   const [incorrecto2, setIncorrecto2] = React.useState("");
@@ -186,6 +193,10 @@ export default function Temporada() {
     //console.log("comentario:  ", comentarioEntrenamieto);
   };
 
+  const handleTemporadaClick = (event, index) => {
+    setIndexTemporada(index);
+  };
+
   const enviarActividad = () => {
     if (
       nombreActividad.length >= 1 &&
@@ -311,6 +322,27 @@ export default function Temporada() {
       .catch((err) => {});
   }
 
+  function ultimaTemporada() {
+    axios.get(`http://localhost:3000/api/ultimaTemporada`).then((resultado) => {
+      const temporadaUltima = resultado.data.data[0];
+      const nombreTemp = resultado.data.data[0].nombre;
+      setNombreTemporada(nombreTemp);
+      setTemporadaUltima(temporadaUltima);
+    });
+  }
+
+  function getTemporadas() {
+    axios
+      .get(`http://localhost:3000/api/getAllTemporadas`)
+      .then((resultado) => {
+        const listTemporadas = resultado.data.data;
+        console.log("PRUEBA LISTA ", listTemporadas.length);
+        setListaTemporadas(listTemporadas);
+        setIndexTemporada(listTemporadas.length - 1);
+        console.log("PRUEBA 2 ", listTemporadas[3]);
+      });
+  }
+
   let gestorEntrenamiento = new GestorEntrenamiento();
   let gestorPartido = new GestorPartido();
 
@@ -360,7 +392,7 @@ export default function Temporada() {
         }}
       >
         <FormControl className={classes.formControl}>
-          <NativeSelect
+          {/* <NativeSelect
             className={classes.selectEmpty}
             //value={state.age}
             name="age"
@@ -373,7 +405,28 @@ export default function Temporada() {
             <option value={"Temporada 2"}>Temporada 2</option>
             <option value={"Temporada 3"}>Temporada 3</option>
             <option value={"Temporada 4"}>Temporada 4</option>
-          </NativeSelect>
+          </NativeSelect> */}
+          <Dropdown>
+            <Button id="btnMenuTitular">
+              {""}
+              {indexTemporada === -1 ||
+              indexTemporada === listaTemporadas.length
+                ? "Seleccionar Temporada"
+                : listaTemporadas[indexTemporada].nombre}
+            </Button>
+            <Dropdown.Toggle split id="dropdown-custom-2" />
+            <Dropdown.Menu className="super-colors">
+              {listaTemporadas.map((option, index) => (
+                <Dropdown.Item
+                  key={index}
+                  selected={index === indexTemporada}
+                  onClick={(event) => handleTemporadaClick(event, index)}
+                >
+                  {option.nombre}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
           <FormHelperText>Elegir Temporada</FormHelperText>
         </FormControl>
 
