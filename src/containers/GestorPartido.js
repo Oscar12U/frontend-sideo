@@ -54,7 +54,7 @@ export default class GestorPartido {
   agregarLesion(nombreJugador, descripcion) {
     console.log(descripcion);
     axios
-      .post(`http://localhost:3000/api/newLesion`, {
+      .post(`http://localhost:3000/api/newLesionNombre`, {
         nombreJugador: nombreJugador,
         descripcion: descripcion,
       })

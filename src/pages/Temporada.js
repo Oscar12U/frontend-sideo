@@ -48,6 +48,10 @@ export default function Temporada() {
   const [descripcionEntrenamiento, setDescripcionEntrenamiento] =
     React.useState("");
 
+  const [incorrecto, setIncorrecto] = React.useState("");
+  const [incorrecto2, setIncorrecto2] = React.useState("");
+  const [incorrecto3, setIncorrecto3] = React.useState("");
+
   const useStyles3 = makeStyles((theme) => ({
     formControl: {
       margin: theme.spacing(1),
@@ -102,10 +106,21 @@ export default function Temporada() {
 
   const handleActividad = () => {
     setOpenActividad(false);
+    setIncorrecto("");
+    setIncorrecto2("");
+    setIncorrecto3("");
+
+    setDescripcionActividad("");
+    setNombreActividad("");
+    setTiempoActividad();
   };
 
   const handleEntrenamiento = () => {
     setOpenEntrenamiento(false);
+    setIncorrecto("");
+    setIncorrecto2("");
+    setNombreEntrenamiento("");
+    setDescripcionEntrenamiento("");
   };
 
   const handleNombreActividad = (event) => {
@@ -134,29 +149,71 @@ export default function Temporada() {
   };
 
   const enviarActividad = () => {
-    gestorEntrenamiento.crearActividad(
-      nombreActividad,
-      descripcionActividad,
-      tiempoActividad
-    );
-    setNombreActividad("");
-    setTiempoActividad("");
-    setDescripcionActividad("");
-    setOpenActividad(false);
+    if (
+      nombreActividad.length >= 1 &&
+      descripcionActividad.length >= 1 &&
+      typeof tiempoActividad !== "undefined"
+    ) {
+      gestorEntrenamiento.crearActividad(
+        nombreActividad,
+        descripcionActividad,
+        tiempoActividad
+      );
+      setNombreActividad("");
+      setTiempoActividad();
+      setDescripcionActividad("");
+      setOpenActividad(false);
+      setIncorrecto("");
+      setIncorrecto2("");
+      setIncorrecto3("");
+    } else {
+      if (nombreActividad.length >= 1) {
+        setIncorrecto("");
+      } else {
+        setIncorrecto("Por Favor Completar todos los Espacios");
+      }
+      if (descripcionActividad.length >= 1) {
+        setIncorrecto2("");
+      } else {
+        setIncorrecto2("Por Favor Completar todos los Espacios");
+      }
+      if (typeof tiempoActividad !== "undefined") {
+        setIncorrecto3("");
+      } else {
+        setIncorrecto3("Por Favor Completar todos los Espacios");
+      }
+    }
   };
 
   const crearEntrenamiento = () => {
-    gestorEntrenamiento.crearNuevoEntrenamiento(
-      nombreEntrenamiento,
-      descripcionEntrenamiento
-    );
-    setDescripcionEntrenamiento("");
-    setNombreEntrenamiento("");
-    setOpenEntrenamiento(false);
-
-    setTimeout(() => {
-      ultimoEntrenamiento();
-    }, 1000);
+    if (
+      nombreEntrenamiento.length >= 1 &&
+      descripcionEntrenamiento.length >= 1
+    ) {
+      gestorEntrenamiento.crearNuevoEntrenamiento(
+        nombreEntrenamiento,
+        descripcionEntrenamiento
+      );
+      setDescripcionEntrenamiento("");
+      setNombreEntrenamiento("");
+      setOpenEntrenamiento(false);
+      setIncorrecto("");
+      setIncorrecto2("");
+      setTimeout(() => {
+        ultimoEntrenamiento();
+      }, 1000);
+    } else {
+      if (nombreEntrenamiento.length >= 1) {
+        setIncorrecto("");
+      } else {
+        setIncorrecto("Por Favor Completar todos los Espacios");
+      }
+      if (descripcionEntrenamiento.length >= 1) {
+        setIncorrecto2("");
+      } else {
+        setIncorrecto2("Por Favor Completar todos los Espacios");
+      }
+    }
   };
 
   function ultimoEntrenamiento() {
@@ -367,7 +424,8 @@ export default function Temporada() {
               margin="dense"
               id="name"
               label="Nombre"
-              type="email"
+              helperText={incorrecto}
+              error={incorrecto}
               fullWidth
               value={nombreActividad}
               onChange={handleNombreActividad}
@@ -378,7 +436,8 @@ export default function Temporada() {
               margin="dense"
               id="name"
               label="Descripcion de la Actividad"
-              type="email"
+              helperText={incorrecto2}
+              error={incorrecto2}
               fullWidth
               value={descripcionActividad}
               onChange={handleDescripcionActividad}
@@ -390,7 +449,8 @@ export default function Temporada() {
               id="name"
               label="Tiempo en Min"
               type="number"
-              helperText="En caso de no tener poner 0"
+              error={incorrecto3}
+              helperText={"En caso de no tener poner 0" || incorrecto3}
               fullWidth
               value={tiempoActividad}
               onChange={handleTiempoActividad}
@@ -445,7 +505,8 @@ export default function Temporada() {
               margin="dense"
               id="name"
               label="Nombre"
-              type="email"
+              helperText={incorrecto}
+              error={incorrecto}
               fullWidth
               value={nombreEntrenamiento}
               onChange={handleNombreEntrenamiento}
@@ -456,7 +517,8 @@ export default function Temporada() {
               margin="dense"
               id="name"
               label="Descripcion de la Actividad"
-              type="email"
+              helperText={incorrecto2}
+              error={incorrecto2}
               fullWidth
               value={descripcionEntrenamiento}
               onChange={handleDescripcionEntrenamiento}

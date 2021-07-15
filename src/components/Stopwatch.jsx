@@ -15,9 +15,9 @@ class Stopwatch extends React.Component {
     this.state = {
       running: false,
       finalizar: false,
-      currentTimeMs: 0,
-      currentTimeSec: 0,
-      currentTimeMin: 0,
+      currentTimeMs: this.props.Ms,
+      currentTimeSec: this.props.Sec,
+      currentTimeMin: this.propsMin,
       open: false,
       notificacion: false,
       nombre: "El tiempo de la actividad: "+this.props.nombre
@@ -31,21 +31,28 @@ class Stopwatch extends React.Component {
 //     this.inicioAutomatico()
 //   } 
 
+componentDidMount() {
+  if (this.props.iniciarJugador) {
+    this.start();
+  } else {
+    this.stop();
+  }
+}
 
-
-  componentDidUpdate() {
+  componentDidUpdate(prevProps,prevState) {
     // Uso tipico (no olvides de comparar las props):
    // console.log("dentro",this.props.iniciar)
-    this.inicioAutomatico()
-    this.notificarTiempo()
+   if(prevProps.iniciar !== this.props.iniciar){
+        this.inicioAutomatico()
+   }
+    if(prevState.currentTimeMin !== this.state.currentTimeMin){
+        this.notificarTiempo()
+    }
+    // this.notificarTiempo()
   }
-
-
-  
 
    handleClick = () => {
     this.setState({ open: true });
-  
   };
 
    handleClose = (event, reason) => {
@@ -56,16 +63,11 @@ class Stopwatch extends React.Component {
     this.setState({ open: false });
   };
 
-
-
-
-
-
-
-
    ingresarTiempoJugador = (entrenamiento1, jugador1, actividad1) =>{
     if(!this.state.running){
       this.setState({ finalizar: true });
+      //Mandar Finalizar a Entrenamiento
+      //Recibirlo
         axios
               .post(`http://localhost:3000/api/newActividadJugador`, {
                 entrenamiento: entrenamiento1,
@@ -78,14 +80,12 @@ class Stopwatch extends React.Component {
                 console.log(resultado);
               })
               .catch((err) => {});
-
     }
   }
 
   notificarTiempo = () =>{
+    //console.log("notificar")
     if(this.props.limite !== 0){
-
-    
         if(this.props.limite === this.state.currentTimeMin && this.state.notificacion ===false){
           this.handleClick();
           this.setState({ notificacion: true });
@@ -112,6 +112,7 @@ class Stopwatch extends React.Component {
         this.start(); 
       }
     }
+    //console.log("inicio solo ")
 
   }
 
