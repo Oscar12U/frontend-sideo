@@ -26,11 +26,16 @@ class Stopwatch extends React.Component {
   //     this.inicioAutomatico()
   //   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     // Uso tipico (no olvides de comparar las props):
     // console.log("dentro",this.props.iniciar)
-    this.inicioAutomatico();
-    this.notificarTiempo();
+    if (prevProps.iniciar !== this.props.iniciar) {
+      this.inicioAutomatico();
+    }
+    if (prevState.currentTimeMin !== this.state.currentTimeMin) {
+      this.notificarTiempo();
+    }
+    // this.notificarTiempo()
   }
 
   handleClick = () => {

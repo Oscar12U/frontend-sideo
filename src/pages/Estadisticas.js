@@ -52,7 +52,7 @@ const Estadisticas = () => {
             marginBottom: "15px",
           }}
         >
-          Estadistica Goles
+          Estadística Goles
         </Typography>
 
         <GolesxTemporada />

@@ -13,9 +13,14 @@ import axios from "axios";
 
 const ChartGolesTemporada = () => {
   const [jugadores, setJugadores] = React.useState([]);
+  const [jugadoresMinutosJugados, setJugadoresMinutosJugados] = React.useState(
+    []
+  );
+  const [entrenamientos, setEntrenamientos] = React.useState([]);
 
   useEffect(() => {
     actualizarJugadoresBD();
+    getListEntrenamientos();
     console.log("actualizando JugadoresBD");
   }, []);
 
@@ -25,9 +30,18 @@ const ChartGolesTemporada = () => {
       .then((resultado) => {
         let jugadoresList = resultado.data.data;
         let prueba = getList(resultado.data.data);
+        let minJugadores = getListMin(resultado.data.data);
         setJugadores(prueba);
+        setJugadoresMinutosJugados(minJugadores);
       })
       .catch((err) => {});
+  }
+
+  function getListEntrenamientos() {
+    axios.get(`http://localhost:3000/api/entrenamientos/`).then((resultado) => {
+      let listEntrenamientos = getEntrenamientos(resultado.data.data);
+      setEntrenamientos(listEntrenamientos);
+    });
   }
 
   const getList = (jugadores) => {
@@ -43,6 +57,31 @@ const ChartGolesTemporada = () => {
     return listJugadores;
   };
 
+  const getListMin = (jugadores) => {
+    let listJugadoresMin = [];
+    jugadores.map((jugador, index) => {
+      let jugadorMin = {
+        nombre: jugador.nombre,
+        minutos: jugador.tiempoMinutosJuego,
+      };
+
+      listJugadoresMin.push(jugadorMin);
+    });
+    return listJugadoresMin;
+  };
+
+  const getEntrenamientos = (entrenamientos) => {
+    let listEntrenamientos = [];
+    entrenamientos.map((entrenamiento, index) => {
+      let cantEntrenamiento = {
+        nombre: entrenamiento.nombre,
+        cantActividades: entrenamiento.actividades.length,
+      };
+      listEntrenamientos.push(cantEntrenamiento);
+    });
+    return listEntrenamientos;
+  };
+
   return (
     <>
       <Paper>
@@ -52,6 +91,26 @@ const ChartGolesTemporada = () => {
 
           <BarSeries valueField="cantGoles" argumentField="nombre" />
           <Title text="Goles" />
+          <Animation />
+        </Chart>
+      </Paper>
+      <br></br>
+      <Paper>
+        <Chart data={jugadoresMinutosJugados}>
+          <ArgumentAxis />
+          <ValueAxis max={7} />
+          <BarSeries valueField="minutos" argumentField="nombre" />
+          <Title text="Minutos Jugados" />
+          <Animation />
+        </Chart>
+      </Paper>
+      <br></br>
+      <Paper>
+        <Chart data={entrenamientos}>
+          <ArgumentAxis />
+          <ValueAxis max={7} />
+          <BarSeries valueField="cantActividades" argumentField="nombre" />
+          <Title text="Minutos Jugados" />
           <Animation />
         </Chart>
       </Paper>

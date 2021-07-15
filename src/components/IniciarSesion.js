@@ -66,7 +66,7 @@ export default function IniciarSesion() {
         <Col sm={8}>
           <Card>
             <Card.Body>
-              <h2 className="text-center mb-4">Iniciar Sesion</h2>
+              <h2 className="text-center mb-4">Iniciar Sesión</h2>
               <div className="border border-blue-400 mx-auto w-11/12 md:w-2/4 rounded py-8 px-4 md:px-8">
                 {error && <Alert variant="danger">{error}</Alert>}
                 <Form>
@@ -102,7 +102,7 @@ export default function IniciarSesion() {
                       signInWithEmailAndPasswordHandler(event, email, password);
                     }}
                   >
-                    Iniciar Sesion
+                    Iniciar Sesión
                   </Button>
                   <br></br>
                   <br></br>

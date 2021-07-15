@@ -59,9 +59,9 @@ const TempDrawel = (props) => {
       onClick: () => history.push("/menuJugador"),
     },
     {
-      text: "Adminsitrar Asistentes",
+      text: "Registrar Asistentes",
       icon: <AssignmentIndIcon />,
-      onClick: () => history.push("/AdminAsistentes"),
+      onClick: () => history.push("/registrarse"),
     },
   ];
   const list = (anchor) => (

@@ -31,6 +31,10 @@ import {
 import GestorPartido from "../containers/GestorPartido";
 import Badge from "@material-ui/core/Badge";
 import NotificationsIcon from "@material-ui/icons/Notifications";
+import GestorJugadorTimer from "../containers/GestorJugadorTimer";
+import JugadorClass from "../containers/JugadorClass";
+import TiempoJugadoresPartido from "../components/TiempoJugadoresPartido";
+import NotificacionJugadores from "../components/NotificacionJugadores";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -87,10 +91,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+let timeMin = 0;
+let timeSec = 0;
+let timeMls = 0;
+
 export default function ScrollableTabsButtonForce() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  const [time, setTime] = React.useState(0);
+  const [changeTab, setChangeTab] = React.useState(false);
+  const [iniciarTiempoJugador, setIniciarTiempoJugador] = React.useState(false);
+  const [actualizarDetalles, setActualizarDetalles] = React.useState(false);
+  const [running, setRunning] = React.useState(false);
+  const [reset, setReset] = React.useState(false);
   const [periodo, setPeriodo] = React.useState(0);
   const [counter, setCounter] = React.useState(null);
   const [selectIndexTitular, setSelectIndexTitular] = React.useState(-1);
@@ -98,121 +110,236 @@ export default function ScrollableTabsButtonForce() {
   const [selectIndexEntra, setSelectIndexEntra] = React.useState(-1);
   const [selectIndexAsistente, setSelectIndexAsistente] = React.useState(-1);
   let gestorPartido = new GestorPartido("Partido 1");
+  const [notification, setNotification] = React.useState(0);
+  const [listNotificaciones, setListNotificaciones] = React.useState([]);
+  const [gestorTimersTitulares, setGestorTimersTitulares] = React.useState([]);
+  const [gestorTimersSustitutos, setGestorTimersSustitutos] = React.useState(
+    []
+  );
   const [jugadoresTitulares, setJugadoresTitulares] = React.useState([]);
   const [jugadoresSustitutos, setJugadoresSustitutos] = React.useState([]);
-  const [timeJugadores, setTimeJugadores] = React.useState([]);
-  const [partidoObjct, setPartidoObjct] = React.useState([]);
 
   useEffect(() => {
+    function actualizarJugadoresBD() {
+      axios
+        .get(`http://localhost:3000/api/jugadores`)
+        .then((resultado) => {
+          let jugadoresList = resultado.data.data;
+          let listEnJuego = [];
+          let listFueraJuego = [];
+          let objctJugador;
+
+          jugadoresList.forEach((element) => {
+            objctJugador = new JugadorClass(element.nombre);
+
+            if (element.jugando) {
+              listEnJuego.push(objctJugador);
+            } else if (element.convocado) {
+              listFueraJuego.push(objctJugador);
+            }
+          });
+
+          setJugadoresTitulares(listEnJuego);
+          setJugadoresSustitutos(listFueraJuego);
+        })
+        .catch((err) => {});
+    }
+    console.log("entra actualizar BD");
     actualizarJugadoresBD();
-    obtenerDetallesPartido();
-    console.log("enta a pedir");
+  }, [changeTab]);
+
+  useEffect(() => {
+    function actualizarGestores() {
+      axios
+        .get(`http://localhost:3000/api/jugadores`)
+        .then((resultado) => {
+          let jugadoresList = resultado.data.data;
+          let listGestoresTimers = [];
+          let listGestoresSustitutos = [];
+
+          let gestorTimer;
+          let lista;
+          let storedListTiempos = localStorage.getItem("listaTiempos");
+          if (storedListTiempos != null) {
+            lista = JSON.parse(storedListTiempos);
+          }
+
+          jugadoresList.forEach((element) => {
+            if (storedListTiempos != null) {
+              gestorTimer = lista.find((gestorStored) => {
+                return gestorStored.nombre === element.nombre;
+              });
+            } else {
+              gestorTimer = new GestorJugadorTimer(element.nombre, 0, 0, 0);
+            }
+
+            if (element.jugando) {
+              listGestoresTimers.push(gestorTimer);
+            } else if (element.convocado) {
+              listGestoresSustitutos.push(gestorTimer);
+            }
+          });
+
+          setGestorTimersTitulares(listGestoresTimers);
+          setGestorTimersSustitutos(listGestoresSustitutos);
+        })
+        .catch((err) => {});
+    }
+    console.log("entra actualizar Gestores Timers");
+    actualizarGestores();
   }, []);
 
-  function actualizarJugadoresBD() {
-    axios
-      .get(`http://localhost:3000/api/jugadores`)
-      .then((resultado) => {
-        let jugadoresList = resultado.data.data;
-        let listEnJuego = [];
-        let listFueraJuego = [];
-        jugadoresList.forEach((element) => {
-          if (element.jugando) {
-            listEnJuego.push(element.nombre);
-          } else if (element.convocado) {
-            listFueraJuego.push(element.nombre);
-          }
-        });
-        setJugadoresTitulares(listEnJuego);
-        setJugadoresSustitutos(listFueraJuego);
-      })
-      .catch((err) => {});
-  }
-
-  function obtenerDetallesPartido() {
-    axios
-      .get(
-        `http://localhost:3000/api/detallesPartido/${gestorPartido._nombrePartido}`
-      )
-      .then((resultado) => {
-        setPartidoObjct(resultado.data.data);
-      })
-      .catch((err) => {});
-  }
-  function obtenerTiempoJugadores() {
-    let listTiempos = [];
-    let storedListTiempos = localStorage.getItem("listaTiempos");
-    if (storedListTiempos != null) {
-      let lista = JSON.parse(storedListTiempos);
-
-      lista.forEach((element) => {
-        listTiempos.push(element);
-        console.log(element);
-      });
-      //this.setState({ listComentario: listaComenatriosObject });
-      console.log(listTiempos);
+  const [partidoObjct, setPartidoObjct] = React.useState([]);
+  useEffect(() => {
+    function obtenerDetallesPartido() {
+      axios
+        .get(
+          `http://localhost:3000/api/detallesPartido/${gestorPartido._nombrePartido}`
+        )
+        .then((resultado) => {
+          setPartidoObjct(resultado.data.data);
+        })
+        .catch((err) => {});
     }
-    return listTiempos;
-  }
 
-  const agregarTiempoJugador = (jugador, tiempoCambiado) => {
-    let tiemposJugadores = timeJugadores;
-
-    let objctTiempoJugador = { nombre: jugador, tiempo: tiempoCambiado };
-    tiemposJugadores.push(objctTiempoJugador);
-    this.setState({
-      timeJugadores: tiemposJugadores,
-    });
-    localStorageListTiempos(tiemposJugadores);
-    setTimeJugadores(tiemposJugadores);
-  };
-
-  const localStorageListTiempos = (listComentarios) => {
-    localStorage.setItem("listaTiempos", JSON.stringify(listComentarios));
-  };
-
-  const clearLocalStorage = () => {
-    localStorage.removeItem("listaTiempos");
-  };
+    obtenerDetallesPartido();
+    console.log("enta a pedir al de detalles del partido");
+  }, [gestorPartido._nombrePartido, actualizarDetalles]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+
+    if (newValue === 0) setChangeTab(!changeTab);
   };
 
+  //Gestionar Tiempos
+
   const handleInitTimer = () => {
-    if (counter) {
-      pauseTimer();
+    setReset(false);
+    if (!running) {
+      setRunning(true);
+      iniciarTiempoLocal();
+      iniciarTiemposJugadores();
+      setIniciarTiempoJugador(true);
     } else {
-      setCounter(
-        setInterval(() => {
-          setTime((time) => time + 1);
-        }, 1000)
-      );
+      pauseTimerLocal();
+      detenerTiemposJugadores();
+      setRunning(false);
+    }
+  };
+
+  const iniciarTiempoLocal = () => {
+    setCounter(setInterval(() => pace(), 10));
+  };
+
+  const pace = () => {
+    timeMls += 10;
+
+    if (timeMls >= 1000) {
+      timeSec += 1;
+      timeMls = 0;
+    }
+    if (timeSec >= 60) {
+      timeMin += 1;
+      timeSec = 0;
     }
   };
 
   const handleEndPeriodo = () => {
     setPeriodo(periodo + 1);
-    //(time) => time + 1
+    timeSec = 0;
+    timeMin = 0;
+    timeMls = 0;
+    clearInterval(counter);
+    setIniciarTiempoJugador(false);
+    setRunning(false);
   };
 
-  const CrearPartido = () => {
-    gestorPartido.crearPartido();
+  const pauseTimerLocal = () => {
+    clearInterval(counter);
+    setIniciarTiempoJugador(false);
   };
 
-  const ActionGolFavor = () => {
-    Notification.fire({
-      icon: "success",
-      title: `Gol agregado a ${jugadoresTitulares[selectIndexTitular]} `,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        AddGolFavor();
-      } else if (result.isDenied) {
-        console.log("Goooool Cancelado");
-      } else {
-        AddGolFavor();
-      }
+  const handleClearTimer = () => {
+    timeSec = 0;
+    timeMin = 0;
+    timeMls = 0;
+    clearInterval(counter);
+    setCounter(null);
+    resetTiemposJugadores();
+    setIniciarTiempoJugador(false);
+    setReset(true);
+    setRunning(false);
+  };
+
+  //Tiempo de jugadadores
+  const iniciarTiemposJugadores = () => {
+    gestorTimersTitulares.map((gestor) => {
+      gestor.start();
     });
+  };
+
+  const detenerTiemposJugadores = () => {
+    gestorTimersTitulares.map((gestor) => {
+      gestor.stop();
+    });
+  };
+
+  const resetTiemposJugadores = () => {
+    gestorTimersTitulares.map((gestor) => {
+      gestor.reset();
+    });
+  };
+
+  //Notificaciones
+
+  const handleNotificacion = (jugador) => {
+    //Se debería de obtener el jugador que cumplio con ese tiempo
+    let listaNotificaciones = listNotificaciones;
+    let notify = {
+      tipo: "tiempo",
+      descripcion:
+        "El jugador " + jugador + " ha alcanzado el tiempo límite de juego",
+      id: listaNotificaciones.length,
+    };
+    listaNotificaciones.push(notify);
+
+    setListNotificaciones(listaNotificaciones);
+    setNotification(notification + 1);
+
+    gestorTimersTitulares.find(
+      (element) => element.nombre === jugador
+    ).notificacion = true;
+  };
+
+  const handleEliminarNotif = (notify) => {
+    let listaNotificaciones = listNotificaciones;
+    let pos = listaNotificaciones.indexOf(notify);
+    listaNotificaciones.splice(pos, 1);
+    setListNotificaciones(listaNotificaciones);
+    setNotification(notification - 1);
+  };
+
+  //Acciones de eventos del partido y la generación de
+  //las notificaciones
+  const ActionGolFavor = () => {
+    if (selectIndexTitular === -1 || selectIndexAsistente === -1) {
+      ErrorNotify(
+        "Se debe seleccionar el jugador anotador y el asistente del gol"
+      );
+    } else {
+      Notification.fire({
+        icon: "success",
+        title: `Gol agregado a ${jugadoresTitulares[selectIndexTitular].nombre} `,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          AddGolFavor();
+        } else if (result.isDenied) {
+        } else {
+          AddGolFavor();
+        }
+      });
+    }
   };
 
   const ActionGolContra = () => {
@@ -223,8 +350,6 @@ export default function ScrollableTabsButtonForce() {
       if (result.isConfirmed) {
         AddGolContra();
       } else if (result.isDenied) {
-        //
-        console.log("Goooool en Contra Cancelado");
       } else {
         AddGolContra();
       }
@@ -232,50 +357,65 @@ export default function ScrollableTabsButtonForce() {
   };
 
   const ActionLesion = () => {
-    Notification.fire({
-      icon: "success",
-      title: `Lesión agregada a ${jugadoresTitulares[selectIndexTitular]} `,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        AddLesion();
-      } else if (result.isDenied) {
-        console.log("Lesioooooooon Cancelada");
-      } else {
-        AddLesion();
-      }
-    });
+    let descLesion = document.getElementById("descLesion").value;
+    if (selectIndexTitular === -1) {
+      ErrorNotify("Se debe seleccionar el jugador que se ha lesionado");
+      document.getElementById("descLesion").value = "Descripción de la lesión";
+    } else if (descLesion.trim() === "") {
+      ErrorNotify("Se debe agregar una descripción de la lesión");
+      document.getElementById("descLesion").value = "Descripción de la lesión";
+    } else {
+      Notification.fire({
+        icon: "success",
+        title: `Lesión agregada a ${jugadoresTitulares[selectIndexTitular].nombre} `,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          AddLesion();
+        } else if (result.isDenied) {
+        } else {
+          AddLesion();
+        }
+      });
+    }
   };
 
   const ActionFalta = () => {
-    Notification.fire({
-      icon: "success",
-      title: `Falta agregada a ${jugadoresTitulares[selectIndexTitular]} `,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        AddFalta();
-      } else if (result.isDenied) {
-        console.log("Lesioooooooon Cancelada");
-      } else {
-        AddFalta();
-      }
-    });
+    if (selectIndexTitular === -1) {
+      ErrorNotify("Se debe seleccionar el jugador que ha realizado la falta");
+    } else {
+      Notification.fire({
+        icon: "success",
+        title: `Falta agregada a ${jugadoresTitulares[selectIndexTitular].nombre} `,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          AddFalta();
+        } else if (result.isDenied) {
+        } else {
+          AddFalta();
+        }
+      });
+    }
   };
 
   const ActionCambio = () => {
-    Notification.fire({
-      icon: "success",
-      title: `Entra: ${jugadoresSustitutos[selectIndexEntra]} Sale: ${jugadoresTitulares[selectIndexSustituto]}`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        CambioJugador();
-      } else if (result.isDenied) {
-        console.log("Cambio Cancelado");
-      } else {
-        CambioJugador();
-      }
-    });
+    if (selectIndexEntra === -1 || selectIndexSustituto === -1) {
+      ErrorNotify("Se debe seleccionar los jugadores para realizar el cambio");
+    } else {
+      Notification.fire({
+        icon: "success",
+        title: `Entra: ${jugadoresSustitutos[selectIndexEntra].nombre} Sale: ${jugadoresTitulares[selectIndexSustituto].nombre}`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          CambioJugador();
+        } else if (result.isDenied) {
+        } else {
+          CambioJugador();
+        }
+      });
+    }
   };
 
+  //Estructura de notificaciones
   const Notification = Swal.mixin({
     toast: true,
     position: "top-end",
@@ -291,16 +431,12 @@ export default function ScrollableTabsButtonForce() {
     },
   });
 
-  const pauseTimer = () => {
-    clearInterval(counter);
-    setCounter(null);
-  };
-
-  const handleClearTimer = () => {
-    console.log("Handle Clear desde Partido");
-    setTime(0);
-    clearInterval(counter);
-    setCounter(null);
+  const ErrorNotify = (text) => {
+    Swal.fire({
+      icon: "error",
+      title: "Error...",
+      text: text,
+    });
   };
 
   //Cambios en los DropDowns
@@ -317,6 +453,119 @@ export default function ScrollableTabsButtonForce() {
     setSelectIndexAsistente(index);
   };
 
+  //Controlar los cambios del partido
+  const CambioJugador = () => {
+    let jugadorEntra = jugadoresSustitutos[selectIndexEntra];
+    let jugadorSale = jugadoresTitulares[selectIndexSustituto];
+
+    let sustitutosNew = actualizarListaCambioAdd(
+      jugadoresSustitutos,
+      jugadorSale
+    );
+
+    sustitutosNew = actualizarListaCambioRemove(sustitutosNew, jugadorEntra);
+
+    let titularesNew = actualizarListaCambioAdd(
+      jugadoresTitulares,
+      jugadorEntra
+    );
+
+    titularesNew = actualizarListaCambioRemove(titularesNew, jugadorSale);
+
+    gestorPartido.cambiarJugador(jugadorEntra.nombre, jugadorSale.nombre);
+
+    setJugadoresSustitutos(sustitutosNew);
+    setJugadoresTitulares(titularesNew);
+    setSelectIndexEntra(-1);
+    setSelectIndexSustituto(-1);
+  };
+
+  const actualizarListaCambioAdd = (lista, jugadorAdd) => {
+    let listJugadores = lista;
+    listJugadores.push(jugadorAdd);
+
+    return listJugadores;
+  };
+
+  const actualizarListaCambioRemove = (lista, jugadorRemove) => {
+    let listJugadores = lista;
+    let pos = listJugadores.indexOf(jugadorRemove);
+    listJugadores.splice(pos, 1);
+
+    return listJugadores;
+  };
+
+  const AddGolFavor = () => {
+    gestorPartido.agregarGolFavor(
+      jugadoresTitulares[selectIndexTitular].nombre,
+      jugadoresTitulares[selectIndexAsistente].nombre,
+      timeMin,
+      periodo
+    );
+
+    actualizarDetallesPartidoLento();
+    setSelectIndexTitular(-1);
+    setSelectIndexAsistente(-1);
+  };
+
+  function actualizarDetallesPartidoLento() {
+    setTimeout(function () {
+      setActualizarDetalles(!actualizarDetalles);
+    }, 600);
+  }
+
+  function actualizarDetallesPartidoRapido() {
+    setTimeout(function () {
+      setActualizarDetalles(!actualizarDetalles);
+    }, 300);
+  }
+
+  const AddGolContra = () => {
+    gestorPartido.agregarGolContra();
+    actualizarDetallesPartidoRapido();
+  };
+
+  const VerificarGol = () => {
+    if (document.getElementById("A favor").checked) {
+      ActionGolFavor();
+    } else if (document.getElementById("En contra").checked) {
+      ActionGolContra();
+    }
+  };
+
+  const AddFalta = () => {
+    gestorPartido.agregarFalta(jugadoresTitulares[selectIndexTitular].nombre);
+    actualizarDetallesPartidoRapido();
+
+    setSelectIndexTitular(-1);
+
+    if (partidoObjct.faltas + 1 === 72) {
+      let listaNotificaciones = listNotificaciones;
+      let notify = {
+        tipo: "falta",
+        descripcion:
+          "El equipo ha alcanzado " +
+          (partidoObjct.faltas + 1) +
+          " faltas en el partido",
+        id: listaNotificaciones.length,
+      };
+      listaNotificaciones.push(notify);
+
+      setListNotificaciones(listaNotificaciones);
+      setNotification(notification + 1);
+    }
+  };
+
+  const AddLesion = () => {
+    gestorPartido.agregarLesion(
+      jugadoresTitulares[selectIndexTitular].nombre,
+      document.getElementById("descLesion").value
+    );
+
+    setSelectIndexTitular(-1);
+    document.getElementById("descLesion").value = "Descripción de la lesión";
+  };
+
   const getAsistentes = (option, index) => {
     if (index !== selectIndexTitular) {
       return (
@@ -329,47 +578,6 @@ export default function ScrollableTabsButtonForce() {
         </Dropdown.Item>
       );
     }
-  };
-
-  const CambioJugador = () => {
-    gestorPartido.cambiarJugador(
-      jugadoresSustitutos[selectIndexEntra],
-      jugadoresTitulares[selectIndexSustituto]
-    );
-  };
-
-  const AddGolFavor = () => {
-    gestorPartido.agregarGolFavor(
-      jugadoresTitulares[selectIndexTitular],
-      jugadoresTitulares[selectIndexAsistente],
-      time,
-      periodo
-    );
-  };
-
-  const AddGolContra = () => {
-    gestorPartido.agregarGolContra();
-  };
-
-  const VerificarGol = () => {
-    if (document.getElementById("A favor").checked) {
-      ActionGolFavor();
-    } else if (document.getElementById("En contra").checked) {
-      ActionGolContra();
-    }
-  };
-
-  const AddFalta = () => {
-    gestorPartido.agregarFalta(jugadoresTitulares[selectIndexTitular]);
-  };
-
-  const AddLesion = () => {
-    //Validar que index sea diferente de -1
-
-    gestorPartido.agregarLesion(
-      jugadoresTitulares[selectIndexTitular],
-      document.getElementById("descLesion").value
-    );
   };
 
   return (
@@ -396,7 +604,7 @@ export default function ScrollableTabsButtonForce() {
           <Tab
             label="Notificaciones"
             icon={
-              <Badge badgeContent={3} color="primary">
+              <Badge badgeContent={notification} color="primary">
                 <NotificationsIcon />
               </Badge>
             }
@@ -423,29 +631,187 @@ export default function ScrollableTabsButtonForce() {
                 borderRadius: "15px",
               }}
             >
+              <div
+                style={{
+                  fontSize: "25px",
+                  color: "#000000",
+                  fontWeight: "bold",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                  marginBottom: "5px",
+                }}
+              >
+                Detalles del Partido
+              </div>
+              <Divider
+                style={{
+                  marginBottom: "5px",
+                }}
+                variant="middle"
+              />
               <Row style={{ margin: "auto 20px" }}>
-                <Col sm="6" style={{}}>
-                  <div className={classes.p1}>Detalles del Partido</div>
-                  <br></br>
-                  <div className={classes.p2}>
-                    Partido Contra:<br></br> {partidoObjct.descripcion}
-                  </div>
-                  <div className={classes.p3}>
-                    Temporada:<br></br> 1
-                  </div>
-                  <div className={classes.p3}>
-                    Periodo Actual Partido:<br></br> {periodo}
-                  </div>
-                  <div className={classes.p3}>
-                    UCR Tacares:<br></br> {partidoObjct.cantGolesFavor}
-                    Universidad Nacional {partidoObjct.cantGolesContra}
-                  </div>
-                  <div className={classes.p3}>
-                    Cantidad de Faltas:<br></br> {partidoObjct.faltas}
-                  </div>
+                <Col sm="3" style={{ marginLeft: "0px" }}>
+                  <h1
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "18px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    Partido Contra:<br></br>
+                  </h1>
+                  <h1
+                    style={{
+                      fontSize: "18px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    {partidoObjct.descripcion}
+                  </h1>
+                  <h1
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "18px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    Temporada
+                  </h1>
+                  <h1
+                    style={{
+                      fontSize: "18px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    1
+                  </h1>
+                  <h1
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "18px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    Periodo Actual
+                  </h1>
+                  <h1
+                    style={{
+                      fontSize: "18px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    {periodo}
+                  </h1>
+                </Col>
+                <Col sm="4" style={{ marginRight: "0px" }}>
+                  <h1
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "18px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    UCR Tacares
+                  </h1>
+                  <h1
+                    style={{
+                      fontSize: "18px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    {partidoObjct.cantGolesFavor}
+                  </h1>
+
+                  <h1
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "18px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    Universidad Nacional
+                  </h1>
+                  <h1
+                    style={{
+                      fontSize: "18px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    {partidoObjct.cantGolesContra}
+                  </h1>
+
+                  <Divider
+                    style={{
+                      marginBottom: "5px",
+                    }}
+                    variant="middle"
+                  />
+                  <h1
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "18px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    Faltas a Favor
+                  </h1>
+                  <h1
+                    style={{
+                      fontSize: "18px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    {partidoObjct.faltas}
+                  </h1>
+                  <h1
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "18px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    Faltas en Contra:
+                  </h1>
+                  <h1
+                    style={{
+                      fontSize: "18px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    {partidoObjct.faltas}
+                  </h1>
                 </Col>
                 <Col
-                  sm="6"
+                  sm="5"
                   style={{
                     font: "bold",
                     justifyContent: "center",
@@ -458,6 +824,11 @@ export default function ScrollableTabsButtonForce() {
                     handleTime={handleInitTimer}
                     handleClearTimer={handleClearTimer}
                     handleEndPeriodo={handleEndPeriodo}
+                    min={timeMin}
+                    sec={timeSec}
+                    mls={timeMls}
+                    running={running}
+                    counter={counter}
                     style={{
                       justifyContent: "center",
                       alignItems: "center",
@@ -514,9 +885,10 @@ export default function ScrollableTabsButtonForce() {
                   <Dropdown as={ButtonGroup}>
                     <Button id="btnMenuTitular">
                       {""}
-                      {selectIndexTitular === -1
+                      {selectIndexTitular === -1 ||
+                      selectIndexTitular === jugadoresTitulares.length
                         ? "Seleccionar Jugador"
-                        : jugadoresTitulares[selectIndexTitular]}
+                        : jugadoresTitulares[selectIndexTitular].nombre}
                     </Button>
                     <Dropdown.Toggle split id="dropdown-custom-2" />
                     <Dropdown.Menu className="super-colors">
@@ -528,9 +900,24 @@ export default function ScrollableTabsButtonForce() {
                             handleMenuTitularClick(event, index)
                           }
                         >
-                          {option}
+                          {option.nombre}
                         </Dropdown.Item>
                       ))}
+                      <Dropdown.Divider />
+                      <Dropdown.Item
+                        key={jugadoresTitulares.length}
+                        selected={
+                          jugadoresTitulares.length === selectIndexTitular
+                        }
+                        onClick={(event) =>
+                          handleMenuTitularClick(
+                            event,
+                            jugadoresTitulares.length
+                          )
+                        }
+                      >
+                        Cancelar Selección
+                      </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </Col>
@@ -556,22 +943,37 @@ export default function ScrollableTabsButtonForce() {
                   <Dropdown as={ButtonGroup}>
                     <Button id="btnAsistente">
                       {""}
-                      {selectIndexAsistente === -1
+                      {selectIndexAsistente === -1 ||
+                      selectIndexAsistente === jugadoresTitulares.length
                         ? "Seleccionar Jugador"
-                        : jugadoresTitulares[selectIndexAsistente]}
+                        : jugadoresTitulares[selectIndexAsistente].nombre}
                     </Button>
-                    <Dropdown.Toggle split id="dropdown-custom-2" />
+                    <Dropdown.Toggle split id="dropdown-custom-3" />
                     <Dropdown.Menu className="super-colors">
                       {jugadoresTitulares.map((option, index) =>
-                        getAsistentes(option, index)
+                        getAsistentes(option.nombre, index)
                       )}
+                      <Dropdown.Divider />
+                      <Dropdown.Item
+                        key={jugadoresTitulares.length}
+                        selected={
+                          jugadoresTitulares.length === selectIndexAsistente
+                        }
+                        onClick={(event) =>
+                          handleMenuAsistenteClick(
+                            event,
+                            jugadoresTitulares.length
+                          )
+                        }
+                      >
+                        Cancelar Selección
+                      </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </Col>
               </Row>
 
               <br />
-              <Divider variant="middle" />
 
               <Row>
                 <Col
@@ -727,11 +1129,12 @@ export default function ScrollableTabsButtonForce() {
                   <Dropdown as={ButtonGroup}>
                     <Button id="btnMenuEntra">
                       {""}
-                      {selectIndexEntra === -1
+                      {selectIndexEntra === -1 ||
+                      selectIndexEntra === jugadoresSustitutos.length
                         ? "Seleccionar Jugador"
-                        : jugadoresSustitutos[selectIndexEntra]}
+                        : jugadoresSustitutos[selectIndexEntra].nombre}
                     </Button>
-                    <Dropdown.Toggle split id="dropdown-custom-2" />
+                    <Dropdown.Toggle split id="dropdown-custom-1" />
                     <Dropdown.Menu className="super-colors">
                       {jugadoresSustitutos.map((option, index) => (
                         <Dropdown.Item
@@ -741,9 +1144,24 @@ export default function ScrollableTabsButtonForce() {
                             handleMenuEntraClick(event, index)
                           }
                         >
-                          {option}
+                          {option.nombre}
                         </Dropdown.Item>
                       ))}
+                      <Dropdown.Divider />
+                      <Dropdown.Item
+                        key={jugadoresSustitutos.length}
+                        selected={
+                          jugadoresSustitutos.length === selectIndexEntra
+                        }
+                        onClick={(event) =>
+                          handleMenuEntraClick(
+                            event,
+                            jugadoresSustitutos.length
+                          )
+                        }
+                      >
+                        Cancelar Selección
+                      </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                   <br></br>
@@ -767,9 +1185,10 @@ export default function ScrollableTabsButtonForce() {
                   <Dropdown as={ButtonGroup}>
                     <Button id="btnMenuSale">
                       {""}
-                      {selectIndexSustituto === -1
+                      {selectIndexSustituto === -1 ||
+                      selectIndexSustituto === jugadoresTitulares.length
                         ? "Seleccionar Jugador"
-                        : jugadoresTitulares[selectIndexSustituto]}
+                        : jugadoresTitulares[selectIndexSustituto].nombre}
                     </Button>
                     <Dropdown.Toggle split id="dropdown-custom-2" />
                     <Dropdown.Menu className="super-colors">
@@ -781,9 +1200,24 @@ export default function ScrollableTabsButtonForce() {
                             handleMenuSustitutoClick(event, index)
                           }
                         >
-                          {option}
+                          {option.nombre}
                         </Dropdown.Item>
                       ))}
+                      <Dropdown.Divider />
+                      <Dropdown.Item
+                        key={jugadoresTitulares.length}
+                        selected={
+                          jugadoresTitulares.length === selectIndexSustituto
+                        }
+                        onClick={(event) =>
+                          handleMenuSustitutoClick(
+                            event,
+                            jugadoresTitulares.length
+                          )
+                        }
+                      >
+                        Cancelar Selección
+                      </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </Col>
@@ -801,6 +1235,27 @@ export default function ScrollableTabsButtonForce() {
                 Ejecutar Cambio
               </Button>
             </Container>
+            {gestorTimersTitulares.map((jugador, index) => {
+              return (
+                <>
+                  <h4>Jugador {jugador.nombre}</h4>
+
+                  <TiempoJugadoresPartido
+                    iniciar={iniciarTiempoJugador}
+                    notificacion={jugador.notificacion}
+                    jugador={jugador.nombre}
+                    handleNotificacion={(element) =>
+                      handleNotificacion(element)
+                    }
+                    nombre={"actividad.nombre"}
+                    min={jugador.min}
+                    sec={jugador.sec}
+                    mls={jugador.mls}
+                    reset={reset}
+                  />
+                </>
+              );
+            })}
           </Row>
           <br></br>
         </Container>
@@ -809,7 +1264,20 @@ export default function ScrollableTabsButtonForce() {
         <JugadoresJuego />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <Container
+          fluid="md"
+          style={{
+            marginTop: "40px",
+            backgroundImage: "linear-gradient( #00233D, #33A7FF)",
+          }}
+        >
+          <Row style={{}}>
+            <NotificacionJugadores
+              notificaciones={listNotificaciones}
+              handleEliminarNotif={(element) => handleEliminarNotif(element)}
+            />
+          </Row>
+        </Container>
       </TabPanel>
     </Box>
   );

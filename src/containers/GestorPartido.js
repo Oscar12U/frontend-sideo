@@ -64,12 +64,12 @@ export default class GestorPartido {
       .catch((err) => {});
   }
 
-  crearPartido() {
+  crearPartido(nombre1, descripcion1, fecha1) {
     axios
       .post(`http://localhost:3000/api/newPartido`, {
-        nombre: "Partido 2",
-        descripcion: "Juego contra San Jose",
-        fecha: "16/06/2021",
+        nombre: nombre1,
+        descripcion: descripcion1,
+        fechaPartido: fecha1,
       })
       .then((resultado) => {
         console.log(resultado);

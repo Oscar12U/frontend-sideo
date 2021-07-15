@@ -129,7 +129,7 @@ export default function Entrenamiento() {
     axiosConsulta();
     axiosConsulta2(IDEntrenamiento);
     rellenarActividadesAuto();
-
+    inicializarTiemposJugadores();
     //console.log(IDEntrenamiento);
   }, []);
 
@@ -147,6 +147,8 @@ export default function Entrenamiento() {
     []
   );
   const [actividadesDisponiblesBO, setActividadesAutoBO] = React.useState([]);
+
+  const [tiemposJugadores, setTiemposJugadores] = React.useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -193,6 +195,42 @@ export default function Entrenamiento() {
       ]);
     });
   }
+
+  function inicializarTiemposJugadores() {
+    actividades.map((actividad) => {
+      //console.log("dasdasd");
+      jugadores
+        .filter(
+          (jugador) => jugador.activo === true && jugador.entrenando === true
+        )
+        .map((jugador) => {
+          let jugadorTiempo = {
+            actividad: actividad.nombre,
+            idJugador: jugador._id,
+            estado: false,
+            tiempoMin: 0,
+            tiempoSeg: 0,
+            tiempoMili: 0,
+          };
+          setTiemposJugadores((tiemposJugadores) => [
+            ...tiemposJugadores,
+            jugadorTiempo,
+          ]);
+        });
+    });
+  }
+
+  const iniciarDetenerTiempoJugador = (actividad, idJugador) => {
+    tiemposJugadores.map((datos, index) => {
+      if (actividad === datos.actividad && idJugador === datos.idJugador) {
+        let items = [...tiemposJugadores];
+        let item = { ...items[index] };
+        item.estado = !item.estado;
+        items[index] = item;
+        setTiemposJugadores(items);
+      }
+    });
+  };
 
   function cambiarActividadesAuto(index) {
     let items = [...actividadesAuto];
@@ -260,6 +298,23 @@ export default function Entrenamiento() {
   }
 
   const incluirJugador = (jugador) => {
+    actividades.map((actividad) => {
+      //console.log("dasdasd");
+
+      let jugadorTiempo = {
+        actividad: actividad.nombre,
+        idJugador: jugador,
+        estado: false,
+        tiempoMin: 0,
+        tiempoSeg: 0,
+        tiempoMili: 0,
+      };
+      setTiemposJugadores((tiemposJugadores) => [
+        ...tiemposJugadores,
+        jugadorTiempo,
+      ]);
+    });
+
     gestorEntrenamiento.agregarJugadorEntrenamiento(jugador, IDEntrenamiento);
     gestorEntrenamiento.entrenandoJugador(jugador);
     setTimeout(() => {
@@ -301,12 +356,21 @@ export default function Entrenamiento() {
   const [openComentarioActividad, setOpenComentarioActividad] =
     React.useState(false);
 
+  const [incorrecto, setIncorrecto] = React.useState("");
+  const [incorrectoSelect1, setIncorrectoSelect1] = React.useState("");
+
+  const [incorrectoSelect2, setIncorrectoSelect2] = React.useState("");
+
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setIncorrecto("");
+    setIncorrectoSelect1("");
+    setJugadorLesionado("");
+    setDesJugadorLesionado("");
   };
 
   const handleClickOpenComentario = () => {
@@ -315,6 +379,7 @@ export default function Entrenamiento() {
 
   const handleComentario = () => {
     setOpenComentarion(false);
+    setIncorrecto("");
   };
 
   const handleClickOpenActividad = () => {
@@ -323,6 +388,9 @@ export default function Entrenamiento() {
 
   const handleActividad = () => {
     setOpenActividad(false);
+    setIncorrectoSelect1("");
+    setIncorrectoSelect2("");
+    setIncorrecto("");
   };
 
   const handleClickOpenCometarioActividad = () => {
@@ -331,6 +399,12 @@ export default function Entrenamiento() {
 
   const handleComentarioActividad = () => {
     setOpenComentarioActividad(false);
+    setActividadSelecionada("");
+    setJugadorLesionado("");
+    setComentarioActividad("");
+    setIncorrectoSelect1("");
+    setIncorrectoSelect2("");
+    setIncorrecto("");
   };
 
   const agregarActividad = () => {
@@ -338,22 +412,42 @@ export default function Entrenamiento() {
   };
 
   const enviarLesion = () => {
-    gestorEntrenamiento.enviarLesionJugador(
-      desJugadorLesionado,
-      jugadorLesionado
-    );
-    setJugadorLesionado("");
-    setDesJugadorLesionado("");
-    setOpen(false);
+    if (desJugadorLesionado.length >= 1 && jugadorLesionado.length >= 1) {
+      gestorEntrenamiento.enviarLesionJugador(
+        desJugadorLesionado,
+        jugadorLesionado
+      );
+      setJugadorLesionado("");
+      setDesJugadorLesionado("");
+      setIncorrectoSelect1("");
+      setIncorrecto("");
+      setOpen(false);
+    } else {
+      if (jugadorLesionado.length >= 1) {
+        setIncorrectoSelect1("");
+      } else {
+        setIncorrectoSelect1("Por Favor Completar todos los Espacios");
+      }
+      if (desJugadorLesionado.length >= 1) {
+        setIncorrecto("");
+      } else {
+        setIncorrecto("Por Favor Completar todos los Espacios");
+      }
+    }
   };
 
   const enviarComentario = () => {
-    gestorEntrenamiento.enviarComentario(
-      IDEntrenamiento,
-      comentarioEntrenamieto
-    );
-    setComentarioEntrenamieto("");
-    setOpenComentarion(false);
+    if (comentarioEntrenamieto.length >= 1) {
+      gestorEntrenamiento.enviarComentario(
+        IDEntrenamiento,
+        comentarioEntrenamieto
+      );
+      setComentarioEntrenamieto("");
+      setOpenComentarion(false);
+      setIncorrecto("");
+    } else {
+      setIncorrecto("Por Favor Completar todos los Espacios");
+    }
   };
 
   const [jugadorLesionado, setJugadorLesionado] = React.useState("");
@@ -413,16 +507,41 @@ export default function Entrenamiento() {
 
   const enviarComentarioActividad = () => {
     //console.log("la actividad es: ", actividad);
-    gestorEntrenamiento.crearNuevoComentarioActividad(
-      IDEntrenamiento,
-      actividadSelecionada,
-      jugadorLesionado,
-      comentarioActividad
-    );
-    setActividadSelecionada("");
-    setJugadorLesionado("");
-    setComentarioActividad("");
-    setOpenComentarioActividad(false);
+    if (
+      actividadSelecionada.length >= 1 &&
+      jugadorLesionado.length >= 1 &&
+      comentarioActividad.length >= 1
+    ) {
+      gestorEntrenamiento.crearNuevoComentarioActividad(
+        IDEntrenamiento,
+        actividadSelecionada,
+        jugadorLesionado,
+        comentarioActividad
+      );
+      setActividadSelecionada("");
+      setJugadorLesionado("");
+      setComentarioActividad("");
+      setOpenComentarioActividad(false);
+      setIncorrecto("");
+      setIncorrectoSelect1("");
+      setIncorrectoSelect2("");
+    } else {
+      if (comentarioActividad.length >= 1) {
+        setIncorrecto("");
+      } else {
+        setIncorrecto("Por Favor Completar todos los Espacios");
+      }
+      if (jugadorLesionado.length >= 1) {
+        setIncorrectoSelect1("");
+      } else {
+        setIncorrectoSelect1("Por Favor Completar todos los Espacios");
+      }
+      if (actividadSelecionada.length >= 1) {
+        setIncorrectoSelect2("");
+      } else {
+        setIncorrectoSelect2("Por Favor Completar todos los Espacios");
+      }
+    }
   };
 
   const finalizarEntrenamieto = () => {
@@ -794,6 +913,8 @@ export default function Entrenamiento() {
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           displayEmpty
+                          helperText={incorrectoSelect1}
+                          error={incorrectoSelect1}
                           value={jugadorLesionado}
                           onChange={handleJugadorLesionado}
                         >
@@ -843,6 +964,8 @@ export default function Entrenamiento() {
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           displayEmpty
+                          helperText={incorrectoSelect2}
+                          error={incorrectoSelect2}
                           value={actividadSelecionada}
                           onChange={handleActividadSelecionada}
                         >
@@ -865,6 +988,8 @@ export default function Entrenamiento() {
                         label="Comentario de la Actividad"
                         type="email"
                         fullWidth
+                        helperText={incorrecto}
+                        error={incorrecto}
                         value={comentarioActividad}
                         onChange={handleDesComentarioActividad}
                       />
@@ -927,6 +1052,8 @@ export default function Entrenamiento() {
                         label="Comentario del Entrenamiento"
                         type="email"
                         fullWidth
+                        helperText={incorrecto}
+                        error={incorrecto}
                         value={comentarioEntrenamieto}
                         onChange={handleDesComentario}
                       />
@@ -1043,6 +1170,8 @@ export default function Entrenamiento() {
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             displayEmpty
+                            helperText={incorrectoSelect1}
+                            error={incorrectoSelect1}
                             value={jugadorLesionado}
                             onChange={handleJugadorLesionado}
                           >
@@ -1068,6 +1197,8 @@ export default function Entrenamiento() {
                           label="Descripcion de la lesion"
                           type="email"
                           fullWidth
+                          helperText={incorrecto}
+                          error={incorrecto}
                           value={desJugadorLesionado}
                           onChange={handleDesJugadorLesionado}
                         />
@@ -1296,7 +1427,7 @@ export default function Entrenamiento() {
               alignItems: "center",
               justifyContent: "center",
               display: "flex",
-              backgroundColor: "#008641",
+              backgroundColor: "#00c0f3",
             }}
           >
             <Typography
@@ -1321,7 +1452,7 @@ export default function Entrenamiento() {
             style={{
               borderBottomRightRadius: "15px",
               borderBottomLeftRadius: "15px",
-              border: "2px solid #008641",
+              border: "2px solid #00c0f3",
             }}
           >
             {jugadores
@@ -1358,7 +1489,7 @@ export default function Entrenamiento() {
                     </CardContent>
                     <CardActions
                       style={{
-                        backgroundColor: "#008641",
+                        backgroundColor: "#00c0f3",
                         alignItems: "center",
                         justifyContent: "center",
                         display: "flex",
@@ -1378,7 +1509,7 @@ export default function Entrenamiento() {
               alignItems: "center",
               justifyContent: "center",
               display: "flex",
-              backgroundColor: "#008641",
+              backgroundColor: "#00c0f3",
             }}
           >
             <Typography
@@ -1403,7 +1534,7 @@ export default function Entrenamiento() {
             style={{
               borderBottomRightRadius: "15px",
               borderBottomLeftRadius: "15px",
-              border: "2px solid #008641",
+              border: "2px solid #00c0f3",
             }}
           >
             {jugadores
@@ -1516,7 +1647,7 @@ export default function Entrenamiento() {
                     </CardContent>
                     <CardActions
                       style={{
-                        backgroundColor: "#008641",
+                        backgroundColor: "#00c0f3",
                         alignItems: "center",
                         justifyContent: "center",
                         display: "flex",

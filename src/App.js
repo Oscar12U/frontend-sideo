@@ -11,7 +11,6 @@ import IniciarSesion from "./components/IniciarSesion";
 import LoginComponent from "./components/LoginComponent";
 import Entrenamiento from "./pages/Entrenamiento";
 import Estadisticas from "./pages/Estadisticas";
-import AdminAsistentes from "./pages/AdminAsistentes";
 
 function App() {
   const token = sessionStorage.getItem("token");
@@ -41,10 +40,6 @@ function App() {
 
             <Route path="/Temporada">
               <Temporada></Temporada>
-            </Route>
-
-            <Route path="/AdminAsistentes">
-              <AdminAsistentes></AdminAsistentes>
             </Route>
 
             <Route path="/menuJugador">

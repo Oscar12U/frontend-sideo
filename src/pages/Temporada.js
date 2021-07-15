@@ -32,11 +32,21 @@ import {
 import axios from "axios";
 import Swal from "sweetalert2";
 import NativeSelect from "@material-ui/core/NativeSelect";
+import GestorPartido from "../containers/GestorPartido";
+import * as moment from "moment";
 
 export default function Temporada() {
   useEffect(() => {
     ultimoEntrenamiento();
   }, []);
+
+  const [openPartido, setOpenPartido] = React.useState(false);
+  const [nombrePartido, setNombrePartido] = React.useState("");
+  const [descripcionPartido, setDescripcionPartido] = React.useState("");
+  const [fechaPartido, setFechaPartido] = React.useState(
+    moment().format("YYYY-MM-DD")
+  );
+
   const [openActividad, setOpenActividad] = React.useState(false);
   const [nombreActividad, setNombreActividad] = React.useState("");
   const [descripcionActividad, setDescripcionActividad] = React.useState("");
@@ -47,6 +57,10 @@ export default function Temporada() {
   const [nombreEntrenamiento, setNombreEntrenamiento] = React.useState("");
   const [descripcionEntrenamiento, setDescripcionEntrenamiento] =
     React.useState("");
+
+  const [incorrecto, setIncorrecto] = React.useState("");
+  const [incorrecto2, setIncorrecto2] = React.useState("");
+  const [incorrecto3, setIncorrecto3] = React.useState("");
 
   const useStyles3 = makeStyles((theme) => ({
     formControl: {
@@ -96,16 +110,55 @@ export default function Temporada() {
     setOpenActividad(true);
   };
 
+  const handleClickOpenPartido = () => {
+    setOpenPartido(true);
+  };
+
   const handleClickOpenEntrenamiento = () => {
     setOpenEntrenamiento(true);
   };
 
   const handleActividad = () => {
     setOpenActividad(false);
+    setIncorrecto("");
+    setIncorrecto2("");
+    setIncorrecto3("");
+
+    setDescripcionActividad("");
+    setNombreActividad("");
+    setTiempoActividad();
   };
 
   const handleEntrenamiento = () => {
     setOpenEntrenamiento(false);
+    setIncorrecto("");
+    setIncorrecto2("");
+    setNombreEntrenamiento("");
+    setDescripcionEntrenamiento("");
+  };
+
+  const handlePartido = () => {
+    setOpenPartido(false);
+    setIncorrecto("");
+    setIncorrecto2("");
+    setNombrePartido("");
+    setDescripcionPartido("");
+    setFechaPartido(moment().format("YYYY-MM-DD"));
+  };
+
+  const handleNombrePartido = (event) => {
+    setNombrePartido(event.target.value);
+    //console.log("comentario:  ", comentarioEntrenamieto);
+  };
+
+  const handleDescripcionPartido = (event) => {
+    setDescripcionPartido(event.target.value);
+    //console.log("comentario:  ", comentarioEntrenamieto);
+  };
+
+  const handleFechaPartido = (event) => {
+    setFechaPartido(event.target.value);
+    //console.log("comentario:  ", comentarioEntrenamieto);
   };
 
   const handleNombreActividad = (event) => {
@@ -134,29 +187,102 @@ export default function Temporada() {
   };
 
   const enviarActividad = () => {
-    gestorEntrenamiento.crearActividad(
-      nombreActividad,
-      descripcionActividad,
-      tiempoActividad
-    );
-    setNombreActividad("");
-    setTiempoActividad("");
-    setDescripcionActividad("");
-    setOpenActividad(false);
+    if (
+      nombreActividad.length >= 1 &&
+      descripcionActividad.length >= 1 &&
+      typeof tiempoActividad !== "undefined"
+    ) {
+      gestorEntrenamiento.crearActividad(
+        nombreActividad,
+        descripcionActividad,
+        tiempoActividad
+      );
+      setNombreActividad("");
+      setTiempoActividad();
+      setDescripcionActividad("");
+      setOpenActividad(false);
+      setIncorrecto("");
+      setIncorrecto2("");
+      setIncorrecto3("");
+    } else {
+      if (nombreActividad.length >= 1) {
+        setIncorrecto("");
+      } else {
+        setIncorrecto("Por Favor Completar todos los Espacios");
+      }
+      if (descripcionActividad.length >= 1) {
+        setIncorrecto2("");
+      } else {
+        setIncorrecto2("Por Favor Completar todos los Espacios");
+      }
+      if (typeof tiempoActividad !== "undefined") {
+        setIncorrecto3("");
+      } else {
+        setIncorrecto3("Por Favor Completar todos los Espacios");
+      }
+    }
   };
 
   const crearEntrenamiento = () => {
-    gestorEntrenamiento.crearNuevoEntrenamiento(
-      nombreEntrenamiento,
-      descripcionEntrenamiento
-    );
-    setDescripcionEntrenamiento("");
-    setNombreEntrenamiento("");
-    setOpenEntrenamiento(false);
+    if (
+      nombreEntrenamiento.length >= 1 &&
+      descripcionEntrenamiento.length >= 1
+    ) {
+      gestorEntrenamiento.crearNuevoEntrenamiento(
+        nombreEntrenamiento,
+        descripcionEntrenamiento
+      );
+      setDescripcionEntrenamiento("");
+      setNombreEntrenamiento("");
+      setOpenEntrenamiento(false);
+      setIncorrecto("");
+      setIncorrecto2("");
+      setTimeout(() => {
+        ultimoEntrenamiento();
+      }, 1000);
+    } else {
+      if (nombreEntrenamiento.length >= 1) {
+        setIncorrecto("");
+      } else {
+        setIncorrecto("Por Favor Completar todos los Espacios");
+      }
+      if (descripcionEntrenamiento.length >= 1) {
+        setIncorrecto2("");
+      } else {
+        setIncorrecto2("Por Favor Completar todos los Espacios");
+      }
+    }
+  };
 
-    setTimeout(() => {
-      ultimoEntrenamiento();
-    }, 1000);
+  const crearPartido = () => {
+    console.log("Fachero: " + fechaPartido);
+    if (nombrePartido.length >= 1 && descripcionPartido.length >= 1) {
+      gestorPartido.crearPartido(
+        nombrePartido,
+        descripcionPartido,
+        fechaPartido
+      );
+      setFechaPartido(moment().format("YYYY-MM-DD"));
+      setDescripcionPartido("");
+      setNombrePartido("");
+      setOpenPartido(false);
+      setIncorrecto("");
+      setIncorrecto2("");
+      setTimeout(() => {
+        //ultimoEntrenamiento();
+      }, 1000);
+    } else {
+      if (nombrePartido.length >= 1) {
+        setIncorrecto("");
+      } else {
+        setIncorrecto("Por Favor Completar todos los Espacios");
+      }
+      if (descripcionPartido.length >= 1) {
+        setIncorrecto2("");
+      } else {
+        setIncorrecto2("Por Favor Completar todos los Espacios");
+      }
+    }
   };
 
   // const CrearUnPartido = () => {
@@ -186,6 +312,7 @@ export default function Temporada() {
   }
 
   let gestorEntrenamiento = new GestorEntrenamiento();
+  let gestorPartido = new GestorPartido();
 
   const AjaxNotify = () => {
     (async () => {
@@ -272,7 +399,7 @@ export default function Temporada() {
         }}
       >
         <List component="nav" className={classes.root} aria-label="contacts">
-          <ListItem button component="a" onClick={AjaxNotify}>
+          <ListItem button component="a" onClick={handleClickOpenPartido}>
             <ListItemIcon className={classes.icon}>
               <AddIcon />
             </ListItemIcon>
@@ -349,7 +476,6 @@ export default function Temporada() {
             />
           </ListItem>
         </List>
-
         <Dialog
           open={openActividad}
           onClose={handleActividad}
@@ -365,7 +491,7 @@ export default function Temporada() {
               margin: "auto",
             }}
           >
-            {"Actividad Nueva"}
+            {"Nueva Actividad"}
           </DialogTitle>
           <DialogContent
             style={{
@@ -383,6 +509,8 @@ export default function Temporada() {
               label="Nombre"
               type="email"
               fullWidth
+              helperText={incorrecto}
+              error={incorrecto}
               value={nombreActividad}
               onChange={handleNombreActividad}
             />
@@ -394,6 +522,8 @@ export default function Temporada() {
               label="Descripcion de la Actividad"
               type="email"
               fullWidth
+              helperText={incorrecto2}
+              error={incorrecto2}
               value={descripcionActividad}
               onChange={handleDescripcionActividad}
             />
@@ -404,7 +534,8 @@ export default function Temporada() {
               id="name"
               label="Tiempo en Min"
               type="number"
-              helperText="En caso de no tener poner 0"
+              error={incorrecto3}
+              helperText={"En caso de no tener poner 0" || incorrecto3}
               fullWidth
               value={tiempoActividad}
               onChange={handleTiempoActividad}
@@ -427,7 +558,6 @@ export default function Temporada() {
             </Button>
           </DialogActions>
         </Dialog>
-
         <Dialog
           open={openEntrenamiento}
           onClose={handleEntrenamiento}
@@ -443,7 +573,7 @@ export default function Temporada() {
               margin: "auto",
             }}
           >
-            {"Actividad Nueva"}
+            {"Nuevo Entrenamiento"}
           </DialogTitle>
           <DialogContent
             style={{
@@ -461,6 +591,8 @@ export default function Temporada() {
               label="Nombre"
               type="email"
               fullWidth
+              helperText={incorrecto}
+              error={incorrecto}
               value={nombreEntrenamiento}
               onChange={handleNombreEntrenamiento}
             />
@@ -469,9 +601,11 @@ export default function Temporada() {
               autoFocus
               margin="dense"
               id="name"
-              label="Descripcion de la Actividad"
+              label="Descripcion del Entrenamiento"
               type="email"
               fullWidth
+              helperText={incorrecto2}
+              error={incorrecto2}
               value={descripcionEntrenamiento}
               onChange={handleDescripcionEntrenamiento}
             />
@@ -489,6 +623,92 @@ export default function Temporada() {
               Cancelar
             </Button>
             <Button onClick={crearEntrenamiento} color="primary" autoFocus>
+              Aceptar
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* //////////////////////////////Crear Partido */}
+
+        <Dialog
+          open={openPartido}
+          onClose={handlePartido}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle
+            id="alert-dialog-title"
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              margin: "auto",
+            }}
+          >
+            {"Partido Nuevo"}
+          </DialogTitle>
+          <DialogContent
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              margin: "10px",
+            }}
+          >
+            <FormControl className={classes5.formControl}></FormControl>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Nombre"
+              type="email"
+              fullWidth
+              helperText={incorrecto}
+              error={incorrecto}
+              value={nombrePartido}
+              onChange={handleNombrePartido}
+            />
+            <FormControl className={classes5.formControl}></FormControl>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Descripcion del Partido"
+              type="email"
+              fullWidth
+              helperText={incorrecto2}
+              error={incorrecto2}
+              value={descripcionPartido}
+              onChange={handleDescripcionPartido}
+            />
+
+            <FormControl className={classes5.formControl}></FormControl>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="dateP"
+              label="Fecha Partido"
+              type="date"
+              fullWidth
+              value={fechaPartido}
+              onChange={handleFechaPartido}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </DialogContent>
+          <DialogActions
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              margin: "10px",
+            }}
+          >
+            <Button onClick={handlePartido} color="primary">
+              Cancelar
+            </Button>
+            <Button onClick={crearPartido} color="primary" autoFocus>
               Aceptar
             </Button>
           </DialogActions>

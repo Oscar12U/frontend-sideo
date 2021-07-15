@@ -44,13 +44,13 @@ export default function TopMenuBar() {
   const history = useHistory();
   const handleClose = () => {
     logOut();
-    history.push("/iniciarSesion")
+    history.push("/iniciarSesion");
     window.location.reload();
   };
 
   const handleCerrar = () => {
     setAnchorEl(false);
-  }
+  };
 
   return (
     <div className={classes.root}>
@@ -97,8 +97,6 @@ export default function TopMenuBar() {
                 open={open}
                 onClose={handleCerrar}
               >
-                <MenuItem >Perfil</MenuItem>
-                <MenuItem >Mi Cuenta</MenuItem>
                 <MenuItem onClick={handleClose}>Salir</MenuItem>
               </Menu>
             </div>

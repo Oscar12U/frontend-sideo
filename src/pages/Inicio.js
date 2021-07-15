@@ -108,15 +108,14 @@ const Inicio = () => {
             />
           </ListItem>
 
-          <ListItem button component="a" href="/AdminAsistentes">
+          <ListItem button component="a" href="/registrarse">
             <ListItemIcon className={classes.icon}>
               <AccountCircleIcon />
             </ListItemIcon>
-
             <ListItemText
               className={classes.txt}
               inset
-              primary="Administrar Asistentes"
+              primary="Registrar Asistentes"
             />
           </ListItem>
         </List>
