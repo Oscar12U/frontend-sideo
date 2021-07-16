@@ -97,31 +97,49 @@ export default function ScrollableTabsButtonForce() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [changeTab, setChangeTab] = React.useState(false);
-  const [iniciarTiempoJugador, setIniciarTiempoJugador] = React.useState(false);
+  const [cambio, setCambio] = React.useState(false);
   const [actualizarDetalles, setActualizarDetalles] = React.useState(false);
   const [running, setRunning] = React.useState(false);
-  const [reset, setReset] = React.useState(false);
-  // const [time, setTime] = React.useState(0);
-  // const [timeMin, setTimeMin] = React.useState(0);
-  // const [timeSec, setTimeSec] = React.useState(0);
-  // const [timeMls, setTimeMls] = React.useState(0);
-
-  const [periodo, setPeriodo] = React.useState(0);
+  const [periodo, setPeriodo] = React.useState(1);
   const [counter, setCounter] = React.useState(null);
   const [selectIndexTitular, setSelectIndexTitular] = React.useState(-1);
   const [selectIndexSustituto, setSelectIndexSustituto] = React.useState(-1);
   const [selectIndexEntra, setSelectIndexEntra] = React.useState(-1);
   const [selectIndexAsistente, setSelectIndexAsistente] = React.useState(-1);
   let gestorPartido = new GestorPartido("Partido 1");
-  const [timeJugadores, setTimeJugadores] = React.useState([]);
   const [notification, setNotification] = React.useState(0);
   const [listNotificaciones, setListNotificaciones] = React.useState([]);
   const [gestorTimersTitulares, setGestorTimersTitulares] = React.useState([]);
-  const [gestorTimersSustitutos, setGestorTimersSustitutos] = React.useState(
-    []
-  );
   const [jugadoresTitulares, setJugadoresTitulares] = React.useState([]);
   const [jugadoresSustitutos, setJugadoresSustitutos] = React.useState([]);
+
+  // useEffect(() => {
+  //   function actualizarJugadoresCambio() {
+  //     gestorTimersTitulares.map((gestor) => {
+  //       if (
+  //         jugadoresTitulares.find(
+  //           (element) => element.nombre === gestor.nombre
+  //         ) !== undefined &&
+  //         gestor.running === false
+  //       ) {
+  //         if (running) {
+  //           gestor.start();
+  //           gestor.running = true;
+  //         }
+  //       } else if (
+  //         jugadoresTitulares.find(
+  //           (element) => element.nombre === gestor.nombre
+  //         ) === undefined &&
+  //         gestor.running === true
+  //       ) {
+  //         gestor.stop();
+  //         gestor.running = false;
+  //       }
+  //     });
+  //   }
+  //   actualizarJugadoresCambio();
+  //   console.log("Se llama el de cambio useEffect");
+  // }, [cambio]);
 
   useEffect(() => {
     function actualizarJugadoresBD() {
@@ -159,7 +177,6 @@ export default function ScrollableTabsButtonForce() {
         .then((resultado) => {
           let jugadoresList = resultado.data.data;
           let listGestoresTimers = [];
-          let listGestoresSustitutos = [];
 
           let gestorTimer;
           let lista;
@@ -177,15 +194,16 @@ export default function ScrollableTabsButtonForce() {
               gestorTimer = new GestorJugadorTimer(element.nombre, 0, 0, 0);
             }
 
-            if (element.jugando) {
-              listGestoresTimers.push(gestorTimer);
-            } else if (element.convocado) {
-              listGestoresSustitutos.push(gestorTimer);
-            }
+            // if (element.jugando) {
+            //   listGestoresTimers.push(gestorTimer);
+            // } else if (element.convocado) {
+            //   listGestoresSustitutos.push(gestorTimer);
+            // }
+            listGestoresTimers.push(gestorTimer);
           });
 
           setGestorTimersTitulares(listGestoresTimers);
-          setGestorTimersSustitutos(listGestoresSustitutos);
+          //setGestorTimersSustitutos(listGestoresSustitutos);
         })
         .catch((err) => {});
     }
@@ -281,12 +299,11 @@ export default function ScrollableTabsButtonForce() {
 
   //Gestionando tiempo General
   const handleInitTimer = () => {
-    setReset(false);
+    //setReset(false);
     if (!running) {
       setRunning(true);
       iniciarTiempoLocal();
       iniciarTiemposJugadores();
-      setIniciarTiempoJugador(true);
     } else {
       pauseTimerLocal();
       detenerTiemposJugadores();
@@ -318,32 +335,45 @@ export default function ScrollableTabsButtonForce() {
     timeMls = 0;
     clearInterval(counter);
     // setCounter(null);
-    setIniciarTiempoJugador(false);
+
     setRunning(false);
+    gestorTimersTitulares.map((gestor) => {
+      if (
+        jugadoresTitulares.find(
+          (element) => element.nombre === gestor.nombre
+        ) !== undefined
+      ) {
+        gestor.stop();
+        gestor.running = false;
+      }
+    });
   };
 
   const pauseTimerLocal = () => {
     clearInterval(counter);
     // setCounter(null);
-    setIniciarTiempoJugador(false);
   };
 
-  const handleClearTimer = () => {
-    timeSec = 0;
-    timeMin = 0;
-    timeMls = 0;
-    clearInterval(counter);
-    setCounter(null);
-    resetTiemposJugadores();
-    setIniciarTiempoJugador(false);
-    setReset(true);
-    setRunning(false);
-  };
+  // const handleClearTimer = () => {
+  //   timeSec = 0;
+  //   timeMin = 0;
+  //   timeMls = 0;
+  //   clearInterval(counter);
+  //   resetTiemposJugadores();
+  //   setReset(true);
+  //   setRunning(false);
+  // };
 
   const handleNotificacion = (jugador) => {
     //Se debería de obtener el jugador que cumplio con ese tiempo
     let listaNotificaciones = listNotificaciones;
-    listaNotificaciones.push(jugador);
+    let notify = {
+      tipo: "tiempo",
+      descripcion:
+        "El jugador " + jugador + " ha alcanzado el tiempo límite de juego",
+      id: listaNotificaciones.length,
+    };
+    listaNotificaciones.push(notify);
 
     setListNotificaciones(listaNotificaciones);
     setNotification(notification + 1);
@@ -357,32 +387,43 @@ export default function ScrollableTabsButtonForce() {
 
   const iniciarTiemposJugadores = () => {
     gestorTimersTitulares.map((gestor) => {
-      gestor.start();
+      if (
+        jugadoresTitulares.find(
+          (element) => element.nombre === gestor.nombre
+        ) !== undefined
+      ) {
+        gestor.start();
+        gestor.running = true;
+      }
     });
   };
 
   const detenerTiemposJugadores = () => {
     gestorTimersTitulares.map((gestor) => {
-      gestor.stop();
+      if (
+        jugadoresTitulares.find(
+          (element) => element.nombre === gestor.nombre
+        ) !== undefined
+      ) {
+        gestor.stop();
+        gestor.running = false;
+      }
     });
   };
 
-  const resetTiemposJugadores = () => {
-    gestorTimersTitulares.map((gestor) => {
-      gestor.reset();
-    });
-  };
+  // const resetTiemposJugadores = () => {
+  //   gestorTimersTitulares.map((gestor) => {
+  //     gestor.reset();
+  //     gestor.running = false;
+  //   });
+  // };
 
-  const handleEliminarNotif = (nombreJugador) => {
+  const handleEliminarNotif = (notify) => {
     let listaNotificaciones = listNotificaciones;
-    let pos = listaNotificaciones.indexOf(nombreJugador);
+    let pos = listaNotificaciones.indexOf(notify);
     listaNotificaciones.splice(pos, 1);
     setListNotificaciones(listaNotificaciones);
     setNotification(notification - 1);
-  };
-
-  const CrearPartido = () => {
-    gestorPartido.crearPartido();
   };
 
   const ActionGolFavor = () => {
@@ -397,9 +438,7 @@ export default function ScrollableTabsButtonForce() {
       }).then((result) => {
         if (result.isConfirmed) {
           AddGolFavor();
-        } else if (result.isDenied) {
-          console.log("Goooool Cancelado");
-        } else {
+        } else if (!result.isDenied) {
           AddGolFavor();
         }
       });
@@ -413,20 +452,22 @@ export default function ScrollableTabsButtonForce() {
     }).then((result) => {
       if (result.isConfirmed) {
         AddGolContra();
-      } else if (result.isDenied) {
-        //
-        console.log("Goooool en Contra Cancelado");
-      } else {
+      } else if (!result.isDenied) {
         AddGolContra();
       }
     });
   };
 
   const ActionLesion = () => {
+    let descLesion = document.getElementById("descLesion").value;
     if (selectIndexTitular === -1) {
       ErrorNotify("Se debe seleccionar el jugador que se ha lesionado");
-    } else if (document.getElementById("descLesion").value === "") {
+      document.getElementById("descLesion").placeholder =
+        "Descripción de la lesión";
+    } else if (descLesion.trim() === "") {
       ErrorNotify("Se debe agregar una descripción de la lesión");
+      document.getElementById("descLesion").placeholder =
+        "Descripción de la lesión";
     } else {
       Notification.fire({
         icon: "success",
@@ -434,9 +475,7 @@ export default function ScrollableTabsButtonForce() {
       }).then((result) => {
         if (result.isConfirmed) {
           AddLesion();
-        } else if (result.isDenied) {
-          console.log("Lesioooooooon Cancelada");
-        } else {
+        } else if (!result.isDenied) {
           AddLesion();
         }
       });
@@ -453,9 +492,7 @@ export default function ScrollableTabsButtonForce() {
       }).then((result) => {
         if (result.isConfirmed) {
           AddFalta();
-        } else if (result.isDenied) {
-          console.log("Lesioooooooon Cancelada");
-        } else {
+        } else if (!result.isDenied) {
           AddFalta();
         }
       });
@@ -463,19 +500,23 @@ export default function ScrollableTabsButtonForce() {
   };
 
   const ActionCambio = () => {
+    let jugadorEntra = jugadoresSustitutos[selectIndexEntra];
+    let jugadorSale = jugadoresTitulares[selectIndexSustituto];
     if (selectIndexEntra === -1 || selectIndexSustituto === -1) {
       ErrorNotify("Se debe seleccionar los jugadores para realizar el cambio");
     } else {
       Notification.fire({
         icon: "success",
-        title: `Entra: ${jugadoresSustitutos[selectIndexEntra].nombre} Sale: ${jugadoresTitulares[selectIndexSustituto].nombre}`,
+        title: `Entra: ${jugadorEntra.nombre} Sale: ${jugadorSale.nombre}`,
       }).then((result) => {
         if (result.isConfirmed) {
           CambioJugador();
-        } else if (result.isDenied) {
-          console.log("Cambio Cancelado");
-        } else {
+
+          //actualizarTiempoCambios(jugadorSale.nombre, jugadorEntra.nombre);
+        } else if (!result.isDenied) {
           CambioJugador();
+
+          //actualizarTiempoCambios(jugadorSale.nombre, jugadorEntra.nombre);
         }
       });
     }
@@ -532,6 +573,41 @@ export default function ScrollableTabsButtonForce() {
     }
   };
 
+  const actualizarTiempoCambios = (jugadorSale, jugadorEntra) => {
+    if (running) {
+      gestorTimersTitulares
+        .find((element) => element.nombre === jugadorSale)
+        .stop();
+      gestorTimersTitulares.find(
+        (element) => element.nombre === jugadorSale
+      ).running = false;
+
+      gestorTimersTitulares
+        .find((element) => element.nombre === jugadorEntra)
+        .start();
+      gestorTimersTitulares.find(
+        (element) => element.nombre === jugadorEntra
+      ).running = true;
+    }
+
+    // gestorTimersTitulares.map((gestor) => {
+    //   if (
+    //     jugadoresTitulares.find(
+    //       (element) => element.nombre === gestor.nombre
+    //     ) !== undefined &&
+    //     gestor.running === false
+    //   ) {
+    //     if (running) {
+    //       gestor.start();
+    //       gestor.running = true;
+    //     }
+    //   } else if (jugadorSale === gestor.nombre) {
+    //     gestor.stop();
+    //     gestor.running = false;
+    //   }
+    // });
+  };
+
   const CambioJugador = () => {
     let jugadorEntra = jugadoresSustitutos[selectIndexEntra];
     let jugadorSale = jugadoresTitulares[selectIndexSustituto];
@@ -554,9 +630,40 @@ export default function ScrollableTabsButtonForce() {
 
     setJugadoresSustitutos(sustitutosNew);
     setJugadoresTitulares(titularesNew);
-    setActualizarDetalles(!actualizarDetalles);
     setSelectIndexEntra(-1);
     setSelectIndexSustituto(-1);
+    // setCambio(!cambio);
+
+    if (running) {
+      gestorTimersTitulares
+        .find((element) => element.nombre === jugadorSale.nombre)
+        .stop();
+      gestorTimersTitulares.find(
+        (element) => element.nombre === jugadorSale.nombre
+      ).running = false;
+
+      gestorTimersTitulares
+        .find((element) => element.nombre === jugadorEntra.nombre)
+        .start();
+      gestorTimersTitulares.find(
+        (element) => element.nombre === jugadorEntra.nombre
+      ).running = true;
+    }
+
+    actualizarDetallesPartidoRapido();
+    // gestorTimersTitulares.map((gestor) => {
+    //   if (gestor.nombre === jugadorSale.nombre) {
+    //     console.log("Sale " + gestor.nombre);
+    //     gestor.stop();
+    //     gestor.running = false;
+    //   } else if (gestor.nombre === jugadorEntra.nombre) {
+    //     if (running) {
+    //       console.log("Entra " + gestor.nombre);
+    //       gestor.start();
+    //       gestor.running = true;
+    //     }
+    //   }
+    // });
   };
 
   const actualizarListaCambioAdd = (lista, jugadorAdd) => {
@@ -581,14 +688,27 @@ export default function ScrollableTabsButtonForce() {
       timeMin,
       periodo
     );
-    setTimeout(setActualizarDetalles(!actualizarDetalles), 3000);
+
+    actualizarDetallesPartidoLento();
     setSelectIndexTitular(-1);
     setSelectIndexAsistente(-1);
   };
 
+  function actualizarDetallesPartidoLento() {
+    setTimeout(function () {
+      setActualizarDetalles(!actualizarDetalles);
+    }, 600);
+  }
+
+  function actualizarDetallesPartidoRapido() {
+    setTimeout(function () {
+      setActualizarDetalles(!actualizarDetalles);
+    }, 300);
+  }
+
   const AddGolContra = () => {
     gestorPartido.agregarGolContra();
-    setTimeout(setActualizarDetalles(!actualizarDetalles), 3000);
+    actualizarDetallesPartidoRapido();
   };
 
   const VerificarGol = () => {
@@ -601,9 +721,25 @@ export default function ScrollableTabsButtonForce() {
 
   const AddFalta = () => {
     gestorPartido.agregarFalta(jugadoresTitulares[selectIndexTitular].nombre);
-    setTimeout(setActualizarDetalles(!actualizarDetalles), 3000);
+    actualizarDetallesPartidoRapido();
 
     setSelectIndexTitular(-1);
+
+    if (partidoObjct.faltas + 1 === 71) {
+      let listaNotificaciones = listNotificaciones;
+      let notify = {
+        tipo: "falta",
+        descripcion:
+          "El equipo ha alcanzado " +
+          (partidoObjct.faltas + 1) +
+          " faltas en el partido",
+        id: listaNotificaciones.length,
+      };
+      listaNotificaciones.push(notify);
+
+      setListNotificaciones(listaNotificaciones);
+      setNotification(notification + 1);
+    }
   };
 
   const AddLesion = () => {
@@ -615,7 +751,8 @@ export default function ScrollableTabsButtonForce() {
     );
 
     setSelectIndexTitular(-1);
-    document.getElementById("descLesion").value = "Descripción de la lesión";
+    document.getElementById("descLesion").placeholder =
+      "Descripción de la lesión";
   };
 
   return (
@@ -702,9 +839,8 @@ export default function ScrollableTabsButtonForce() {
                   <br></br>
                   <Timer
                     handleTime={handleInitTimer}
-                    handleClearTimer={handleClearTimer}
+                    // handleClearTimer={handleClearTimer}
                     handleEndPeriodo={handleEndPeriodo}
-                    // time2={time}
                     min={timeMin}
                     sec={timeSec}
                     mls={timeMls}
@@ -774,7 +910,8 @@ export default function ScrollableTabsButtonForce() {
                 <Dropdown as={ButtonGroup}>
                   <Button id="btnMenuTitular">
                     {""}
-                    {selectIndexTitular === -1
+                    {selectIndexTitular === -1 ||
+                    selectIndexTitular === jugadoresTitulares.length
                       ? "Seleccionar Jugador"
                       : jugadoresTitulares[selectIndexTitular].nombre}
                   </Button>
@@ -791,6 +928,18 @@ export default function ScrollableTabsButtonForce() {
                         {option.nombre}
                       </Dropdown.Item>
                     ))}
+                    <Dropdown.Divider />
+                    <Dropdown.Item
+                      key={jugadoresTitulares.length}
+                      selected={
+                        jugadoresTitulares.length === selectIndexTitular
+                      }
+                      onClick={(event) =>
+                        handleMenuTitularClick(event, jugadoresTitulares.length)
+                      }
+                    >
+                      Cancelar Selección
+                    </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
 
@@ -1023,11 +1172,9 @@ export default function ScrollableTabsButtonForce() {
                   <h4>Jugador {jugador.nombre}</h4>
 
                   <TiempoJugadoresPartido
-                    iniciar={iniciarTiempoJugador}
-                    actividad={5}
+                    iniciar={jugador.running}
                     notificacion={jugador.notificacion}
                     jugador={jugador.nombre}
-                    limite={1}
                     handleNotificacion={(element) =>
                       handleNotificacion(element)
                     }
@@ -1035,7 +1182,6 @@ export default function ScrollableTabsButtonForce() {
                     min={jugador.min}
                     sec={jugador.sec}
                     mls={jugador.mls}
-                    reset={reset}
                   />
                 </>
               );

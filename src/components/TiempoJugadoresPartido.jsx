@@ -1,7 +1,6 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import StopwatchDisplay from "./StopwatchDisplay.jsx";
-import { Snackbar, Button, IconButton } from "@material-ui/core";
+import { Snackbar, IconButton } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
 class TiempoJugadoresPartido extends React.Component {
@@ -14,11 +13,10 @@ class TiempoJugadoresPartido extends React.Component {
       currentTimeMin: this.props.min,
       currentTimeSec: this.props.sec,
       currentTimeMs: this.props.mls,
-
       open: false,
       notificacion: this.props.notificacion,
-      nombre: "El tiempo de la actividad: " + this.props.nombre,
     };
+    this.counter = null;
   }
 
   componentWillUnmount() {}
@@ -39,16 +37,18 @@ class TiempoJugadoresPartido extends React.Component {
     // Uso tipico (no olvides de comparar las props):
 
     if (prevProps.iniciar !== this.props.iniciar) {
+      console.log("A ver desde tiempo jugador, " + this.props.iniciar);
       if (this.props.iniciar) {
+        console.log("Entro a iniciar, " + this.props.iniciar);
         this.start();
       } else {
         this.stop();
       }
     }
 
-    if (prevProps.reset !== this.props.reset) {
-      this.reset();
-    }
+    // if (prevProps.reset !== this.props.reset) {
+    //   this.reset();
+    // }
 
     if (prevState.currentTimeSec !== this.state.currentTimeSec) {
       this.notificarTiempo();
@@ -69,12 +69,10 @@ class TiempoJugadoresPartido extends React.Component {
   };
 
   notificarTiempo = () => {
-    if (this.props.limite !== 0) {
-      if (6 <= this.state.currentTimeSec && this.state.notificacion === false) {
-        this.handleClick();
-        this.setState({ notificacion: true });
-        this.props.handleNotificacion(this.props.jugador);
-      }
+    if (25 <= this.state.currentTimeSec && this.state.notificacion === false) {
+      this.handleClick();
+      this.setState({ notificacion: true });
+      this.props.handleNotificacion(this.props.jugador);
     }
   };
 
@@ -90,13 +88,14 @@ class TiempoJugadoresPartido extends React.Component {
   };
 
   start = () => {
+    console.log("Entro a start, " + this.props.iniciar);
+    this.counter = setInterval(() => this.pace(), 10);
     this.setState({ running: true });
-    this.watch = setInterval(() => this.pace(), 10);
   };
 
   stop = () => {
     this.setState({ running: false });
-    clearInterval(this.watch);
+    clearInterval(this.counter);
   };
 
   pace = () => {
@@ -111,14 +110,16 @@ class TiempoJugadoresPartido extends React.Component {
     }
   };
 
-  reset = () => {
-    this.setState({
-      currentTimeMs: 0,
-      currentTimeSec: 0,
-      currentTimeMin: 0,
-      running: false,
-    });
-  };
+  // reset = () => {
+  //   //clearInterval(this.watch);
+  //   this.setState({
+  //     currentTimeMs: 0,
+  //     currentTimeSec: 0,
+  //     currentTimeMin: 0,
+  //     running: false,
+  //   });
+  //   clearInterval(this.counter);
+  // };
 
   render() {
     return (

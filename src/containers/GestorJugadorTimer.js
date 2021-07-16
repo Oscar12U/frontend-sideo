@@ -57,13 +57,11 @@ export default class GestorJugadorTimer {
   }
 
   start = () => {
-    if (!this.running) {
-      this.watch = setInterval(() => this.pace(), 10);
-    }
+    this.watch = setInterval(() => this.pace(), 10);
   };
 
   stop = () => {
-    this._running = false;
+    //this._running = false;
     clearInterval(this.watch);
   };
 
@@ -79,10 +77,11 @@ export default class GestorJugadorTimer {
     }
   };
 
-  reset = () => {
-    this._mls = 0;
-    this._sec = 0;
-    this._min = 0;
-    this._running = false;
-  };
+  // reset = () => {
+  //   clearInterval(this.watch);
+  //   this._mls = 0;
+  //   this._sec = 0;
+  //   this._min = 0;
+  //   //this._running = false;
+  // };
 }

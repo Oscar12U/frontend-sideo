@@ -1,5 +1,4 @@
-import React, { Component, memo } from "react";
-import cronometroImage from "../assets/images/cronometronegro.png";
+import React, { Component } from "react";
 import "./style/Timer.css";
 
 class Timer extends Component {
@@ -17,7 +16,7 @@ class Timer extends Component {
     this.counter = null;
     this.initTimer = this.initTimer.bind(this);
     this.initTimerAutomatico = this.initTimerAutomatico.bind(this);
-    this.clearTimer = this.clearTimer.bind(this);
+    //this.clearTimer = this.clearTimer.bind(this);
     this.pauseTimer = this.pauseTimer.bind(this);
     this.endPeriod = this.endPeriod.bind(this);
   }
@@ -61,18 +60,19 @@ class Timer extends Component {
     this.setState({ running: false });
   }
 
-  clearTimer() {
-    this.setState({
-      actualTime: 0,
-      currentTimeMin: 0,
-      currentTimeSec: 0,
-      currentTimeMs: 0,
-    });
-    clearInterval(this.counter);
-    //this.counter = null;
-    this.setState({ btnPlayPause: "Iniciar" });
-    this.props.handleClearTimer();
-  }
+  // clearTimer() {
+  //   this.setState({
+  //     actualTime: 0,
+  //     currentTimeMin: 0,
+  //     currentTimeSec: 0,
+  //     currentTimeMs: 0,
+  //     running: false,
+  //   });
+  //   clearInterval(this.counter);
+  //   //this.counter = null;
+  //   this.setState({ btnPlayPause: "Iniciar" });
+  //   this.props.handleClearTimer();
+  // }
 
   endPeriod() {
     this.setState({
@@ -80,6 +80,7 @@ class Timer extends Component {
       currentTimeMin: 0,
       currentTimeSec: 0,
       currentTimeMs: 0,
+      running: false,
     });
     clearInterval(this.counter);
     this.counter = null;
@@ -94,9 +95,7 @@ class Timer extends Component {
     if (value.length < 2) {
       value = "0" + value;
     }
-    if (rest[0] === "ms" && value.length < 3) {
-      value = "0" + value;
-    }
+
     return value;
   };
 
@@ -129,8 +128,7 @@ class Timer extends Component {
           {/* <h2>{this.state.actualTime.toFixed(0)}</h2> */}
           <span>
             {this.formatTime(this.state.currentTimeMin)}:
-            {this.formatTime(this.state.currentTimeSec)}:
-            {this.formatTime(this.state.currentTimeMs, "ms")}:
+            {this.formatTime(this.state.currentTimeSec)}
           </span>
         </div>
         <br></br>
@@ -141,7 +139,7 @@ class Timer extends Component {
             value={this.state.btnPlayPause}
             onClick={this.initTimer}
           />
-          <input type="button" value="Reiniciar" onClick={this.clearTimer} />
+          {/* <input type="button" value="Reiniciar" onClick={this.clearTimer} /> */}
           <input
             type="button"
             value="Finalizar Periodo"

@@ -36,7 +36,7 @@ class TiempoJugadoresPartido extends React.Component {
     return (
       <>
         <h2>Notificaciones</h2>
-        {this.props.notificaciones.map((jugador, index) => {
+        {this.props.notificaciones.map((notificacion, index) => {
           return (
             <>
               <Card
@@ -74,8 +74,7 @@ class TiempoJugadoresPartido extends React.Component {
                       fontWeight: "bold",
                     }}
                   >
-                    El jugador {jugador} ha cumplido con el tiempo maximo de
-                    juego
+                    {notificacion.descripcion}
                   </Typography>
                   <Divider />
                   <br />
@@ -98,7 +97,7 @@ class TiempoJugadoresPartido extends React.Component {
                       display: "flex",
                       color: "#FFFFFF",
                     }}
-                    onClick={() => this.props.handleEliminarNotif(jugador)}
+                    onClick={() => this.props.handleEliminarNotif(notificacion)}
                   >
                     Eliminar
                   </Button>
