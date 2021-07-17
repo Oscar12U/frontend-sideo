@@ -26,8 +26,10 @@ import {
 } from "@material-ui/core";
 import GestorPartido from "../containers/GestorPartido";
 import GolesxTemporada from "../components/ChartGolesTemporada";
+import { useLocation } from "react-router-dom";
 
 const Estadisticas = () => {
+  let { temporadaID } = useLocation().state;
   return (
     <>
       <TopMenuBar></TopMenuBar>
@@ -40,22 +42,7 @@ const Estadisticas = () => {
           marginTop: "80px",
         }}
       >
-        <Typography
-          style={{
-            fontFamily: "Arial",
-            fontSize: "200%",
-            display: "flex",
-            fontWeight: "bold",
-            justifyContent: "center",
-            textAlign: "justify",
-            textJustify: "inter-word",
-            marginBottom: "15px",
-          }}
-        >
-          Estadística Goles
-        </Typography>
-
-        <GolesxTemporada />
+        <GolesxTemporada temporada={temporadaID} />
         <br />
       </Container>
     </>

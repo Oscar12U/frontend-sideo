@@ -17,7 +17,6 @@ class Timer extends Component {
     this.counter = null;
     this.initTimer = this.initTimer.bind(this);
     this.initTimerAutomatico = this.initTimerAutomatico.bind(this);
-    this.clearTimer = this.clearTimer.bind(this);
     this.pauseTimer = this.pauseTimer.bind(this);
     this.endPeriod = this.endPeriod.bind(this);
   }
@@ -31,10 +30,6 @@ class Timer extends Component {
       this.pauseTimer();
       this.setState({ btnPlayPause: "Iniciar" });
     } else {
-      // this.counter = setInterval(() => {
-      //   this.setState({ actualTime: this.state.actualTime + 1 });
-      // }, 1000);
-      // //60000
       this.start();
       this.setState({ btnPlayPause: "Pausar" });
     }
@@ -43,10 +38,6 @@ class Timer extends Component {
   initTimer() {
     if (!this.state.running) {
       this.start();
-      // this.counter = setInterval(() => {
-      //   this.setState({ actualTime: this.state.actualTime + 1 });
-      // }, 1000);
-      // //60000
       this.setState({ btnPlayPause: "Pausar" });
     } else {
       this.pauseTimer();
@@ -57,21 +48,7 @@ class Timer extends Component {
 
   pauseTimer() {
     clearInterval(this.counter);
-    //this.counter = null;
     this.setState({ running: false });
-  }
-
-  clearTimer() {
-    this.setState({
-      actualTime: 0,
-      currentTimeMin: 0,
-      currentTimeSec: 0,
-      currentTimeMs: 0,
-    });
-    clearInterval(this.counter);
-    //this.counter = null;
-    this.setState({ btnPlayPause: "Iniciar" });
-    this.props.handleClearTimer();
   }
 
   endPeriod() {
@@ -80,6 +57,7 @@ class Timer extends Component {
       currentTimeMin: 0,
       currentTimeSec: 0,
       currentTimeMs: 0,
+      running: false,
     });
     clearInterval(this.counter);
     this.counter = null;
@@ -123,8 +101,6 @@ class Timer extends Component {
         <br></br>
         <br></br>
         <div className="time">
-          {/* <img src={cronometroImage} alt="" /> */}
-          {/* <h2>{this.state.actualTime.toFixed(0)}</h2> */}
           <span
             style={{
               fontSize: "25px",
@@ -153,23 +129,6 @@ class Timer extends Component {
             type="button"
             value={this.state.btnPlayPause}
             onClick={this.initTimer}
-          />
-          <input
-            style={{
-              justifyContent: "center",
-              justifySelf: "center",
-              alignItems: "center",
-              textAlign: "center",
-              fontSize: "15px",
-              display: "inline-block",
-              backgroundColor: "#287ACC",
-              color: "#FFFFFF",
-              borderRadius: "3px",
-              fontWeight: "bold",
-            }}
-            type="button"
-            value="Reiniciar"
-            onClick={this.clearTimer}
           />
           <input
             style={{

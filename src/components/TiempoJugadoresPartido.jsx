@@ -10,22 +10,13 @@ class TiempoJugadoresPartido extends React.Component {
 
     this.state = {
       running: false,
-      finalizar: false,
       currentTimeMin: this.props.min,
       currentTimeSec: this.props.sec,
       currentTimeMs: this.props.mls,
-
       open: false,
       notificacion: this.props.notificacion,
-      nombre: "El tiempo de la actividad: " + this.props.nombre,
     };
   }
-
-  componentWillUnmount() {}
-  // componentDidUpdate() {
-  //   this.inicioAutomatico();
-  //   this.notificarTiempo();
-  // }
 
   componentDidMount() {
     if (this.props.iniciar) {
@@ -46,14 +37,10 @@ class TiempoJugadoresPartido extends React.Component {
       }
     }
 
-    if (prevProps.reset !== this.props.reset) {
-      this.reset();
-    }
-
-    if (prevState.currentTimeSec !== this.state.currentTimeSec) {
+    if (prevState.currentTimeMin !== this.state.currentTimeMin) {
       this.notificarTiempo();
     }
-    // this.notificarTiempo()
+    
   }
 
   handleClick = () => {
@@ -69,7 +56,7 @@ class TiempoJugadoresPartido extends React.Component {
   };
 
   notificarTiempo = () => {
-    if (6 <= this.state.currentTimeSec && this.state.notificacion === false) {
+    if (1 <= this.state.currentTimeMin && this.state.notificacion === false) {
       this.handleClick();
       this.setState({ notificacion: true });
       this.props.handleNotificacion(this.props.jugador);
@@ -107,15 +94,6 @@ class TiempoJugadoresPartido extends React.Component {
       this.setState({ currentTimeMin: this.state.currentTimeMin + 1 });
       this.setState({ currentTimeSec: 0 });
     }
-  };
-
-  reset = () => {
-    this.setState({
-      currentTimeMs: 0,
-      currentTimeSec: 0,
-      currentTimeMin: 0,
-      running: false,
-    });
   };
 
   render() {
@@ -161,10 +139,8 @@ class TiempoJugadoresPartido extends React.Component {
             }}
             ref="header"
           >
-            Tiempo
+            Tiempo del Juego
           </h4>
-
-          {this.state.finalizar === true && <h4 ref="header">Finalizada</h4>}
           <StopwatchDisplay
             ref="display"
             {...this.state}

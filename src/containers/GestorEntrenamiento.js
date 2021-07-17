@@ -98,6 +98,17 @@ export default class GestorEntrenamiento {
       .catch((err) => {});
   }
 
+  agregarEntrenamientoTemporada(temporadaID) {
+    axios
+      .post(`http://localhost:3000/api/agregarEntrenamientoTempo`, {
+        temporada: temporadaID,
+      })
+      .then((resultado) => {
+        console.log(resultado);
+      })
+      .catch((err) => {});
+  }
+
   crearNuevoComentarioActividad(
     entrenamiento1,
     actividad1,

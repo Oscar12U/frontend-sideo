@@ -39,15 +39,22 @@ export default class GestorPartido {
       .catch((err) => {});
   }
 
-  agregarFalta(nombreJugador) {
+  agregarFaltaFavor(nombreJugador) {
     axios
-      .post(`http://localhost:3000/api/newFalta`, {
+      .post(`http://localhost:3000/api/newFaltaAFavor`, {
         nombrePartido: this.nombrePartido,
         nombreJugador: nombreJugador,
       })
-      .then((resultado) => {
-        console.log(resultado);
+      .then((resultado) => {})
+      .catch((err) => {});
+  }
+
+  agregarFaltaContra(nombreJugador) {
+    axios
+      .post(`http://localhost:3000/api/newFaltaEnContra`, {
+        nombrePartido: this.nombrePartido,
       })
+      .then((resultado) => {})
       .catch((err) => {});
   }
 
@@ -58,9 +65,7 @@ export default class GestorPartido {
         nombreJugador: nombreJugador,
         descripcion: descripcion,
       })
-      .then((resultado) => {
-        //console.log(resultado);
-      })
+      .then((resultado) => {})
       .catch((err) => {});
   }
 
@@ -119,6 +124,28 @@ export default class GestorPartido {
       .then((resultado) => {
         jugadores = resultado.data.data;
         return jugadores;
+      })
+      .catch((err) => {});
+  }
+
+  agregarPartidoTemporada(temporadaID) {
+    axios
+      .post(`http://localhost:3000/api/agregarPartidoTempo`, {
+        temporada: temporadaID,
+      })
+      .then((resultado) => {
+        console.log(resultado);
+      })
+      .catch((err) => {});
+  }
+
+  finalizarPartido(partidoID) {
+    axios
+      .post(`http://localhost:3000/api/finalizarPartido`, {
+        partido: partidoID,
+      })
+      .then((resultado) => {
+        //console.log(resultado);
       })
       .catch((err) => {});
   }

@@ -65,6 +65,10 @@ export default function Temporada() {
   const [indexTemporada, setIndexTemporada] = React.useState(-1);
   const [listaTemporadas, setListaTemporadas] = React.useState([]);
 
+  const [ultimoEntrenamientoTempo, setUltimoEntrenamientoTempo] =
+    React.useState("");
+  const [ultimoPartidoTempo, setUltimoPartidoTempo] = React.useState("");
+
   const [incorrecto, setIncorrecto] = React.useState("");
   const [incorrecto2, setIncorrecto2] = React.useState("");
   const [incorrecto3, setIncorrecto3] = React.useState("");
@@ -195,6 +199,7 @@ export default function Temporada() {
 
   const handleTemporadaClick = (event, index) => {
     setIndexTemporada(index);
+    actulizarUltimos(index);
   };
 
   const enviarActividad = () => {
@@ -243,6 +248,12 @@ export default function Temporada() {
         nombreEntrenamiento,
         descripcionEntrenamiento
       );
+      setTimeout(() => {
+        gestorEntrenamiento.agregarEntrenamientoTemporada(
+          listaTemporadas[indexTemporada]
+        );
+      }, 1000);
+
       setDescripcionEntrenamiento("");
       setNombreEntrenamiento("");
       setOpenEntrenamiento(false);
@@ -266,13 +277,16 @@ export default function Temporada() {
   };
 
   const crearPartido = () => {
-    console.log("Fachero: " + fechaPartido);
+    //console.log("Fachero: " + fechaPartido);
     if (nombrePartido.length >= 1 && descripcionPartido.length >= 1) {
       gestorPartido.crearPartido(
         nombrePartido,
         descripcionPartido,
         fechaPartido
       );
+      setTimeout(() => {
+        gestorPartido.agregarPartidoTemporada(listaTemporadas[indexTemporada]);
+      }, 1000);
       setFechaPartido(moment().format("YYYY-MM-DD"));
       setDescripcionPartido("");
       setNombrePartido("");
@@ -336,11 +350,66 @@ export default function Temporada() {
       .get(`http://localhost:3000/api/getAllTemporadas`)
       .then((resultado) => {
         const listTemporadas = resultado.data.data;
-        console.log("PRUEBA LISTA ", listTemporadas.length);
+        //console.log("PRUEBA LISTA ", listTemporadas.length);
         setListaTemporadas(listTemporadas);
         setIndexTemporada(listTemporadas.length - 1);
-        console.log("PRUEBA 2 ", listTemporadas[3]);
+        //console.log("PRUEBA 2 ", listTemporadas[3]);
+        getUltima(listTemporadas.length - 1, listTemporadas);
       });
+  }
+
+  function getUltima(index, lista) {
+    let ultimoEntrenamiento =
+      lista[index].entrenamientos[lista[index].entrenamientos.length - 1];
+    let ultimoPartido = lista[index].partidos[lista[index].partidos.length - 1];
+    //console.log("ultimo entrenamiento", ultimoEntrenamiento);
+    //console.log("ultimo partido", ultimoPartido);
+    axios
+      .get(`http://localhost:3000/api/getEntrenamiento/${ultimoEntrenamiento}`)
+      .then((resultado) => {
+        const actividades1 = resultado.data.data;
+
+        setUltimoEntrenamientoTempo(actividades1);
+      })
+      .catch((err) => {});
+
+    axios
+      .get(`http://localhost:3000/api/getPartido/${ultimoPartido}`)
+      .then((resultado) => {
+        const actividades1 = resultado.data.data;
+
+        setUltimoPartidoTempo(actividades1);
+      })
+      .catch((err) => {});
+  }
+
+  function actulizarUltimos(index) {
+    let ultimoEntrenamiento =
+      listaTemporadas[index].entrenamientos[
+        listaTemporadas[index].entrenamientos.length - 1
+      ];
+    let ultimoPartido =
+      listaTemporadas[index].partidos[
+        listaTemporadas[index].partidos.length - 1
+      ];
+
+    axios
+      .get(`http://localhost:3000/api/getEntrenamiento/${ultimoEntrenamiento}`)
+      .then((resultado) => {
+        const actividades1 = resultado.data.data;
+
+        setUltimoEntrenamientoTempo(actividades1);
+      })
+      .catch((err) => {});
+
+    axios
+      .get(`http://localhost:3000/api/getPartido/${ultimoPartido}`)
+      .then((resultado) => {
+        const actividades1 = resultado.data.data;
+
+        setUltimoPartidoTempo(actividades1);
+      })
+      .catch((err) => {});
   }
 
   let gestorEntrenamiento = new GestorEntrenamiento();
@@ -391,6 +460,9 @@ export default function Temporada() {
           alignItems: "center",
         }}
       >
+        {/* <Button variant="primary" size="lg">
+          {ultimoEntrenamientoTempo.nombre}
+        </Button>{" "} */}
         <FormControl className={classes.formControl}>
           {/* <NativeSelect
             className={classes.selectEmpty}
@@ -429,7 +501,6 @@ export default function Temporada() {
           </Dropdown>
           <FormHelperText>Elegir Temporada</FormHelperText>
         </FormControl>
-
         {/* <TextField
           id="outlined-basic"
           label="Temporada"
@@ -462,16 +533,29 @@ export default function Temporada() {
               primary="Crear Partido"
             />
           </ListItem>
-          <ListItem button component="a" href="/Estadisticas">
-            <ListItemIcon className={classes.icon}>
-              <AssessmentIcon />
-            </ListItemIcon>
-            <ListItemText
-              className={classes.txt}
-              inset
-              primary="Estadisticas de Temporada"
-            />
-          </ListItem>
+
+          <Link
+            to={{
+              pathname: `/Estadisticas`,
+              state: { temporadaID: listaTemporadas[indexTemporada] },
+            }}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              display: "flex",
+            }}
+          >
+            <ListItem button component="a">
+              <ListItemIcon className={classes.icon}>
+                <AssessmentIcon />
+              </ListItemIcon>
+              <ListItemText
+                className={classes.txt}
+                inset
+                primary="Estadisticas de Temporada"
+              />
+            </ListItem>
+          </Link>
           <ListItem button onClick={handleClickOpenEntrenamiento}>
             <ListItemIcon className={classes.icon}>
               <DirectionsRunIcon />
@@ -482,22 +566,36 @@ export default function Temporada() {
               primary="Crear Entrenamiento"
             />
           </ListItem>
-          <ListItem button component="a" href="/Partido">
-            <ListItemIcon className={classes.icon}>
-              <PanToolIcon />
-            </ListItemIcon>
-            <ListItemText
-              className={classes.txt}
-              inset
-              primary="Gestionar Partido"
-            />
-          </ListItem>
 
-          {entrenamientoUltimo.finalizado === false && (
+          {ultimoPartidoTempo.finalizado === false && (
+            <Link
+              to={{
+                pathname: `/Partido`,
+                state: { nombrePartido: ultimoPartidoTempo.nombre },
+              }}
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                display: "flex",
+              }}
+            >
+              <ListItem button component="a">
+                <ListItemIcon className={classes.icon}>
+                  <PanToolIcon />
+                </ListItemIcon>
+                <ListItemText
+                  className={classes.txt}
+                  inset
+                  primary="Gestionar Partido en Curso"
+                />
+              </ListItem>
+            </Link>
+          )}
+          {ultimoEntrenamientoTempo.finalizado === false && (
             <Link
               to={{
                 pathname: `/entrenamiento`,
-                state: { IDEntrenamiento: entrenamientoUltimo._id },
+                state: { IDEntrenamiento: ultimoEntrenamientoTempo._id },
               }}
               style={{
                 alignItems: "center",
