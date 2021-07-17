@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./style/Timer.css";
 
-class Timer extends Component {
+class Timer2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,6 +23,19 @@ class Timer extends Component {
 
   componentDidMount() {
     this.initTimerAutomatico();
+  }
+
+  componentDidUpdate(prevProps) {
+    // Uso tipico (no olvides de comparar las props):
+    console.log("entra update " + this.props.sec);
+    if (prevProps.min !== this.props.min) {
+      this.setState({ currentTimeMin: this.props.min });
+      console.log("entraaaaaaaaaaaaaaaaaaaaaa min");
+    }
+    if (prevProps.sec !== this.props.sec) {
+      this.setState({ currentTimeSec: this.props.sec });
+      console.log("entraaaaaaaaaaaaaaaaaaaaaa sec");
+    }
   }
 
   initTimerAutomatico() {
@@ -47,35 +60,14 @@ class Timer extends Component {
   }
 
   pauseTimer() {
-    clearInterval(this.counter);
-    //this.counter = null;
     this.setState({ running: false });
   }
 
-  // clearTimer() {
-  //   this.setState({
-  //     actualTime: 0,
-  //     currentTimeMin: 0,
-  //     currentTimeSec: 0,
-  //     currentTimeMs: 0,
-  //     running: false,
-  //   });
-  //   clearInterval(this.counter);
-  //   //this.counter = null;
-  //   this.setState({ btnPlayPause: "Iniciar" });
-  //   this.props.handleClearTimer();
-  // }
-
   endPeriod() {
     this.setState({
-      actualTime: 0,
-      currentTimeMin: 0,
-      currentTimeSec: 0,
-      currentTimeMs: 0,
       running: false,
     });
-    clearInterval(this.counter);
-    this.counter = null;
+
     this.setState({ btnPlayPause: "Iniciar" });
     this.props.handleEndPeriodo();
   }
@@ -93,20 +85,6 @@ class Timer extends Component {
 
   start = () => {
     this.setState({ running: true });
-    this.counter = setInterval(() => this.pace(), 10);
-  };
-
-  pace = () => {
-    this.setState({ currentTimeMs: this.state.currentTimeMs + 10 });
-    if (this.state.currentTimeMs >= 1000) {
-      this.setState({ currentTimeSec: this.state.currentTimeSec + 1 });
-      this.setState({ currentTimeMs: 0 });
-    }
-
-    if (this.state.currentTimeSec >= 60) {
-      this.setState({ currentTimeMin: this.state.currentTimeMin + 1 });
-      this.setState({ currentTimeSec: 0 });
-    }
   };
 
   render() {
@@ -143,4 +121,4 @@ class Timer extends Component {
   }
 }
 
-export default Timer;
+export default Timer2;

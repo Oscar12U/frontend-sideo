@@ -37,23 +37,16 @@ class TiempoJugadoresPartido extends React.Component {
     // Uso tipico (no olvides de comparar las props):
 
     if (prevProps.iniciar !== this.props.iniciar) {
-      console.log("A ver desde tiempo jugador, " + this.props.iniciar);
       if (this.props.iniciar) {
-        console.log("Entro a iniciar, " + this.props.iniciar);
         this.start();
       } else {
         this.stop();
       }
     }
 
-    // if (prevProps.reset !== this.props.reset) {
-    //   this.reset();
-    // }
-
     if (prevState.currentTimeSec !== this.state.currentTimeSec) {
       this.notificarTiempo();
     }
-    // this.notificarTiempo()
   }
 
   handleClick = () => {
@@ -88,7 +81,6 @@ class TiempoJugadoresPartido extends React.Component {
   };
 
   start = () => {
-    console.log("Entro a start, " + this.props.iniciar);
     this.counter = setInterval(() => this.pace(), 10);
     this.setState({ running: true });
   };

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Timer from "../components/Timer";
 import axios from "axios";
 import JugadoresJuego from "../components/JugadoresJuego";
@@ -11,6 +11,7 @@ import {
   Form,
   Dropdown,
   ButtonGroup,
+  Alert,
 } from "react-bootstrap";
 import TopMenuBar from "../components/TopMenuBar";
 import PartidoIcon from "@material-ui/icons/SportsSoccer";
@@ -238,6 +239,8 @@ export default function ScrollableTabsButtonForce() {
     console.log("enta a pedir al de detalles del partido");
   }, [gestorPartido._nombrePartido, actualizarDetalles]);
 
+  useEffect(() => {}, [cambio]);
+
   // useEffect(() => {
   //   console.log("Se llamo el nuevo useEfecct");
 
@@ -297,9 +300,36 @@ export default function ScrollableTabsButtonForce() {
     if (newValue === 0) setChangeTab(!changeTab);
   };
 
+  const valid = () => {
+    if (timeMin === 0 && timeSec === 0 && timeMls === 0) {
+      Notification.fire({
+        icon: "success",
+        title: `¿Iniciar Partido? `,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          return true;
+        } else if (!result.isDenied) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    } else {
+      return true;
+    }
+  };
   //Gestionando tiempo General
   const handleInitTimer = () => {
     //setReset(false);
+
+    reanudarPeriodo();
+
+    // if (iniciar) {
+    //   reanudarPeriodo();
+    // }
+  };
+
+  const reanudarPeriodo = () => {
     if (!running) {
       setRunning(true);
       iniciarTiempoLocal();
@@ -310,7 +340,6 @@ export default function ScrollableTabsButtonForce() {
       setRunning(false);
     }
   };
-
   const iniciarTiempoLocal = () => {
     setCounter(setInterval(() => pace(), 10));
   };
@@ -511,12 +540,8 @@ export default function ScrollableTabsButtonForce() {
       }).then((result) => {
         if (result.isConfirmed) {
           CambioJugador();
-
-          //actualizarTiempoCambios(jugadorSale.nombre, jugadorEntra.nombre);
         } else if (!result.isDenied) {
           CambioJugador();
-
-          //actualizarTiempoCambios(jugadorSale.nombre, jugadorEntra.nombre);
         }
       });
     }
@@ -573,40 +598,40 @@ export default function ScrollableTabsButtonForce() {
     }
   };
 
-  const actualizarTiempoCambios = (jugadorSale, jugadorEntra) => {
-    if (running) {
-      gestorTimersTitulares
-        .find((element) => element.nombre === jugadorSale)
-        .stop();
-      gestorTimersTitulares.find(
-        (element) => element.nombre === jugadorSale
-      ).running = false;
+  // const actualizarTiempoCambios = (jugadorSale, jugadorEntra) => {
+  //   if (running) {
+  //     gestorTimersTitulares
+  //       .find((element) => element.nombre === jugadorSale)
+  //       .stop();
+  //     gestorTimersTitulares.find(
+  //       (element) => element.nombre === jugadorSale
+  //     ).running = false;
 
-      gestorTimersTitulares
-        .find((element) => element.nombre === jugadorEntra)
-        .start();
-      gestorTimersTitulares.find(
-        (element) => element.nombre === jugadorEntra
-      ).running = true;
-    }
+  //     gestorTimersTitulares
+  //       .find((element) => element.nombre === jugadorEntra)
+  //       .start();
+  //     gestorTimersTitulares.find(
+  //       (element) => element.nombre === jugadorEntra
+  //     ).running = true;
+  //   }
 
-    // gestorTimersTitulares.map((gestor) => {
-    //   if (
-    //     jugadoresTitulares.find(
-    //       (element) => element.nombre === gestor.nombre
-    //     ) !== undefined &&
-    //     gestor.running === false
-    //   ) {
-    //     if (running) {
-    //       gestor.start();
-    //       gestor.running = true;
-    //     }
-    //   } else if (jugadorSale === gestor.nombre) {
-    //     gestor.stop();
-    //     gestor.running = false;
-    //   }
-    // });
-  };
+  //   // gestorTimersTitulares.map((gestor) => {
+  //   //   if (
+  //   //     jugadoresTitulares.find(
+  //   //       (element) => element.nombre === gestor.nombre
+  //   //     ) !== undefined &&
+  //   //     gestor.running === false
+  //   //   ) {
+  //   //     if (running) {
+  //   //       gestor.start();
+  //   //       gestor.running = true;
+  //   //     }
+  //   //   } else if (jugadorSale === gestor.nombre) {
+  //   //     gestor.stop();
+  //   //     gestor.running = false;
+  //   //   }
+  //   // });
+  // };
 
   const CambioJugador = () => {
     let jugadorEntra = jugadoresSustitutos[selectIndexEntra];
@@ -648,9 +673,11 @@ export default function ScrollableTabsButtonForce() {
       gestorTimersTitulares.find(
         (element) => element.nombre === jugadorEntra.nombre
       ).running = true;
+      setCambio(!cambio);
     }
 
-    actualizarDetallesPartidoRapido();
+    //actualizarDetallesPartidoRapido();
+
     // gestorTimersTitulares.map((gestor) => {
     //   if (gestor.nombre === jugadorSale.nombre) {
     //     console.log("Sale " + gestor.nombre);
