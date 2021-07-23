@@ -1,26 +1,26 @@
 import axios from "axios";
 
 export default class GestorJugador {
-  constructor() {}
+  constructor() { }
   crearJugador(nombreJugador) {
     axios
-      .post(`http://localhost:3000/api/newJugador`, {
+      .post(`https://backend-sideo.herokuapp.com/api/newJugador`, {
         nombre: nombreJugador,
       })
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
   eliminarJugador(jugadorID) {
     console.log("asdasd", jugadorID);
     axios
-      .post(`http://localhost:3000/api/deleteJugador`, {
+      .post(`https://backend-sideo.herokuapp.com/api/deleteJugador`, {
         jugador: jugadorID,
       })
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 }

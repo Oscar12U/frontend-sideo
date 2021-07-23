@@ -69,7 +69,7 @@ export default function TopMenuBar() {
             </IconButton> */}
           </div>
           <Typography variant="h6" className={classes.title}>
-            Temporada
+            SIDEO
           </Typography>
           {auth && (
             <div>

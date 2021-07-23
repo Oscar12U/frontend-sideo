@@ -22,7 +22,7 @@ const JugadoresJuego = () => {
 
   function actualizarJugadoresBD() {
     axios
-      .get(`http://localhost:3000/api/jugadores`)
+      .get(`https://backend-sideo.herokuapp.com/api/jugadores`)
       .then((resultado) => {
         let jugadoresList = resultado.data.data;
         let listEnJuego = [];
@@ -41,7 +41,7 @@ const JugadoresJuego = () => {
         setJugadoresSustitutos(listSustitutos);
         setJugadoresFuera(listNoConvocados);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   const actualizarJugadoresJuego = (newJugador, recienAgregado) => {
@@ -61,35 +61,35 @@ const JugadoresJuego = () => {
     jugadoresTitulares.splice(pos, 1);
 
     axios
-      .post(`http://localhost:3000/api/quitJugador`, {
+      .post(`https://backend-sideo.herokuapp.com/api/quitJugador`, {
         nombreJugador: newJugador,
       })
-      .then((resultado) => {})
-      .catch((err) => {});
+      .then((resultado) => { })
+      .catch((err) => { });
   };
 
   const AddJugadorTitular = (jugador, recienAgregado) => {
     axios
-      .post(`http://localhost:3000/api/addJugador`, {
+      .post(`https://backend-sideo.herokuapp.com/api/addJugador`, {
         nombreJugador: jugador,
         nombrePartido: "Partido 1",
         titular: true,
       })
-      .then((resultado) => {})
-      .catch((err) => {});
+      .then((resultado) => { })
+      .catch((err) => { });
 
     actualizarJugadoresJuego(jugador, recienAgregado);
   };
 
   const AddJugadorSustituto = (newJugador) => {
     axios
-      .post(`http://localhost:3000/api/addJugador`, {
+      .post(`https://backend-sideo.herokuapp.com/api/addJugador`, {
         nombreJugador: newJugador,
         nombrePartido: "Partido 1",
         titular: false,
       })
-      .then((resultado) => {})
-      .catch((err) => {});
+      .then((resultado) => { })
+      .catch((err) => { });
 
     setJugadoresSustitutos([...jugadoresSustitutos, newJugador]);
     let pos = jugadoresFuera.indexOf(newJugador);
@@ -107,12 +107,12 @@ const JugadoresJuego = () => {
     }
 
     axios
-      .post(`http://localhost:3000/api/removeJugadorPartido`, {
+      .post(`https://backend-sideo.herokuapp.com/api/removeJugadorPartido`, {
         nombreJugador: newJugador,
         nombrePartido: "Partido 1",
       })
-      .then((resultado) => {})
-      .catch((err) => {});
+      .then((resultado) => { })
+      .catch((err) => { });
   };
 
   return (

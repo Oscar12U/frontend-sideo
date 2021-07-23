@@ -54,7 +54,7 @@ class Stopwatch extends React.Component {
     if (!this.state.running) {
       this.setState({ finalizar: true });
       axios
-        .post(`http://localhost:3000/api/newActividadJugador`, {
+        .post(`https://backend-sideo.herokuapp.com/api/newActividadJugador`, {
           entrenamiento: entrenamiento1,
           jugador: jugador1,
           actividad: actividad1,

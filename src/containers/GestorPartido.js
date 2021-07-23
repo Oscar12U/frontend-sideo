@@ -15,7 +15,7 @@ export default class GestorPartido {
 
   agregarGolFavor(idAnotador, idAsistente, tiempoGol, periodoGol) {
     axios
-      .post(`http://localhost:3000/api/newGolFavor`, {
+      .post(`https://backend-sideo.herokuapp.com/api/newGolFavor`, {
         anotador: idAnotador,
         asistente: idAsistente,
         tiempoGol: tiempoGol,
@@ -25,53 +25,53 @@ export default class GestorPartido {
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   agregarGolContra() {
     axios
-      .post(`http://localhost:3000/api/newGolContra`, {
+      .post(`https://backend-sideo.herokuapp.com/api/newGolContra`, {
         nombrePartido: this.nombrePartido,
       })
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   agregarFaltaFavor(nombreJugador) {
     axios
-      .post(`http://localhost:3000/api/newFaltaAFavor`, {
+      .post(`https://backend-sideo.herokuapp.com/api/newFaltaAFavor`, {
         nombrePartido: this.nombrePartido,
         nombreJugador: nombreJugador,
       })
-      .then((resultado) => {})
-      .catch((err) => {});
+      .then((resultado) => { })
+      .catch((err) => { });
   }
 
   agregarFaltaContra(nombreJugador) {
     axios
-      .post(`http://localhost:3000/api/newFaltaEnContra`, {
+      .post(`https://backend-sideo.herokuapp.com/api/newFaltaEnContra`, {
         nombrePartido: this.nombrePartido,
       })
-      .then((resultado) => {})
-      .catch((err) => {});
+      .then((resultado) => { })
+      .catch((err) => { });
   }
 
   agregarLesion(nombreJugador, descripcion) {
     console.log(descripcion);
     axios
-      .post(`http://localhost:3000/api/newLesion`, {
+      .post(`https://backend-sideo.herokuapp.com/api/newLesion`, {
         nombreJugador: nombreJugador,
         descripcion: descripcion,
       })
-      .then((resultado) => {})
-      .catch((err) => {});
+      .then((resultado) => { })
+      .catch((err) => { });
   }
 
   crearPartido(nombre1, descripcion1, fecha1) {
     axios
-      .post(`http://localhost:3000/api/newPartido`, {
+      .post(`https://backend-sideo.herokuapp.com/api/newPartido`, {
         nombre: nombre1,
         descripcion: descripcion1,
         fechaPartido: fecha1,
@@ -79,74 +79,75 @@ export default class GestorPartido {
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   agregarJugador(nombreJugador) {
     axios
-      .post(`http://localhost:3000/api/addJugador`, {
+      .post(`https://backend-sideo.herokuapp.com/api/addJugador`, {
         nameJugador: nombreJugador,
         nombrePartido: this.nombrePartido,
       })
       .then((resultado) => {
         return resultado.data.jugador;
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   cambiarJugador(jugadorEntra, jugadorSale) {
     axios
-      .post(`http://localhost:3000/api/changeJugador`, {
+      .post(`https://backend-sideo.herokuapp.com/api/changeJugador`, {
         entra: jugadorEntra,
         sale: jugadorSale,
       })
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   quitarJugador(nombreJugador) {
     axios
-      .post(`http://localhost:3000/api/quitJugador`, {
+      .post(`https://backend-sideo.herokuapp.com/api/quitJugador`, {
         nombreJugador: nombreJugador,
       })
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   obtenerJugadores() {
     let jugadores;
     axios
-      .get(`http://localhost:3000/api/jugadores`, {})
+      .get(`https://backend-sideo.herokuapp.com/api/jugadores`, {})
       .then((resultado) => {
         jugadores = resultado.data.data;
         return jugadores;
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   agregarPartidoTemporada(temporadaID) {
     axios
-      .post(`http://localhost:3000/api/agregarPartidoTempo`, {
+      .post(`https://backend-sideo.herokuapp.com/api/agregarPartidoTempo`, {
         temporada: temporadaID,
       })
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
-  finalizarPartido(partidoID) {
+  finalizarPartido(partidoID, arrayTiempos) {
     axios
-      .post(`http://localhost:3000/api/finalizarPartido`, {
+      .post(`https://backend-sideo.herokuapp.com/api/finalizarPartido`, {
         partido: partidoID,
+        tiempos: arrayTiempos,
       })
       .then((resultado) => {
         //console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 }

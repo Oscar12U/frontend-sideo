@@ -155,7 +155,7 @@ export default function Entrenamiento() {
   };
   function axiosConsulta() {
     axios
-      .get(`http://localhost:3000/api/jugadores/`)
+      .get(`https://backend-sideo.herokuapp.com/api/jugadores/`)
       .then((resultado) => {
         const jugadoresList = resultado.data.data;
 
@@ -163,12 +163,12 @@ export default function Entrenamiento() {
         //console.log(jugadores[0].nombre);
         //console.log("variablex: " + listaJugadores);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   function axiosConsulta2(entrenamietoID) {
     axios
-      .get(`http://localhost:3000/api/entrenamientos/${entrenamietoID}`)
+      .get(`https://backend-sideo.herokuapp.com/api/entrenamientos/${entrenamietoID}`)
       .then((resultado) => {
         const entrenamieto = resultado.data.data;
         setEntrenamiento(entrenamieto);
@@ -176,7 +176,7 @@ export default function Entrenamiento() {
         consultaLesiones(entrenamieto.actividades);
         obtenerActividades(entrenamieto.actividades);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
   function rellenarActividadesAuto() {
     setActividadesAuto([]);
@@ -257,7 +257,7 @@ export default function Entrenamiento() {
     actividades.map((actividad) => {
       //console.log(lesion);
       axios
-        .get(`http://localhost:3000/api/actividad/${actividad}`)
+        .get(`https://backend-sideo.herokuapp.com/api/actividad/${actividad}`)
         .then((resultado) => {
           const actividades1 = resultado.data.data;
           //setLesiones(listLesiones);
@@ -266,13 +266,13 @@ export default function Entrenamiento() {
           //Lesion.push(listLesiones);
           setActividades((actividades) => [...actividades, actividades1]);
         })
-        .catch((err) => {});
+        .catch((err) => { });
     });
   }
 
   function obtenerActividades(actividades) {
     axios
-      .get(`http://localhost:3000/api/actividades`)
+      .get(`https://backend-sideo.herokuapp.com/api/actividades`)
       .then((resultado) => {
         const actividades1 = resultado.data.data;
         let actividadesNuevas = [];
@@ -294,7 +294,7 @@ export default function Entrenamiento() {
         rellenarActividadesDisponibles(actividadesNuevas);
         setActividadesDisponibles(actividadesNuevas);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   const incluirJugador = (jugador) => {

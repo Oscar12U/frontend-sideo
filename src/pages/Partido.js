@@ -36,6 +36,7 @@ import JugadorClass from "../containers/JugadorClass";
 import TiempoJugadoresPartido from "../components/TiempoJugadoresPartido";
 import NotificacionJugadores from "../components/NotificacionJugadores";
 import { useLocation } from "react-router-dom";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -96,11 +97,13 @@ let timeMin = 0;
 let timeSec = 0;
 let timeMls = 0;
 
+
 export default function ScrollableTabsButtonForce() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [changeTab, setChangeTab] = React.useState(false);
   const [cambio, setCambio] = React.useState(false);
+  const [notifyFaltas, setNotifyFaltas] = React.useState(false);
   const [iniciarTiempoJugador, setIniciarTiempoJugador] = React.useState(false);
   const [actualizarDetalles, setActualizarDetalles] = React.useState(false);
   const [running, setRunning] = React.useState(false);
@@ -121,7 +124,7 @@ export default function ScrollableTabsButtonForce() {
   useEffect(() => {
     function actualizarJugadoresBD() {
       axios
-        .get(`http://localhost:3000/api/jugadores`)
+        .get(`https://backend-sideo.herokuapp.com/api/jugadores`)
         .then((resultado) => {
           let jugadoresList = resultado.data.data;
           let listEnJuego = [];
@@ -141,16 +144,16 @@ export default function ScrollableTabsButtonForce() {
           setJugadoresTitulares(listEnJuego);
           setJugadoresSustitutos(listFueraJuego);
         })
-        .catch((err) => {});
+        .catch((err) => { });
     }
-    console.log("entra actualizar BD");
+
     actualizarJugadoresBD();
   }, [changeTab]);
 
   useEffect(() => {
     function actualizarGestores() {
       axios
-        .get(`http://localhost:3000/api/jugadores`)
+        .get(`https://backend-sideo.herokuapp.com/api/jugadores`)
         .then((resultado) => {
           let jugadoresList = resultado.data.data;
           let listGestoresTimers = [];
@@ -175,29 +178,31 @@ export default function ScrollableTabsButtonForce() {
 
           setGestorTimersTitulares(listGestoresTimers);
         })
-        .catch((err) => {});
+        .catch((err) => { });
     }
 
     actualizarGestores();
   }, []);
 
-  const [partidoObjct, setPartidoObjct] = React.useState([]);
+  const [partidoObjct, setPartidoObjct] = React.useState(null);
   useEffect(() => {
     function obtenerDetallesPartido() {
       axios
         .get(
-          `http://localhost:3000/api/detallesPartido/${gestorPartido._nombrePartido}`
+          `https://backend-sideo.herokuapp.com/api/detallesPartido/${gestorPartido._nombrePartido}`
         )
         .then((resultado) => {
-          setPartidoObjct(resultado.data.data);
+          setTimeout(function () {
+            setPartidoObjct(resultado.data.data);
+          }, 1000);
         })
-        .catch((err) => {});
+        .catch((err) => { });
     }
 
     obtenerDetallesPartido();
   }, [gestorPartido._nombrePartido, actualizarDetalles]);
 
-  useEffect(() => {}, [cambio]);
+  useEffect(() => { }, [cambio]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -212,7 +217,6 @@ export default function ScrollableTabsButtonForce() {
       setRunning(true);
       iniciarTiempoLocal();
       iniciarTiemposJugadores();
-      setIniciarTiempoJugador(true);
     } else {
       pauseTimerLocal();
       detenerTiemposJugadores();
@@ -243,13 +247,12 @@ export default function ScrollableTabsButtonForce() {
     timeMin = 0;
     timeMls = 0;
     clearInterval(counter);
-    setIniciarTiempoJugador(false);
+    detenerTiemposJugadores();
     setRunning(false);
   };
 
   const pauseTimerLocal = () => {
     clearInterval(counter);
-    setIniciarTiempoJugador(false);
   };
 
   //Tiempo de jugadadores
@@ -563,7 +566,8 @@ export default function ScrollableTabsButtonForce() {
 
     setSelectIndexTitular(-1);
 
-    if (partidoObjct.faltasAFavor + 1 === 7) {
+    if (partidoObjct.faltasAFavor + 1 >= 4 && !notifyFaltas) {
+      setNotifyFaltas(true);
       let listaNotificaciones = listNotificaciones;
       let notify = {
         descripcion:
@@ -608,7 +612,22 @@ export default function ScrollableTabsButtonForce() {
     }
   };
 
-  const finalizarEntrenamieto = () => {
+  const getTiemposJugadores = () => {
+    let arrayTiempos = [];
+
+    gestorTimersTitulares.map((gestor) => {
+      gestor.stop();
+      gestor.running = false;
+      const objTiempo = {
+        nombreJugador: gestor.nombre,
+        tiempoMin: gestor.sec,
+      };
+      arrayTiempos.push(objTiempo);
+    });
+    return arrayTiempos;
+  };
+
+  const finalizarPartido = () => {
     Swal.fire({
       title: "¿Seguro de terminar el partido actual?",
       showDenyButton: true,
@@ -617,11 +636,222 @@ export default function ScrollableTabsButtonForce() {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        gestorPartido.finalizarPartido(partidoObjct._id);
+        gestorPartido.finalizarPartido(partidoObjct._id, getTiemposJugadores());
         window.location.href = "/";
       }
     });
   };
+
+
+  const getProgress = () => {
+    if (partidoObjct === null) {
+      return (
+        <div
+          id="progress"
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+          }}
+        >
+          <CircularProgress />
+        </div>
+      );
+    } else {
+      return (
+        <Row style={{ margin: "auto 20px" }}>
+          <Col sm="3" style={{ marginLeft: "0px" }}>
+            <h1
+              style={{
+                fontWeight: "bold",
+                fontSize: "18px",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              Partido Contra:<br></br>
+            </h1>
+            <h1
+              style={{
+                fontSize: "18px",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              {partidoObjct.descripcion}
+            </h1>
+            <h1
+              style={{
+                fontWeight: "bold",
+                fontSize: "18px",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              Temporada
+            </h1>
+            <h1
+              style={{
+                fontSize: "18px",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              1
+            </h1>
+            <h1
+              style={{
+                fontWeight: "bold",
+                fontSize: "18px",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              Periodo Actual
+            </h1>
+            <h1
+              style={{
+                fontSize: "18px",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              {periodo}
+            </h1>
+          </Col>
+          <Col sm="4" style={{ marginRight: "0px" }}>
+            <h1
+              style={{
+                fontWeight: "bold",
+                fontSize: "18px",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              UCR Tacares
+            </h1>
+            <h1
+              style={{
+                fontSize: "18px",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              {partidoObjct.cantGolesFavor}
+
+            </h1>
+
+            <h1
+              style={{
+                fontWeight: "bold",
+                fontSize: "18px",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              Equipo en Contra
+            </h1>
+            <h1
+              style={{
+                fontSize: "18px",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              {partidoObjct.cantGolesContra}
+            </h1>
+
+            <Divider
+              style={{
+                marginBottom: "5px",
+              }}
+              variant="middle"
+            />
+            <h1
+              style={{
+                fontWeight: "bold",
+                fontSize: "18px",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              Faltas a Favor
+            </h1>
+            <h1
+              style={{
+                fontSize: "18px",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              {partidoObjct.faltasAFavor}
+
+            </h1>
+            <h1
+              style={{
+                fontWeight: "bold",
+                fontSize: "18px",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              Faltas en Contra:
+            </h1>
+            <h1
+              style={{
+                fontSize: "18px",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              {partidoObjct.faltasEnContra}
+            </h1>
+          </Col>
+          <Col
+            sm="5"
+            style={{
+              font: "bold",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div className={classes.p1}>Tiempo del partido</div>
+            <br></br>
+            <Timer
+              handleTime={handleInitTimer}
+              handleEndPeriodo={handleEndPeriodo}
+              min={timeMin}
+              sec={timeSec}
+              mls={timeMls}
+              running={running}
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+                margin: "auto",
+              }}
+            />
+            <br></br>
+          </Col>
+        </Row>
+      );
+    }
+  };
+
 
   return (
     <Box
@@ -666,19 +896,6 @@ export default function ScrollableTabsButtonForce() {
         >
           <br />
           <div>
-            <Button
-              style={{
-                fontFamily: "Arial",
-                marginBottom: "15px",
-                marginTop: "15px",
-              }}
-              variant="warning"
-              size="lg"
-              onClick={finalizarEntrenamieto}
-            >
-              {" "}
-              Finalizar Partido
-            </Button>{" "}
             <Paper
               elevation={0}
               borderRadius={50}
@@ -706,210 +923,31 @@ export default function ScrollableTabsButtonForce() {
                 }}
                 variant="middle"
               />
-              <Row style={{ margin: "auto 20px" }}>
-                <Col sm="3" style={{ marginLeft: "0px" }}>
-                  <h1
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "18px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    Partido Contra:<br></br>
-                  </h1>
-                  <h1
-                    style={{
-                      fontSize: "18px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    {partidoObjct.descripcion}
-                  </h1>
-                  <h1
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "18px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    Temporada
-                  </h1>
-                  <h1
-                    style={{
-                      fontSize: "18px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    1
-                  </h1>
-                  <h1
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "18px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    Periodo Actual
-                  </h1>
-                  <h1
-                    style={{
-                      fontSize: "18px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    {periodo}
-                  </h1>
-                </Col>
-                <Col sm="4" style={{ marginRight: "0px" }}>
-                  <h1
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "18px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    UCR Tacares
-                  </h1>
-                  <h1
-                    style={{
-                      fontSize: "18px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    {partidoObjct.cantGolesFavor}
-                  </h1>
-
-                  <h1
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "18px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    Equipo en Contra
-                  </h1>
-                  <h1
-                    style={{
-                      fontSize: "18px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    {partidoObjct.cantGolesContra}
-                  </h1>
-
-                  <Divider
-                    style={{
-                      marginBottom: "5px",
-                    }}
-                    variant="middle"
-                  />
-                  <h1
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "18px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    Faltas a Favor
-                  </h1>
-                  <h1
-                    style={{
-                      fontSize: "18px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    {partidoObjct.faltasAFavor}
-                  </h1>
-                  <h1
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "18px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    Faltas en Contra:
-                  </h1>
-                  <h1
-                    style={{
-                      fontSize: "18px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    {partidoObjct.faltasEnContra}
-                  </h1>
-                </Col>
-                <Col
-                  sm="5"
-                  style={{
-                    font: "bold",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <div className={classes.p1}>Tiempo del partido</div>
-                  <br></br>
-                  <Timer
-                    handleTime={handleInitTimer}
-                    handleEndPeriodo={handleEndPeriodo}
-                    min={timeMin}
-                    sec={timeSec}
-                    mls={timeMls}
-                    running={running}
-                    style={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                      margin: "auto",
-                    }}
-                  />
-                  <br></br>
-                </Col>
-              </Row>
+              {getProgress()}
             </Paper>
           </div>
           <br />
-          <Button
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              textAlign: "center",
-              margin: "auto",
-            }}
-            variant="warning"
-            size="lg"
-            onClick={finalizarEntrenamieto}
-          >
-            {" "}
-            Finalizar Partido
-          </Button>{" "}
+          <Row style={{
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            margin: "auto",
+          }}>
+            <Button
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+                margin: "auto",
+              }}
+              variant="warning"
+              size="lg"
+              onClick={finalizarPartido}
+            >
+              {" "}
+              Finalizar Partido
+            </Button>{" "}
+          </Row>
           <br />
           <Row
             style={{
@@ -953,7 +991,7 @@ export default function ScrollableTabsButtonForce() {
                     <Button id="btnMenuTitular">
                       {""}
                       {selectIndexTitular === -1 ||
-                      selectIndexTitular === jugadoresTitulares.length
+                        selectIndexTitular === jugadoresTitulares.length
                         ? "Seleccionar Jugador"
                         : jugadoresTitulares[selectIndexTitular].nombre}
                     </Button>
@@ -1052,7 +1090,7 @@ export default function ScrollableTabsButtonForce() {
                     <Button id="btnAsistente">
                       {""}
                       {selectIndexAsistente === -1 ||
-                      selectIndexAsistente === jugadoresTitulares.length
+                        selectIndexAsistente === jugadoresTitulares.length
                         ? "Seleccionar Jugador"
                         : jugadoresTitulares[selectIndexAsistente].nombre}
                     </Button>
@@ -1196,7 +1234,7 @@ export default function ScrollableTabsButtonForce() {
                     <Button id="btnMenuEntra">
                       {""}
                       {selectIndexEntra === -1 ||
-                      selectIndexEntra === jugadoresSustitutos.length
+                        selectIndexEntra === jugadoresSustitutos.length
                         ? "Seleccionar Jugador"
                         : jugadoresSustitutos[selectIndexEntra].nombre}
                     </Button>
@@ -1252,7 +1290,7 @@ export default function ScrollableTabsButtonForce() {
                     <Button id="btnMenuSale">
                       {""}
                       {selectIndexSustituto === -1 ||
-                      selectIndexSustituto === jugadoresTitulares.length
+                        selectIndexSustituto === jugadoresTitulares.length
                         ? "Seleccionar Jugador"
                         : jugadoresTitulares[selectIndexSustituto].nombre}
                     </Button>

@@ -88,7 +88,7 @@ const MenuJugador = () => {
 
   function axiosConsulta() {
     axios
-      .get(`http://localhost:3000/api/jugadores/`)
+      .get(`https://backend-sideo.herokuapp.com/api/jugadores/`)
       .then((resultado) => {
         const jugadoresList = resultado.data.data;
 
@@ -96,7 +96,7 @@ const MenuJugador = () => {
         //console.log(jugadores[0].nombre);
         //console.log("variablex: " + listaJugadores);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   const [jugadores, setJugadores] = React.useState([]);

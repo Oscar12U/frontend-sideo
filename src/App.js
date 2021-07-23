@@ -16,12 +16,10 @@ function App() {
   const token = sessionStorage.getItem("token");
 
   if (!token) {
-    console.log("IF 1 ", token);
     return <IniciarSesion />;
   }
 
   if (token) {
-    console.log("IF 2 ", token);
     return (
       <>
         <BrowserRouter>

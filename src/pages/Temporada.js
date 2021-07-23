@@ -37,8 +37,8 @@ import * as moment from "moment";
 
 export default function Temporada() {
   useEffect(() => {
-    ultimoEntrenamiento();
-    ultimaTemporada();
+    // ultimoEntrenamiento();
+    // ultimaTemporada();
     getTemporadas();
   }, []);
 
@@ -253,15 +253,18 @@ export default function Temporada() {
           listaTemporadas[indexTemporada]
         );
       }, 1000);
+      setTimeout(() => {
+        getTemporadas();
+      }, 2000);
 
       setDescripcionEntrenamiento("");
       setNombreEntrenamiento("");
       setOpenEntrenamiento(false);
       setIncorrecto("");
       setIncorrecto2("");
-      setTimeout(() => {
-        ultimoEntrenamiento();
-      }, 1000);
+      // setTimeout(() => {
+      //   ultimoEntrenamiento();
+      // }, 1000);
     } else {
       if (nombreEntrenamiento.length >= 1) {
         setIncorrecto("");
@@ -287,6 +290,9 @@ export default function Temporada() {
       setTimeout(() => {
         gestorPartido.agregarPartidoTemporada(listaTemporadas[indexTemporada]);
       }, 1000);
+      setTimeout(() => {
+        getTemporadas();
+      }, 2000);
       setFechaPartido(moment().format("YYYY-MM-DD"));
       setDescripcionPartido("");
       setNombrePartido("");
@@ -326,18 +332,18 @@ export default function Temporada() {
 
   function ultimoEntrenamiento() {
     axios
-      .get(`http://localhost:3000/api/ultimoEntrenamiento`)
+      .get(`https://backend-sideo.herokuapp.com/api/ultimoEntrenamiento`)
       .then((resultado) => {
         const entrenamiento1 = resultado.data.data[0];
         //console.log("entrenamiento adentro: ", entrenamiento1);
         setEntrenamientoUltimo(entrenamiento1);
         //console.log("entrenamiento ultimo: ", entrenamientoUltimo);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   function ultimaTemporada() {
-    axios.get(`http://localhost:3000/api/ultimaTemporada`).then((resultado) => {
+    axios.get(`https://backend-sideo.herokuapp.com/api/ultimaTemporada`).then((resultado) => {
       const temporadaUltima = resultado.data.data[0];
       const nombreTemp = resultado.data.data[0].nombre;
       setNombreTemporada(nombreTemp);
@@ -347,7 +353,7 @@ export default function Temporada() {
 
   function getTemporadas() {
     axios
-      .get(`http://localhost:3000/api/getAllTemporadas`)
+      .get(`https://backend-sideo.herokuapp.com/api/getAllTemporadas`)
       .then((resultado) => {
         const listTemporadas = resultado.data.data;
         //console.log("PRUEBA LISTA ", listTemporadas.length);
@@ -365,51 +371,51 @@ export default function Temporada() {
     //console.log("ultimo entrenamiento", ultimoEntrenamiento);
     //console.log("ultimo partido", ultimoPartido);
     axios
-      .get(`http://localhost:3000/api/getEntrenamiento/${ultimoEntrenamiento}`)
+      .get(`https://backend-sideo.herokuapp.com/api/getEntrenamiento/${ultimoEntrenamiento}`)
       .then((resultado) => {
         const actividades1 = resultado.data.data;
 
         setUltimoEntrenamientoTempo(actividades1);
       })
-      .catch((err) => {});
+      .catch((err) => { });
 
     axios
-      .get(`http://localhost:3000/api/getPartido/${ultimoPartido}`)
+      .get(`https://backend-sideo.herokuapp.com/api/getPartido/${ultimoPartido}`)
       .then((resultado) => {
         const actividades1 = resultado.data.data;
 
         setUltimoPartidoTempo(actividades1);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   function actulizarUltimos(index) {
     let ultimoEntrenamiento =
       listaTemporadas[index].entrenamientos[
-        listaTemporadas[index].entrenamientos.length - 1
+      listaTemporadas[index].entrenamientos.length - 1
       ];
     let ultimoPartido =
       listaTemporadas[index].partidos[
-        listaTemporadas[index].partidos.length - 1
+      listaTemporadas[index].partidos.length - 1
       ];
 
     axios
-      .get(`http://localhost:3000/api/getEntrenamiento/${ultimoEntrenamiento}`)
+      .get(`https://backend-sideo.herokuapp.com/api/getEntrenamiento/${ultimoEntrenamiento}`)
       .then((resultado) => {
         const actividades1 = resultado.data.data;
 
         setUltimoEntrenamientoTempo(actividades1);
       })
-      .catch((err) => {});
+      .catch((err) => { });
 
     axios
-      .get(`http://localhost:3000/api/getPartido/${ultimoPartido}`)
+      .get(`https://backend-sideo.herokuapp.com/api/getPartido/${ultimoPartido}`)
       .then((resultado) => {
         const actividades1 = resultado.data.data;
 
         setUltimoPartidoTempo(actividades1);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   let gestorEntrenamiento = new GestorEntrenamiento();
@@ -482,7 +488,7 @@ export default function Temporada() {
             <Button id="btnMenuTitular">
               {""}
               {indexTemporada === -1 ||
-              indexTemporada === listaTemporadas.length
+                indexTemporada === listaTemporadas.length
                 ? "Seleccionar Temporada"
                 : listaTemporadas[indexTemporada].nombre}
             </Button>

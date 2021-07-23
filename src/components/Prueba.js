@@ -24,7 +24,7 @@
 
 //   function actualizarJugadoresBD() {
 //     axios
-//       .get(`http://localhost:3000/api/jugadores`)
+//       .get(`https://backend-sideo.herokuapp.com/api/jugadores`)
 //       .then((resultado) => {
 //         let jugadoresList = resultado.data.data;
 //         setJugadores(jugadoresList);

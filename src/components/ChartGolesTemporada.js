@@ -45,7 +45,7 @@ const ChartGolesTemporada = (props) => {
     partidos.map((partido, index) => {
       //console.log("partido especifico: ", partido);
       axios
-        .get(`http://localhost:3000/api/getPartido/${partido}`)
+        .get(`https://backend-sideo.herokuapp.com/api/getPartido/${partido}`)
         .then((resultado) => {
           let partido = resultado.data.data;
           let golID = resultado.data.data.goles;
@@ -74,7 +74,7 @@ const ChartGolesTemporada = (props) => {
           setPartidos((partidos) => [...partidos, partidoNuevo]);
           golesEspecificos(golID);
         })
-        .catch((err) => {});
+        .catch((err) => { });
     });
   }
 
@@ -85,7 +85,7 @@ const ChartGolesTemporada = (props) => {
     entrenamientos.map((entrenamiento, index) => {
       //console.log("partido especifico: ", partido);
       axios
-        .get(`http://localhost:3000/api/entrenamientos/${entrenamiento}`)
+        .get(`https://backend-sideo.herokuapp.com/api/entrenamientos/${entrenamiento}`)
         .then((resultado) => {
           let entrenamiento = resultado.data.data;
           //console.log("entrenamientios ", entrenamiento);
@@ -107,20 +107,20 @@ const ChartGolesTemporada = (props) => {
             entrenamientoNuevo,
           ]);
         })
-        .catch((err) => {});
+        .catch((err) => { });
     });
   }
 
   function obtenerAusencias(entrenamientos) {
     //console.log("entrenamientosi: ", entrenamiento._id);
     axios
-      .get(`http://localhost:3000/api/ausencia`)
+      .get(`https://backend-sideo.herokuapp.com/api/ausencia`)
       .then((resultado) => {
         let ausencia = resultado.data.data;
         //setAusenciasJugador(ausencia);
         obtenerJugadorAusente(ausencia, entrenamientos);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   function obtenerJugadorAusente(ausencia, entrenamientos) {
@@ -157,7 +157,7 @@ const ChartGolesTemporada = (props) => {
     results.map((result, index) => {
       if (result.entrenamiento === entrenamientos._id) {
         axios
-          .get(`http://localhost:3000/api/jugador/${result.jugador}`)
+          .get(`https://backend-sideo.herokuapp.com/api/jugador/${result.jugador}`)
           .then((resultado) => {
             let jugador = resultado.data.data;
             //console.log("algun gol: ", gol);
@@ -172,7 +172,7 @@ const ChartGolesTemporada = (props) => {
               jugadorAusente,
             ]);
           })
-          .catch((err) => {});
+          .catch((err) => { });
       }
     });
   }
@@ -181,7 +181,7 @@ const ChartGolesTemporada = (props) => {
     //console.log("muchos goles: ", golesID);
     golesID.map((golID, index) => {
       axios
-        .get(`http://localhost:3000/api/golEspecifico/${golID}`)
+        .get(`https://backend-sideo.herokuapp.com/api/golEspecifico/${golID}`)
         .then((resultado) => {
           let gol = resultado.data.data;
           //console.log("algun gol: ", gol);
@@ -189,7 +189,7 @@ const ChartGolesTemporada = (props) => {
           obtenerJugador(gol.anotador, gol);
           setGolesID((goles) => [...goles, golListo]);
         })
-        .catch((err) => {});
+        .catch((err) => { });
     });
   }
 
@@ -203,7 +203,7 @@ const ChartGolesTemporada = (props) => {
 
   function obtenerJugador(jugadorID, gol) {
     axios
-      .get(`http://localhost:3000/api/jugador/${jugadorID}`)
+      .get(`https://backend-sideo.herokuapp.com/api/jugador/${jugadorID}`)
       .then((resultado) => {
         let jugador = resultado.data.data;
         //console.log("algun gol: ", gol);
@@ -214,7 +214,7 @@ const ChartGolesTemporada = (props) => {
 
         setJugadorGol((jugadorGol) => [...jugadorGol, anotadorNuevo]);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   function conversionGolesTiempo() {
@@ -232,18 +232,18 @@ const ChartGolesTemporada = (props) => {
 
   function actualizarJugadoresBD() {
     axios
-      .get(`http://localhost:3000/api/jugadores`)
+      .get(`https://backend-sideo.herokuapp.com/api/jugadores`)
       .then((resultado) => {
         let jugadoresList = resultado.data.data;
         let prueba = getList(resultado.data.data);
         let minJugadores = getListMin(resultado.data.data);
         setJugadoresMinutosJugados(minJugadores);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   function getListEntrenamientos() {
-    axios.get(`http://localhost:3000/api/entrenamientos/`).then((resultado) => {
+    axios.get(`https://backend-sideo.herokuapp.com/api/entrenamientos/`).then((resultado) => {
       let listEntrenamientos = getEntrenamientos(resultado.data.data);
       setEntrenamientos(listEntrenamientos);
     });

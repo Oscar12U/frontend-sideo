@@ -1,69 +1,69 @@
 import axios from "axios";
 
 export default class GestorEntrenamiento {
-  constructor() {}
+  constructor() { }
   agregarJugadorEntrenamiento(nombreJugador, entrenamiento1) {
     axios
-      .post(`http://localhost:3000/api/agregarJugadorPartido`, {
+      .post(`https://backend-sideo.herokuapp.com/api/agregarJugadorPartido`, {
         entrenamiento: entrenamiento1,
         jugador: nombreJugador,
       })
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   entrenandoJugador(jugadorID) {
     //console.log("asdasd", jugadorID);
     axios
-      .post(`http://localhost:3000/api/entrenandoJugador`, {
+      .post(`https://backend-sideo.herokuapp.com/api/entrenandoJugador`, {
         jugador: jugadorID,
       })
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   enviarLesionJugador(descripcion1, jugador1) {
     axios
-      .post(`http://localhost:3000/api/newLesion`, {
+      .post(`https://backend-sideo.herokuapp.com/api/newLesion`, {
         descripcion: descripcion1,
         jugador: jugador1,
       })
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   enviarComentario(entrenamiento1, comentario1) {
     axios
-      .post(`http://localhost:3000/api/agregarComentario`, {
+      .post(`https://backend-sideo.herokuapp.com/api/agregarComentario`, {
         entrenamiento: entrenamiento1,
         comentario: comentario1,
       })
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   finalizarEntrenamiento(entrenamiento1) {
     axios
-      .post(`http://localhost:3000/api/finalizarEntrentramiento`, {
+      .post(`https://backend-sideo.herokuapp.com/api/finalizarEntrentramiento`, {
         entrenamiento: entrenamiento1,
       })
       .then((resultado) => {
         //console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   crearActividad(nombre1, descripcion1, tiempo1) {
     axios
-      .post(`http://localhost:3000/api/newActividad`, {
+      .post(`https://backend-sideo.herokuapp.com/api/newActividad`, {
         nombre: nombre1,
         descripcion: descripcion1,
         tiempoMinutos: tiempo1,
@@ -71,42 +71,42 @@ export default class GestorEntrenamiento {
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   agregarActividadNueva(entrenamiento1, actividad1) {
     axios
-      .post(`http://localhost:3000/api/agregarActividadEntrenamiento`, {
+      .post(`https://backend-sideo.herokuapp.com/api/agregarActividadEntrenamiento`, {
         entrenamiento: entrenamiento1,
         actividad: actividad1,
       })
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   crearNuevoEntrenamiento(nombre1, descripcion1) {
     axios
-      .post(`http://localhost:3000/api/newEntrenamiento`, {
+      .post(`https://backend-sideo.herokuapp.com/api/newEntrenamiento`, {
         nombre: nombre1,
         descripcion: descripcion1,
       })
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   agregarEntrenamientoTemporada(temporadaID) {
     axios
-      .post(`http://localhost:3000/api/agregarEntrenamientoTempo`, {
+      .post(`https://backend-sideo.herokuapp.com/api/agregarEntrenamientoTempo`, {
         temporada: temporadaID,
       })
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   crearNuevoComentarioActividad(
@@ -116,7 +116,7 @@ export default class GestorEntrenamiento {
     comentario1
   ) {
     axios
-      .post(`http://localhost:3000/api/newActividadComentario`, {
+      .post(`https://backend-sideo.herokuapp.com/api/newActividadComentario`, {
         jugador: jugador1,
         entrenamiento: entrenamiento1,
         actividad: actividad1,
@@ -125,13 +125,13 @@ export default class GestorEntrenamiento {
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   ausenciaJustificada(jugadorID, entrenamiento1) {
     //console.log("asdasd", jugadorID);
     axios
-      .post(`http://localhost:3000/api/newAusencia`, {
+      .post(`https://backend-sideo.herokuapp.com/api/newAusencia`, {
         jugador: jugadorID,
         entrenamiento: entrenamiento1,
         justificada: true,
@@ -140,13 +140,13 @@ export default class GestorEntrenamiento {
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   ausenciaInjustificada(jugadorID, entrenamiento1) {
     //console.log("asdasd", jugadorID);
     axios
-      .post(`http://localhost:3000/api/newAusencia`, {
+      .post(`https://backend-sideo.herokuapp.com/api/newAusencia`, {
         jugador: jugadorID,
         entrenamiento: entrenamiento1,
         justificada: false,
@@ -155,17 +155,17 @@ export default class GestorEntrenamiento {
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   actualizarAusenciaJugador(jugadorID) {
     axios
-      .post(`http://localhost:3000/api/ausenteJugador`, {
+      .post(`https://backend-sideo.herokuapp.com/api/ausenteJugador`, {
         jugador: jugadorID,
       })
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 }

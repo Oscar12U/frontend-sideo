@@ -108,7 +108,7 @@ const VerJugador = () => {
 
   function axiosConsulta(jugadorId) {
     axios
-      .get(`http://localhost:3000/api/jugador/${jugadorId}`)
+      .get(`https://backend-sideo.herokuapp.com/api/jugador/${jugadorId}`)
       .then((resultado) => {
         const jugador = resultado.data.data;
         setJugadores(jugador);
@@ -119,7 +119,7 @@ const VerJugador = () => {
         consultaLesiones(jugador.lesiones);
         //console.log("Lista de lesiones definitiva", lesionID);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   function consultaLesiones(lesionId) {
@@ -129,7 +129,7 @@ const VerJugador = () => {
     lesionId.map((lesion) => {
       //console.log(lesion);
       axios
-        .get(`http://localhost:3000/api/lesion/${lesion}`)
+        .get(`https://backend-sideo.herokuapp.com/api/lesion/${lesion}`)
         .then((resultado) => {
           const listLesiones = resultado.data.data;
           //setLesiones(listLesiones);
@@ -138,11 +138,11 @@ const VerJugador = () => {
           //Lesion.push(listLesiones);
           setLesiones((Lesion) => [...Lesion, listLesiones]);
         })
-        .catch((err) => {});
+        .catch((err) => { });
     });
 
     // axios
-    //     .get(`http://localhost:3000/api/lesion/${lesionId}`)
+    //     .get(`https://backend-sideo.herokuapp.com//api/lesion/${lesionId}`)
     //     .then((resultado) => {
     //         const listLesiones = resultado.data.data;
     //         setLesiones(listLesiones);

@@ -15,7 +15,7 @@ export default class GestorTemporada {
 
   crearNuevaTemporada(nombre1, descripcion1, fechaInicio1, fechaFin1) {
     axios
-      .post(`http://localhost:3000/api/newTemporada`, {
+      .post(`https://backend-sideo.herokuapp.com/api/newTemporada`, {
         nombre: nombre1,
         descripcion: descripcion1,
         fechaInicio: fechaInicio1,
@@ -24,6 +24,6 @@ export default class GestorTemporada {
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 }
