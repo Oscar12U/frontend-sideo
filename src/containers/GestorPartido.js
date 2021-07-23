@@ -13,7 +13,7 @@ export default class GestorPartido {
     this._nombrePartido = nombrePartido;
   }
 
-  agregarGolFavor(idAnotador, idAsistente, tiempoGol, periodoGol) {
+  agregarGolFavor(idAnotador, idAsistente, tiempoGol, periodoGol, asistenciaBoolean) {
     axios
       .post(`https://backend-sideo.herokuapp.com/api/newGolFavor`, {
         anotador: idAnotador,
@@ -21,6 +21,7 @@ export default class GestorPartido {
         tiempoGol: tiempoGol,
         periodoGol: periodoGol,
         nombrePartido: this.nombrePartido,
+        asistenteBool: asistenciaBoolean
       })
       .then((resultado) => {
         console.log(resultado);

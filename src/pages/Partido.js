@@ -93,9 +93,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-let timeMin = 0;
-let timeSec = 0;
-let timeMls = 0;
+
 
 
 export default function ScrollableTabsButtonForce() {
@@ -120,6 +118,10 @@ export default function ScrollableTabsButtonForce() {
   const [gestorTimersTitulares, setGestorTimersTitulares] = React.useState([]);
   const [jugadoresTitulares, setJugadoresTitulares] = React.useState([]);
   const [jugadoresSustitutos, setJugadoresSustitutos] = React.useState([]);
+
+  let timeMin = 0;
+  let timeSec = 0;
+  let timeMls = 0;
 
   useEffect(() => {
     function actualizarJugadoresBD() {
@@ -313,9 +315,11 @@ export default function ScrollableTabsButtonForce() {
   //Acciones de eventos del partido y la generación de
   //las notificaciones
   const ActionGolFavor = () => {
-    if (selectIndexTitular === -1 || selectIndexAsistente === -1) {
+
+
+    if (selectIndexTitular === -1) {
       ErrorNotify(
-        "Se debe seleccionar el jugador anotador y el asistente del gol"
+        "Se debe seleccionar el jugador anotador del gol"
       );
     } else {
       Notification.fire({
@@ -513,11 +517,20 @@ export default function ScrollableTabsButtonForce() {
   };
 
   const AddGolFavor = () => {
+
+    let asistente = null;
+    let asistenciaBoolean = false;
+    if (selectIndexAsistente !== -1) {
+      asistente = jugadoresTitulares[selectIndexAsistente].nombre;
+      asistenciaBoolean = true;
+    }
+
     gestorPartido.agregarGolFavor(
       jugadoresTitulares[selectIndexTitular].nombre,
-      jugadoresTitulares[selectIndexAsistente].nombre,
+      asistente,
       timeMin,
-      periodo
+      periodo,
+      asistenciaBoolean
     );
 
     actualizarDetallesPartidoLento();
