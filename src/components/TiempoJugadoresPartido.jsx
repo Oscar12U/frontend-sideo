@@ -37,10 +37,9 @@ class TiempoJugadoresPartido extends React.Component {
       }
     }
 
-    if (prevState.currentTimeMin !== this.state.currentTimeMin) {
+    if (prevState.currentTimeSec !== this.state.currentTimeSec) {
       this.notificarTiempo();
     }
-    
   }
 
   handleClick = () => {
@@ -56,8 +55,8 @@ class TiempoJugadoresPartido extends React.Component {
   };
 
   notificarTiempo = () => {
-    if (1 <= this.state.currentTimeMin && this.state.notificacion === false) {
-      this.handleClick();
+    if (30 <= this.state.currentTimeSec && this.state.notificacion === false) {
+      //this.handleClick();
       this.setState({ notificacion: true });
       this.props.handleNotificacion(this.props.jugador);
     }
@@ -99,29 +98,6 @@ class TiempoJugadoresPartido extends React.Component {
   render() {
     return (
       <>
-        <Snackbar
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-          open={this.state.open}
-          autoHideDuration={6000}
-          onClose={this.handleClose}
-          message={this.state.nombre}
-          action={
-            <React.Fragment>
-              <IconButton
-                size="small"
-                aria-label="close"
-                color="inherit"
-                onClick={this.handleClose}
-              >
-                <CloseIcon fontSize="small" />
-              </IconButton>
-            </React.Fragment>
-          }
-        />
-
         <div
           className={"stopwatch"}
           style={{

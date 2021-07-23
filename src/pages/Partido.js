@@ -94,7 +94,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-
+let timeMin = 0;
+let timeSec = 0;
+let timeMls = 0;
 
 export default function ScrollableTabsButtonForce() {
   const classes = useStyles();
@@ -118,10 +120,6 @@ export default function ScrollableTabsButtonForce() {
   const [gestorTimersTitulares, setGestorTimersTitulares] = React.useState([]);
   const [jugadoresTitulares, setJugadoresTitulares] = React.useState([]);
   const [jugadoresSustitutos, setJugadoresSustitutos] = React.useState([]);
-
-  let timeMin = 0;
-  let timeSec = 0;
-  let timeMls = 0;
 
   useEffect(() => {
     function actualizarJugadoresBD() {

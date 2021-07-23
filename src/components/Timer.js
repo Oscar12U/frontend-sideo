@@ -26,6 +26,7 @@ class Timer extends Component {
   }
 
   initTimerAutomatico() {
+
     if (!this.props.running) {
       this.pauseTimer();
       this.setState({ btnPlayPause: "Iniciar" });
@@ -77,6 +78,7 @@ class Timer extends Component {
   };
 
   start = () => {
+
     this.setState({ running: true });
     this.counter = setInterval(() => this.pace(), 10);
   };
