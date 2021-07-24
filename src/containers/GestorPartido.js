@@ -62,7 +62,7 @@ export default class GestorPartido {
   agregarLesion(nombreJugador, descripcion) {
     console.log(descripcion);
     axios
-      .post(`https://backend-sideo.herokuapp.com/api/newLesion`, {
+      .post(`https://backend-sideo.herokuapp.com/api/newLesionNombre`, {
         nombreJugador: nombreJugador,
         descripcion: descripcion,
       })
@@ -83,10 +83,11 @@ export default class GestorPartido {
       .catch((err) => { });
   }
 
-  agregarJugador(nombreJugador) {
+  agregarJugador(nombreJ) {
+    console.log(nombreJ)
     axios
       .post(`https://backend-sideo.herokuapp.com/api/addJugador`, {
-        nameJugador: nombreJugador,
+        nombreJugador: nombreJ,
         nombrePartido: this.nombrePartido,
       })
       .then((resultado) => {
@@ -141,6 +142,7 @@ export default class GestorPartido {
   }
 
   finalizarPartido(partidoID, arrayTiempos) {
+    console.log(arrayTiempos);
     axios
       .post(`https://backend-sideo.herokuapp.com/api/finalizarPartido`, {
         partido: partidoID,

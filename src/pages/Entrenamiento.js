@@ -51,6 +51,7 @@ import GestorEntrenamiento from "../containers/GestorEntrenamiento";
 import * as moment from "moment";
 import Stopwatch from "../components/Stopwatch";
 import { useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -153,6 +154,7 @@ export default function Entrenamiento() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const history = useHistory();
   function axiosConsulta() {
     axios
       .get(`https://backend-sideo.herokuapp.com/api/jugadores/`)
@@ -554,7 +556,8 @@ export default function Entrenamiento() {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         gestorEntrenamiento.finalizarEntrenamiento(IDEntrenamiento);
-        window.location.href = "/";
+        //window.location.href = "/";
+        history.push("/")
       }
     });
   };

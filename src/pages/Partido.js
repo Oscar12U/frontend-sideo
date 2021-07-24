@@ -37,9 +37,11 @@ import TiempoJugadoresPartido from "../components/TiempoJugadoresPartido";
 import NotificacionJugadores from "../components/NotificacionJugadores";
 import { useLocation } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { useHistory } from "react-router-dom";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
+
 
   return (
     <div
@@ -113,13 +115,14 @@ export default function ScrollableTabsButtonForce() {
   const [selectIndexSustituto, setSelectIndexSustituto] = React.useState(-1);
   const [selectIndexEntra, setSelectIndexEntra] = React.useState(-1);
   const [selectIndexAsistente, setSelectIndexAsistente] = React.useState(-1);
-  let { nombrePartido } = useLocation().state;
+  let { nombrePartido, descTemporada } = useLocation().state;
   let gestorPartido = new GestorPartido(nombrePartido);
   const [notification, setNotification] = React.useState(0);
   const [listNotificaciones, setListNotificaciones] = React.useState([]);
   const [gestorTimersTitulares, setGestorTimersTitulares] = React.useState([]);
   const [jugadoresTitulares, setJugadoresTitulares] = React.useState([]);
   const [jugadoresSustitutos, setJugadoresSustitutos] = React.useState([]);
+  const history = useHistory();
 
   useEffect(() => {
     function actualizarJugadoresBD() {
@@ -638,6 +641,13 @@ export default function ScrollableTabsButtonForce() {
     return arrayTiempos;
   };
 
+  function actualizarFinalizar() {
+    //setTimeout(() => {
+    //window.location.href = "/"
+
+    // }, 2000);
+  }
+
   const finalizarPartido = () => {
     Swal.fire({
       title: "¿Seguro de terminar el partido actual?",
@@ -648,7 +658,8 @@ export default function ScrollableTabsButtonForce() {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         gestorPartido.finalizarPartido(partidoObjct._id, getTiemposJugadores());
-        window.location.href = "/";
+        history.push("/");
+        actualizarFinalizar();
       }
     });
   };
@@ -712,7 +723,7 @@ export default function ScrollableTabsButtonForce() {
                 textAlign: "center",
               }}
             >
-              1
+              {descTemporada}
             </h1>
             <h1
               style={{
@@ -944,6 +955,9 @@ export default function ScrollableTabsButtonForce() {
             textAlign: "center",
             margin: "auto",
           }}>
+
+
+
             <Button
               style={{
                 justifyContent: "center",
@@ -954,10 +968,14 @@ export default function ScrollableTabsButtonForce() {
               variant="warning"
               size="lg"
               onClick={finalizarPartido}
+
+
             >
               {" "}
               Finalizar Partido
             </Button>{" "}
+
+
           </Row>
           <br />
           <Row
@@ -1431,7 +1449,7 @@ export default function ScrollableTabsButtonForce() {
         </Container>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <JugadoresJuego />
+        <JugadoresJuego partido={nombrePartido} />
       </TabPanel>
       <TabPanel value={value} index={2}>
         <Container

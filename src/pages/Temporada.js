@@ -577,7 +577,7 @@ export default function Temporada() {
             <Link
               to={{
                 pathname: `/Partido`,
-                state: { nombrePartido: ultimoPartidoTempo.nombre },
+                state: { nombrePartido: ultimoPartidoTempo.nombre, descTemporada: entrenamientoUltimo.nombre },
               }}
               style={{
                 alignItems: "center",

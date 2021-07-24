@@ -10,10 +10,11 @@ import CardContent from "@material-ui/core/CardContent";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import Typography from "@material-ui/core/Typography";
 
-const JugadoresJuego = () => {
+const JugadoresJuego = ({ partido }) => {
   const [jugadoresTitulares, setJugadoresTitulares] = React.useState([]);
   const [jugadoresSustitutos, setJugadoresSustitutos] = React.useState([]);
   const [jugadoresFuera, setJugadoresFuera] = React.useState([]);
+  const [nombrePartido, setNombrePartido] = React.useState(partido);
 
   useEffect(() => {
     actualizarJugadoresBD();
@@ -72,7 +73,7 @@ const JugadoresJuego = () => {
     axios
       .post(`https://backend-sideo.herokuapp.com/api/addJugador`, {
         nombreJugador: jugador,
-        nombrePartido: "Partido 1",
+        nombrePartido: nombrePartido,
         titular: true,
       })
       .then((resultado) => { })
@@ -85,7 +86,7 @@ const JugadoresJuego = () => {
     axios
       .post(`https://backend-sideo.herokuapp.com/api/addJugador`, {
         nombreJugador: newJugador,
-        nombrePartido: "Partido 1",
+        nombrePartido: nombrePartido,
         titular: false,
       })
       .then((resultado) => { })
@@ -109,7 +110,7 @@ const JugadoresJuego = () => {
     axios
       .post(`https://backend-sideo.herokuapp.com/api/removeJugadorPartido`, {
         nombreJugador: newJugador,
-        nombrePartido: "Partido 1",
+        nombrePartido: nombrePartido,
       })
       .then((resultado) => { })
       .catch((err) => { });
