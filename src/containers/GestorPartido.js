@@ -13,12 +13,12 @@ export default class GestorPartido {
     this._nombrePartido = nombrePartido;
   }
 
-  agregarGolFavor(idAnotador, idAsistente, tiempoGol, periodoGol) {
+  agregarGolFavor(idAnotador, idAsistente, tiempo, periodoGol) {
     axios
       .post(`http://localhost:3000/api/newGolFavor`, {
         anotador: idAnotador,
         asistente: idAsistente,
-        tiempoGol: tiempoGol,
+        tiempoGol: tiempo,
         periodoGol: periodoGol,
         nombrePartido: this.nombrePartido,
       })
@@ -33,9 +33,7 @@ export default class GestorPartido {
       .post(`http://localhost:3000/api/newGolContra`, {
         nombrePartido: this.nombrePartido,
       })
-      .then((resultado) => {
-        console.log(resultado);
-      })
+      .then((resultado) => {})
       .catch((err) => {});
   }
 
@@ -45,7 +43,9 @@ export default class GestorPartido {
         nombrePartido: this.nombrePartido,
         nombreJugador: nombreJugador,
       })
-      .then((resultado) => {})
+      .then((req, res) => {
+        // res.send({ data: res.data });
+      })
       .catch((err) => {});
   }
 
@@ -139,10 +139,11 @@ export default class GestorPartido {
       .catch((err) => {});
   }
 
-  finalizarPartido(partidoID) {
+  finalizarPartido(partidoID, arrayTiempos) {
     axios
       .post(`http://localhost:3000/api/finalizarPartido`, {
         partido: partidoID,
+        tiempos: arrayTiempos,
       })
       .then((resultado) => {
         //console.log(resultado);
