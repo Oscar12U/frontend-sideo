@@ -301,7 +301,7 @@ const ChartGolesTemporada = (props) => {
           marginBottom: "15px",
         }}
       >
-        Graficos De Partidos:
+        Gráficos De Partidos:
       </Typography>
       <Paper>
         <Chart data={golesID}>
@@ -377,7 +377,7 @@ const ChartGolesTemporada = (props) => {
           marginBottom: "15px",
         }}
       >
-        Graficos De Entrenamientos:
+        Gráficos De Entrenamientos:
       </Typography>
       <br></br>
       <Paper>

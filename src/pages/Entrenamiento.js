@@ -684,7 +684,7 @@ export default function Entrenamiento() {
                 </div>
                 <br></br>
                 <div className={classes.p2}>
-                  Descripcion:<br></br> {entrenamiento.descripcion}
+                  Descripción:<br></br> {entrenamiento.descripcion}
                 </div>
                 <div className={classes.p3}>
                   Fecha:<br></br>{" "}
@@ -1108,14 +1108,14 @@ export default function Entrenamiento() {
                         color: "#FFFFFF",
                       }}
                     >
-                      Añadir Lesion a Jugador
+                      Añadir Lesión a Jugador
                     </div>
                     <Button
                       variant="primary"
                       size="lg"
                       onClick={handleClickOpen}
                     >
-                      Lesion
+                      Lesión
                     </Button>{" "}
                     <Dialog
                       open={open}
@@ -1132,7 +1132,7 @@ export default function Entrenamiento() {
                           margin: "auto",
                         }}
                       >
-                        {"Lesion Nueva"}
+                        {"Lesión Nueva"}
                       </DialogTitle>
                       <DialogContent
                         style={{
@@ -1197,7 +1197,7 @@ export default function Entrenamiento() {
                           autoFocus
                           margin="dense"
                           id="name"
-                          label="Descripcion de la lesion"
+                          label="Descripción de la lesión"
                           type="email"
                           fullWidth
                           helperText={incorrecto}

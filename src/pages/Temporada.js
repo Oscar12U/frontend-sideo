@@ -558,7 +558,7 @@ export default function Temporada() {
               <ListItemText
                 className={classes.txt}
                 inset
-                primary="Estadisticas de Temporada"
+                primary="Estadísticas de Temporada"
               />
             </ListItem>
           </Link>
@@ -676,7 +676,7 @@ export default function Temporada() {
               autoFocus
               margin="dense"
               id="name"
-              label="Descripcion de la Actividad"
+              label="Descripción de la Actividad"
               type="email"
               fullWidth
               helperText={incorrecto2}
@@ -758,7 +758,7 @@ export default function Temporada() {
               autoFocus
               margin="dense"
               id="name"
-              label="Descripcion del Entrenamiento"
+              label="Descripción del Entrenamiento"
               type="email"
               fullWidth
               helperText={incorrecto2}
@@ -830,7 +830,7 @@ export default function Temporada() {
               autoFocus
               margin="dense"
               id="name"
-              label="Descripcion del Partido"
+              label="Descripción del Partido"
               type="email"
               fullWidth
               helperText={incorrecto2}

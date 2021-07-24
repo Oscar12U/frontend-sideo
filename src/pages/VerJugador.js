@@ -220,7 +220,7 @@ const VerJugador = () => {
             variant="h6"
             fontFamily="Aclonica, sans-serif"
           >
-            Ha continuacion se mostrarán los datos del jugador
+            A continuación se mostrarán los datos del jugador
           </Typography>
           <br />
         </Row>
@@ -276,6 +276,7 @@ const VerJugador = () => {
         <Row className={classes2.r1}>
           <div>Lesiones: </div>
         </Row>
+
         {/*  */}
         <Row className={classes2.r1}>
           <TableContainer component={Paper}>
@@ -283,7 +284,7 @@ const VerJugador = () => {
               <TableHead>
                 <TableRow>
                   <StyledTableCell>Fecha</StyledTableCell>
-                  <StyledTableCell>Descripcion</StyledTableCell>
+                  <StyledTableCell>Descripción</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

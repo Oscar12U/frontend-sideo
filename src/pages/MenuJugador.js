@@ -164,6 +164,7 @@ const MenuJugador = () => {
   const bull = <span className={classes.bullet}>•</span>;
   const classes2 = useStyles2();
   let gestorJugador = new GestorJugador();
+
   return (
     <Box sx={{ pb: 7 }}>
       <TopMenuBar></TopMenuBar>
@@ -404,7 +405,7 @@ const MenuJugador = () => {
         Volviendo a la pagina principal...
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Bienvenido A la Seccion De Jugadores
+        Bienvenido a la Sección de Jugadores
       </TabPanel>
     </Box>
   );

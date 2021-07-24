@@ -244,7 +244,7 @@ const TemporadaInit = () => {
               autoFocus
               margin="dense"
               id="name"
-              label="Descripcion de la temporada"
+              label="Descripción de la temporada"
               type="email"
               fullWidth
               helperText={incorrecto2}
