@@ -55,8 +55,7 @@ class TiempoJugadoresPartido extends React.Component {
   };
 
   notificarTiempo = () => {
-    if (30 <= this.state.currentTimeSec && this.state.notificacion === false) {
-      //this.handleClick();
+    if (7 <= this.state.currentTimeMin && this.state.notificacion === false) {
       this.setState({ notificacion: true });
       this.props.handleNotificacion(this.props.jugador);
     }
