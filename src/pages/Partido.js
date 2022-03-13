@@ -42,7 +42,6 @@ import { useHistory } from "react-router-dom";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
-
   return (
     <div
       role="tabpanel"
@@ -95,7 +94,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 let timeMin = 0;
 let timeSec = 0;
 let timeMls = 0;
@@ -106,7 +104,6 @@ export default function ScrollableTabsButtonForce() {
   const [changeTab, setChangeTab] = React.useState(false);
   const [cambio, setCambio] = React.useState(false);
   const [notifyFaltas, setNotifyFaltas] = React.useState(false);
-  const [iniciarTiempoJugador, setIniciarTiempoJugador] = React.useState(false);
   const [actualizarDetalles, setActualizarDetalles] = React.useState(false);
   const [running, setRunning] = React.useState(false);
   const [periodo, setPeriodo] = React.useState(1);
@@ -147,7 +144,7 @@ export default function ScrollableTabsButtonForce() {
           setJugadoresTitulares(listEnJuego);
           setJugadoresSustitutos(listFueraJuego);
         })
-        .catch((err) => { });
+        .catch((err) => {});
     }
 
     actualizarJugadoresBD();
@@ -173,7 +170,7 @@ export default function ScrollableTabsButtonForce() {
                 return gestorStored.nombre === element.nombre;
               });
             } else {
-              gestorTimer = new GestorJugadorTimer(element.nombre, 0, 0, 0);
+              gestorTimer = new GestorJugadorTimer(element.nombre);
             }
 
             listGestoresTimers.push(gestorTimer);
@@ -181,7 +178,7 @@ export default function ScrollableTabsButtonForce() {
 
           setGestorTimersTitulares(listGestoresTimers);
         })
-        .catch((err) => { });
+        .catch((err) => {});
     }
 
     actualizarGestores();
@@ -199,13 +196,13 @@ export default function ScrollableTabsButtonForce() {
             setPartidoObjct(resultado.data.data);
           }, 1000);
         })
-        .catch((err) => { });
+        .catch((err) => {});
     }
 
     obtenerDetallesPartido();
   }, [gestorPartido._nombrePartido, actualizarDetalles]);
 
-  useEffect(() => { }, [cambio]);
+  useEffect(() => {}, [cambio]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -316,12 +313,8 @@ export default function ScrollableTabsButtonForce() {
   //Acciones de eventos del partido y la generación de
   //las notificaciones
   const ActionGolFavor = () => {
-
-
     if (selectIndexTitular === -1) {
-      ErrorNotify(
-        "Se debe seleccionar el jugador anotador del gol"
-      );
+      ErrorNotify("Se debe seleccionar el jugador anotador del gol");
     } else {
       Notification.fire({
         icon: "success",
@@ -479,25 +472,21 @@ export default function ScrollableTabsButtonForce() {
 
     gestorPartido.cambiarJugador(jugadorEntra.nombre, jugadorSale.nombre);
 
-    setJugadoresSustitutos(sustitutosNew);
-    setJugadoresTitulares(titularesNew);
-    setSelectIndexEntra(-1);
-    setSelectIndexSustituto(-1);
-
     if (running) {
-      gestorTimersTitulares
-        .find((element) => element.nombre === jugadorSale.nombre)
-        .stop();
-      gestorTimersTitulares.find(
-        (element) => element.nombre === jugadorSale.nombre
-      ).running = false;
+      // gestorTimersTitulares
+      //   .find((element) => element.nombre === jugadorSale.nombre)
+      //   .stop();
+      // gestorTimersTitulares.find(
+      //   (element) => element.nombre === jugadorSale.nombre
+      // ).running = false;
+      detenerTiemposCambio(jugadorSale.nombre);
+      iniciarTiemposCambio(jugadorEntra.nombre);
 
-      gestorTimersTitulares
-        .find((element) => element.nombre === jugadorEntra.nombre)
-        .start();
-      gestorTimersTitulares.find(
-        (element) => element.nombre === jugadorEntra.nombre
-      ).running = true;
+      setJugadoresSustitutos(sustitutosNew);
+      setJugadoresTitulares(titularesNew);
+      setSelectIndexEntra(-1);
+      setSelectIndexSustituto(-1);
+      setGestorTimersTitulares(sortByRunningStateTimers());
       setCambio(!cambio);
     }
   };
@@ -509,6 +498,38 @@ export default function ScrollableTabsButtonForce() {
     return listJugadores;
   };
 
+  const detenerTiemposCambio = (nombreJugadorSale) => {
+    gestorTimersTitulares.map((gestor) => {
+      if (gestor.nombre === nombreJugadorSale) {
+        gestor.stop();
+        gestor.sumTimePlayed();
+        gestor.running = false;
+        gestor.reset();
+      }
+    });
+  };
+
+  const iniciarTiemposCambio = (nombreJugadorEntra) => {
+    gestorTimersTitulares.map((gestor) => {
+      if (gestor.nombre === nombreJugadorEntra) {
+        gestor.start();
+        gestor.running = true;
+      }
+    });
+  };
+
+  const sortByRunningStateTimers = () => {
+    let listGestores = gestorTimersTitulares;
+    //listGestores.splice(indexJugador, 1, gestorTitular);
+    //console.log(pos);
+    listGestores.sort(function (jugadorA, jugadorB) {
+      if (!jugadorA.running && jugadorB.running) return 1;
+      if (jugadorA.running && !jugadorB.running) return -1;
+      return 0;
+    });
+    return listGestores;
+  };
+
   const actualizarListaCambioRemove = (lista, jugadorRemove) => {
     let listJugadores = lista;
     let pos = listJugadores.indexOf(jugadorRemove);
@@ -518,7 +539,6 @@ export default function ScrollableTabsButtonForce() {
   };
 
   const AddGolFavor = () => {
-
     let asistente = null;
     let asistenciaBoolean = false;
     if (selectIndexAsistente !== -1) {
@@ -632,9 +652,18 @@ export default function ScrollableTabsButtonForce() {
     gestorTimersTitulares.map((gestor) => {
       gestor.stop();
       gestor.running = false;
+
+      let minPlayed = 0;
+      //Jugador que nunca se cambio
+      if (gestor.minPlayed === 0) {
+        minPlayed = gestor.min;
+      } else {
+        //Jugador que fue cambiado al menos una ves
+        minPlayed = gestor.minPlayed + gestor.min;
+      }
       const objTiempo = {
         nombreJugador: gestor.nombre,
-        tiempoMin: gestor.sec,
+        tiempoMin: minPlayed,
       };
       arrayTiempos.push(objTiempo);
     });
@@ -644,7 +673,6 @@ export default function ScrollableTabsButtonForce() {
   function actualizarFinalizar() {
     //setTimeout(() => {
     //window.location.href = "/"
-
     // }, 2000);
   }
 
@@ -663,7 +691,6 @@ export default function ScrollableTabsButtonForce() {
       }
     });
   };
-
 
   const getProgress = () => {
     if (partidoObjct === null) {
@@ -768,7 +795,6 @@ export default function ScrollableTabsButtonForce() {
               }}
             >
               {partidoObjct.cantGolesFavor}
-
             </h1>
 
             <h1
@@ -819,7 +845,6 @@ export default function ScrollableTabsButtonForce() {
               }}
             >
               {partidoObjct.faltasAFavor}
-
             </h1>
             <h1
               style={{
@@ -873,7 +898,6 @@ export default function ScrollableTabsButtonForce() {
       );
     }
   };
-
 
   return (
     <Box
@@ -949,15 +973,14 @@ export default function ScrollableTabsButtonForce() {
             </Paper>
           </div>
           <br />
-          <Row style={{
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-            margin: "auto",
-          }}>
-
-
-
+          <Row
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              margin: "auto",
+            }}
+          >
             <Button
               style={{
                 justifyContent: "center",
@@ -968,14 +991,10 @@ export default function ScrollableTabsButtonForce() {
               variant="warning"
               size="lg"
               onClick={finalizarPartido}
-
-
             >
               {" "}
               Finalizar Partido
             </Button>{" "}
-
-
           </Row>
           <br />
           <Row
@@ -1020,7 +1039,7 @@ export default function ScrollableTabsButtonForce() {
                     <Button id="btnMenuTitular">
                       {""}
                       {selectIndexTitular === -1 ||
-                        selectIndexTitular === jugadoresTitulares.length
+                      selectIndexTitular === jugadoresTitulares.length
                         ? "Seleccionar Jugador"
                         : jugadoresTitulares[selectIndexTitular].nombre}
                     </Button>
@@ -1119,7 +1138,7 @@ export default function ScrollableTabsButtonForce() {
                     <Button id="btnAsistente">
                       {""}
                       {selectIndexAsistente === -1 ||
-                        selectIndexAsistente === jugadoresTitulares.length
+                      selectIndexAsistente === jugadoresTitulares.length
                         ? "Seleccionar Jugador"
                         : jugadoresTitulares[selectIndexAsistente].nombre}
                     </Button>
@@ -1263,7 +1282,7 @@ export default function ScrollableTabsButtonForce() {
                     <Button id="btnMenuEntra">
                       {""}
                       {selectIndexEntra === -1 ||
-                        selectIndexEntra === jugadoresSustitutos.length
+                      selectIndexEntra === jugadoresSustitutos.length
                         ? "Seleccionar Jugador"
                         : jugadoresSustitutos[selectIndexEntra].nombre}
                     </Button>
@@ -1319,7 +1338,7 @@ export default function ScrollableTabsButtonForce() {
                     <Button id="btnMenuSale">
                       {""}
                       {selectIndexSustituto === -1 ||
-                        selectIndexSustituto === jugadoresTitulares.length
+                      selectIndexSustituto === jugadoresTitulares.length
                         ? "Seleccionar Jugador"
                         : jugadoresTitulares[selectIndexSustituto].nombre}
                     </Button>
@@ -1439,6 +1458,9 @@ export default function ScrollableTabsButtonForce() {
                       min={jugador.min}
                       sec={jugador.sec}
                       mls={jugador.mls}
+                      minPlayed={jugador.minPlayed}
+                      secPlayed={jugador.secPlayed}
+                      mlsPlayed={jugador.mlsPlayed}
                     />
                   </Container>
                 );

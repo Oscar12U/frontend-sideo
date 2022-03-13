@@ -1,11 +1,14 @@
 export default class GestorJugadorTimer {
-  constructor(nombre, min, sec, mls) {
+  constructor(nombre) {
     this.nombre = nombre;
     this.running = false;
     this.notificacion = false;
     this.min = 0;
     this.sec = 0;
     this.mls = 0;
+    this.minPlayed = 0;
+    this.secPlayed = 0;
+    this.mlsPlayed = 0;
   }
 
   get nombre() {
@@ -56,6 +59,30 @@ export default class GestorJugadorTimer {
     this._mls = mls;
   }
 
+  get minPlayed() {
+    return this._minPlayed;
+  }
+
+  set minPlayed(minPlayed) {
+    this._minPlayed = minPlayed;
+  }
+
+  get secPlayed() {
+    return this._secPlayed;
+  }
+
+  set secPlayed(secPlayed) {
+    this._secPlayed = secPlayed;
+  }
+
+  get mlsPlayed() {
+    return this._mlsPlayed;
+  }
+
+  set mlsPlayed(mlsPlayed) {
+    this._mlsPlayed = mlsPlayed;
+  }
+
   start = () => {
     if (!this.running) {
       this.watch = setInterval(() => this.pace(), 10);
@@ -83,6 +110,12 @@ export default class GestorJugadorTimer {
     this._mls = 0;
     this._sec = 0;
     this._min = 0;
-    this._running = false;
+  };
+
+  sumTimePlayed = () => {
+    this._minPlayed += this.min;
+    this._secPlayed += this.sec;
+    this._mlsPlayed += this.mls;
+    console.log(this.secPlayed);
   };
 }

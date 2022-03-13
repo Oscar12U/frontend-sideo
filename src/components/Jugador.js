@@ -1,7 +1,4 @@
 import React, { memo } from "react";
-import { Card } from "react-bootstrap";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
 import { Typography } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -28,23 +25,6 @@ const Jugador = memo(({ jugador }) => {
 
   return (
     <>
-      {/* <Card
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          textAlign: "center",
-          margin: "auto",
-        }}
-        className={classes2.root}
-      >
-        <CardContent
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-            margin: "auto",
-          }}
-        > */}
       <Typography
         style={{
           fontFamily: "Arial",
@@ -57,14 +37,10 @@ const Jugador = memo(({ jugador }) => {
           textJustify: "inter-word",
         }}
         className={classes2.title}
-        //color="textSecondary"
         gutterBottom
       >
         <br /> {jugador}
       </Typography>
-      {/* </CardContent> */}
-      {/* <CardActions style={{ backgroundColor: "gray" }}></CardActions> */}
-      {/*</Card>*/}
     </>
   );
 });

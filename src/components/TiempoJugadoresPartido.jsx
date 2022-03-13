@@ -1,8 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import StopwatchDisplay from "./StopwatchDisplay.jsx";
-import { Snackbar, Button, IconButton } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
 
 class TiempoJugadoresPartido extends React.Component {
   constructor(props) {
@@ -13,6 +10,9 @@ class TiempoJugadoresPartido extends React.Component {
       currentTimeMin: this.props.min,
       currentTimeSec: this.props.sec,
       currentTimeMs: this.props.mls,
+      currentTimeMinPlayed: this.props.minPlayed,
+      currentTimeSecPlayed: this.props.secPlayed,
+      currentTimeMsPlayed: this.props.mlsPlayed,
       open: false,
       notificacion: this.props.notificacion,
     };
@@ -79,7 +79,31 @@ class TiempoJugadoresPartido extends React.Component {
 
   stop = () => {
     this.setState({ running: false });
+    this.sumTimePlayed();
     clearInterval(this.watch);
+    this.reset();
+  };
+
+  sumTimePlayed = () => {
+    this.setState({
+      currentTimeMinPlayed:
+        this.state.currentTimeMinPlayed + this.state.currentTimeMin,
+    });
+    this.setState({
+      currentTimeSecPlayed:
+        this.state.currentTimeSecPlayed + this.state.currentTimeSec,
+    });
+    this.setState({
+      currentTimeMsPlayed:
+        this.state.currentTimeMsPlayed + this.state.currentTimeMs,
+    });
+    console.log(this.state.currentTimeSecPlayed);
+  };
+
+  reset = () => {
+    this.setState({ currentTimeMin: 0 });
+    this.setState({ currentTimeSec: 0 });
+    this.setState({ currentTimeMs: 0 });
   };
 
   pace = () => {

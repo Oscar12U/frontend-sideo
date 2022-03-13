@@ -13,7 +13,13 @@ export default class GestorPartido {
     this._nombrePartido = nombrePartido;
   }
 
-  agregarGolFavor(idAnotador, idAsistente, tiempoGol, periodoGol, asistenciaBoolean) {
+  agregarGolFavor(
+    idAnotador,
+    idAsistente,
+    tiempoGol,
+    periodoGol,
+    asistenciaBoolean
+  ) {
     axios
       .post(`https://backend-sideo.herokuapp.com/api/newGolFavor`, {
         anotador: idAnotador,
@@ -21,12 +27,12 @@ export default class GestorPartido {
         tiempoGol: tiempoGol,
         periodoGol: periodoGol,
         nombrePartido: this.nombrePartido,
-        asistenteBool: asistenciaBoolean
+        asistenteBool: asistenciaBoolean,
       })
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => { });
+      .catch((err) => {});
   }
 
   agregarGolContra() {
@@ -37,7 +43,7 @@ export default class GestorPartido {
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => { });
+      .catch((err) => {});
   }
 
   agregarFaltaFavor(nombreJugador) {
@@ -46,8 +52,8 @@ export default class GestorPartido {
         nombrePartido: this.nombrePartido,
         nombreJugador: nombreJugador,
       })
-      .then((resultado) => { })
-      .catch((err) => { });
+      .then((resultado) => {})
+      .catch((err) => {});
   }
 
   agregarFaltaContra(nombreJugador) {
@@ -55,8 +61,8 @@ export default class GestorPartido {
       .post(`https://backend-sideo.herokuapp.com/api/newFaltaEnContra`, {
         nombrePartido: this.nombrePartido,
       })
-      .then((resultado) => { })
-      .catch((err) => { });
+      .then((resultado) => {})
+      .catch((err) => {});
   }
 
   agregarLesion(nombreJugador, descripcion) {
@@ -66,8 +72,8 @@ export default class GestorPartido {
         nombreJugador: nombreJugador,
         descripcion: descripcion,
       })
-      .then((resultado) => { })
-      .catch((err) => { });
+      .then((resultado) => {})
+      .catch((err) => {});
   }
 
   crearPartido(nombre1, descripcion1, fecha1) {
@@ -80,11 +86,11 @@ export default class GestorPartido {
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => { });
+      .catch((err) => {});
   }
 
   agregarJugador(nombreJ) {
-    console.log(nombreJ)
+    console.log(nombreJ);
     axios
       .post(`https://backend-sideo.herokuapp.com/api/addJugador`, {
         nombreJugador: nombreJ,
@@ -93,7 +99,7 @@ export default class GestorPartido {
       .then((resultado) => {
         return resultado.data.jugador;
       })
-      .catch((err) => { });
+      .catch((err) => {});
   }
 
   cambiarJugador(jugadorEntra, jugadorSale) {
@@ -105,7 +111,7 @@ export default class GestorPartido {
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => { });
+      .catch((err) => {});
   }
 
   quitarJugador(nombreJugador) {
@@ -116,7 +122,7 @@ export default class GestorPartido {
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => { });
+      .catch((err) => {});
   }
 
   obtenerJugadores() {
@@ -127,7 +133,7 @@ export default class GestorPartido {
         jugadores = resultado.data.data;
         return jugadores;
       })
-      .catch((err) => { });
+      .catch((err) => {});
   }
 
   agregarPartidoTemporada(temporadaID) {
@@ -138,7 +144,7 @@ export default class GestorPartido {
       .then((resultado) => {
         console.log(resultado);
       })
-      .catch((err) => { });
+      .catch((err) => {});
   }
 
   finalizarPartido(partidoID, arrayTiempos) {
@@ -151,6 +157,6 @@ export default class GestorPartido {
       .then((resultado) => {
         //console.log(resultado);
       })
-      .catch((err) => { });
+      .catch((err) => {});
   }
 }

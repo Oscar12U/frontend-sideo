@@ -1,18 +1,15 @@
-import firebase from 'firebase';
-import 'firebase/auth';
-import 'firebase/firestore';
-
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCDWzatHwQqQtMYYShLCDSTtAqyMWs_pjg",
-    authDomain: "loginsideodevelopment.firebaseapp.com",
-    projectId: "loginsideodevelopment",
-    storageBucket: "loginsideodevelopment.appspot.com",
-    messagingSenderId: "736079716784",
-    appId: "1:736079716784:web:7dd44109945c3ecd27b675"
-}
-
-
+  apiKey: "AIzaSyCDWzatHwQqQtMYYShLCDSTtAqyMWs_pjg",
+  authDomain: "loginsideodevelopment.firebaseapp.com",
+  projectId: "loginsideodevelopment",
+  storageBucket: "loginsideodevelopment.appspot.com",
+  messagingSenderId: "736079716784",
+  appId: "1:736079716784:web:7dd44109945c3ecd27b675",
+};
 
 // export const generateUserDocument = async (user, additionalData) => {
 //     if (!user) return;
@@ -33,6 +30,6 @@ const firebaseConfig = {
 //     }
 // };
 
-const fire = firebase.initializeApp(firebaseConfig)
+const fire = firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-export { fire, auth }
+export { fire, auth };
